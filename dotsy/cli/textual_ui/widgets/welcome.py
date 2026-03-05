@@ -57,8 +57,8 @@ class WelcomeBanner(Static):
     COLOR_CACHE_THRESHOLD = 0.001
     BORDER_PROGRESS_THRESHOLD = 0.01
 
-    BLOCK = "▇▇"
-    SPACE = "  "
+    BLOCK = "█"
+    SPACE = " "
     LOGO_TEXT_GAP = "   "
 
     def __init__(self, config: DotsyConfig) -> None:
@@ -274,11 +274,11 @@ class WelcomeBanner(Static):
         S = self.SPACE
 
         patterns = [
-            f"{S}[{color}]{B}{B}{B}{B}{B}{B}[/]{S}{self._static_line1_suffix}",
-            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line2_suffix}",
-            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line3_suffix}",
-            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}",
-            f"{S}[{color}]{B}{B}{B}{B}{B}{B}[/]{S}{self._static_line5_suffix}",
-            f"{S}",
+            f"{S}[{color}]{B}{B}{B}{B}{B}{B}╗[/]{S}{self._static_line1_suffix}",
+            f"{S}[{color}]{B}{B}╔══{B}{B}╗[/]{S}{self._static_line2_suffix}",
+            f"{S}[{color}]{B}{B}║  {B}{B}║[/]{S}{self._static_line3_suffix}",
+            f"{S}[{color}]{B}{B}║  {B}{B}║[/]{S}",
+            f"{S}[{color}]{B}{B}{B}{B}{B}{B}╔╝[/]{S}{self._static_line5_suffix}",
+            f"{S}[{color}]╚═════╝[/]",
         ]
         return patterns[line_idx]
