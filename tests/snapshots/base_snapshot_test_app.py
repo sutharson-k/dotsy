@@ -5,7 +5,7 @@ from textual.widgets.text_area import TextAreaTheme
 
 from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 from tests.stubs.fake_backend import FakeBackend
-from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input import ChatTextArea
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
@@ -29,8 +29,8 @@ def default_config() -> DotsyConfig:
     )
 
 
-class BaseSnapshotTestApp(VibeApp):
-    CSS_PATH = "../../vibe/cli/textual_ui/app.tcss"
+class BaseSnapshotTestApp(DotsyApp):
+    CSS_PATH = "../../../dotsy/cli/textual_ui/app.tcss"
     _current_agent_name: str = BuiltinAgentName.DEFAULT
 
     def __init__(
