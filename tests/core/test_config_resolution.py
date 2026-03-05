@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from vibe.core.paths.config_paths import CONFIG_FILE
-from vibe.core.paths.global_paths import GLOBAL_CONFIG_FILE, DOTSY_HOME
-from vibe.core.trusted_folders import trusted_folders_manager
+from dotsy.core.paths.config_paths import CONFIG_FILE
+from dotsy.core.paths.global_paths import GLOBAL_CONFIG_FILE, DOTSY_HOME
+from dotsy.core.trusted_folders import trusted_folders_manager
 
 
 class TestResolveConfigFile:

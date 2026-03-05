@@ -4,11 +4,11 @@ import pytest
 
 from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 from tests.stubs.fake_backend import FakeBackend
-from vibe.cli.plan_offer.ports.whoami_gateway import WhoAmIResponse
-from vibe.cli.textual_ui.app import dotsyApp
-from vibe.cli.textual_ui.widgets.messages import PlanOfferMessage
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.cli.plan_offer.ports.whoami_gateway import WhoAmIResponse
+from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.widgets.messages import PlanOfferMessage
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 def _make_app(gateway: FakeWhoAmIGateway, config: DotsyConfig | None = None) -> VibeApp:

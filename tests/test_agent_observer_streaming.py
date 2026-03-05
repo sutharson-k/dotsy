@@ -10,20 +10,20 @@ import pytest
 
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.llm.exceptions import BackendErrorBuilder
-from vibe.core.middleware import (
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.agents.models import BuiltinAgentName
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.llm.exceptions import BackendErrorBuilder
+from dotsy.core.middleware import (
     ConversationContext,
     MiddlewareAction,
     MiddlewarePipeline,
     MiddlewareResult,
     ResetReason,
 )
-from vibe.core.tools.base import BaseToolConfig, ToolPermission
-from vibe.core.tools.builtins.todo import TodoArgs
-from vibe.core.types import (
+from dotsy.core.tools.base import BaseToolConfig, ToolPermission
+from dotsy.core.tools.builtins.todo import TodoArgs
+from dotsy.core.types import (
     ApprovalResponse,
     AssistantEvent,
     FunctionCall,
@@ -36,7 +36,7 @@ from vibe.core.types import (
     ToolResultEvent,
     UserMessageEvent,
 )
-from vibe.core.utils import CancellationReason, get_user_cancellation_message
+from dotsy.core.utils import CancellationReason, get_user_cancellation_message
 
 
 class InjectBeforeMiddleware:

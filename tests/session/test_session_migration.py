@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from vibe.core.config import SessionLoggingConfig
-from vibe.core.session.session_migration import migrate_sessions
+from dotsy.core.config import SessionLoggingConfig
+from dotsy.core.session.session_migration import migrate_sessions
 
 
 @pytest.fixture

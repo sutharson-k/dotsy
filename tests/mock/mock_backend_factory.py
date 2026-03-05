@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 
-from vibe.core.config import Backend
-from vibe.core.llm.backend.factory import BACKEND_FACTORY
+from dotsy.core.config import Backend
+from dotsy.core.llm.backend.factory import BACKEND_FACTORY
 
 
 @contextmanager

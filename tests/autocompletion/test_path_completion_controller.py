@@ -5,9 +5,9 @@ from pathlib import Path
 import pytest
 from textual import events
 
-from vibe.cli.autocompletion.base import CompletionResult, CompletionView
-from vibe.cli.autocompletion.path_completion import PathCompletionController
-from vibe.core.autocompletion.completers import PathCompleter
+from dotsy.cli.autocompletion.base import CompletionResult, CompletionView
+from dotsy.cli.autocompletion.path_completion import PathCompletionController
+from dotsy.core.autocompletion.completers import PathCompleter
 
 
 class StubView(CompletionView):

@@ -6,9 +6,9 @@ import pytest
 
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.agents.manager import AgentManager
-from vibe.core.agents.models import (
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.agents.manager import AgentManager
+from dotsy.core.agents.models import (
     BUILTIN_AGENTS,
     PLAN_AGENT_TOOLS,
     AgentProfile,
@@ -17,11 +17,11 @@ from vibe.core.agents.models import (
     BuiltinAgentName,
     _deep_merge,
 )
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.paths.config_paths import ConfigPath
-from vibe.core.paths.global_paths import GlobalPath
-from vibe.core.tools.base import ToolPermission
-from vibe.core.types import (
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.paths.config_paths import ConfigPath
+from dotsy.core.paths.global_paths import GlobalPath
+from dotsy.core.tools.base import ToolPermission
+from dotsy.core.types import (
     FunctionCall,
     LLMChunk,
     LLMMessage,

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from vibe.core.agents.manager import AgentManager
-from vibe.core.agents.models import BUILTIN_AGENTS, EXPLORE, AgentSafety, AgentType
-from vibe.core.config import dotsyConfig
+from dotsy.core.agents.manager import AgentManager
+from dotsy.core.agents.models import BUILTIN_AGENTS, EXPLORE, AgentSafety, AgentType
+from dotsy.core.config import dotsyConfig
 
 
 class TestAgentProfile:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from vibe.core.config import load_dotenv_values
+from dotsy.core.config import load_dotenv_values
 
 
 def _write_env_file(path: Path, content: str) -> None:

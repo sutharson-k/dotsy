@@ -3,12 +3,12 @@ from __future__ import annotations
 import pytest
 
 from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
-from vibe.cli.textual_ui.app import dotsyApp
-from vibe.cli.textual_ui.widgets.messages import AssistantMessage, UserMessage
-from vibe.cli.textual_ui.widgets.tools import ToolCallMessage, ToolResultMessage
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.types import FunctionCall, LLMMessage, Role, ToolCall
+from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.widgets.messages import AssistantMessage, UserMessage
+from dotsy.cli.textual_ui.widgets.tools import ToolCallMessage, ToolResultMessage
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.types import FunctionCall, LLMMessage, Role, ToolCall
 
 
 @pytest.fixture

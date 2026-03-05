@@ -5,8 +5,8 @@ import shutil
 import pytest
 
 from tests.mock.utils import collect_result
-from vibe.core.tools.base import ToolError
-from vibe.core.tools.builtins.grep import (
+from dotsy.core.tools.base import ToolError
+from dotsy.core.tools.builtins.grep import (
     Grep,
     GrepArgs,
     GrepBackend,

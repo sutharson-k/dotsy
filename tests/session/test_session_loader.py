@@ -7,9 +7,9 @@ import time
 
 import pytest
 
-from vibe.core.config import SessionLoggingConfig
-from vibe.core.session.session_loader import SessionLoader
-from vibe.core.types import LLMMessage, Role, ToolCall
+from dotsy.core.config import SessionLoggingConfig
+from dotsy.core.session.session_loader import SessionLoader
+from dotsy.core.types import LLMMessage, Role, ToolCall
 
 
 @pytest.fixture

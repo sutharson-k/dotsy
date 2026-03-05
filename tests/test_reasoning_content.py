@@ -9,17 +9,17 @@ import respx
 
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import (
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import (
     ModelConfig,
     ProviderConfig,
     SessionLoggingConfig,
     DotsyConfig,
 )
-from vibe.core.llm.backend.generic import GenericBackend, OpenAIAdapter
-from vibe.core.llm.backend.mistral import MistralBackend, MistralMapper, ParsedContent
-from vibe.core.llm.format import APIToolFormatHandler
-from vibe.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
+from dotsy.core.llm.backend.generic import GenericBackend, OpenAIAdapter
+from dotsy.core.llm.backend.mistral import MistralBackend, MistralMapper, ParsedContent
+from dotsy.core.llm.format import APIToolFormatHandler
+from dotsy.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
 
 
 def make_config() -> DotsyConfig:

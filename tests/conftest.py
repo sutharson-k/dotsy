@@ -7,8 +7,8 @@ from typing import Any
 import pytest
 import tomli_w
 
-from vibe.core.paths import global_paths
-from vibe.core.paths.config_paths import unlock_config_paths
+from dotsy.core.paths import global_paths
+from dotsy.core.paths.config_paths import unlock_config_paths
 
 
 def get_base_config() -> dict[str, Any]:
@@ -79,4 +79,4 @@ def _mock_platform(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.fixture(autouse=True)
 def _mock_update_commands(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("vibe.cli.update_notifier.update.UPDATE_COMMANDS", ["true"])
+    monkeypatch.setattr("dotsy.cli.update_notifier.update.UPDATE_COMMANDS", ["true"])

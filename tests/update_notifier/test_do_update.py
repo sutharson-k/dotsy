@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from vibe.cli.update_notifier.update import do_update
+from dotsy.cli.update_notifier.update import do_update
 
 
 @pytest.mark.asyncio

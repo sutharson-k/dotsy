@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 
 from tests.skills.conftest import create_skill
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.skills.manager import SkillManager
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.skills.manager import SkillManager
 
 
 @pytest.fixture

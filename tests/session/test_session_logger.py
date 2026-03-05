@@ -8,11 +8,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from vibe.core.agents.models import AgentProfile, AgentSafety
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.session.session_logger import SessionLogger
-from vibe.core.tools.manager import ToolManager
-from vibe.core.types import AgentStats, LLMMessage, Role, SessionMetadata
+from dotsy.core.agents.models import AgentProfile, AgentSafety
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.session.session_logger import SessionLogger
+from dotsy.core.tools.manager import ToolManager
+from dotsy.core.types import AgentStats, LLMMessage, Role, SessionMetadata
 
 
 @pytest.fixture

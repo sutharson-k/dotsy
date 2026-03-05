@@ -7,11 +7,11 @@ from textual.content import Content
 from textual.style import Style
 from textual.widgets import Markdown
 
-from vibe.cli.textual_ui.app import dotsyApp
-from vibe.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
-from vibe.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
+from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture

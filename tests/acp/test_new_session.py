@@ -6,10 +6,10 @@ from unittest.mock import patch
 import pytest
 
 from tests.acp.conftest import _create_acp_agent
-from vibe.acp.acp_agent_loop import dotsyAcpAgentLoop
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import ModelConfig, DotsyConfig
+from dotsy.acp.acp_agent_loop import dotsyAcpAgentLoop
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.agents.models import BuiltinAgentName
+from dotsy.core.config import ModelConfig, DotsyConfig
 
 
 @pytest.fixture

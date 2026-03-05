@@ -13,17 +13,17 @@ from tests.update_notifier.adapters.fake_update_cache_repository import (
     FakeUpdateCacheRepository,
 )
 from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
-from vibe.cli.textual_ui.app import dotsyApp
-from vibe.cli.textual_ui.widgets.messages import WhatsNewMessage
-from vibe.cli.update_notifier import (
+from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.widgets.messages import WhatsNewMessage
+from dotsy.cli.update_notifier import (
     Update,
     UpdateCache,
     UpdateGatewayCause,
     UpdateGatewayError,
 )
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.agents.models import BuiltinAgentName
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 async def _wait_for_notification(

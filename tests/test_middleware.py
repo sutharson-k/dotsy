@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import pytest
 
-from vibe.core.agents.models import BUILTIN_AGENTS, AgentProfile, BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.middleware import (
+from dotsy.core.agents.models import BUILTIN_AGENTS, AgentProfile, BuiltinAgentName
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.middleware import (
     PLAN_AGENT_REMINDER,
     ConversationContext,
     MiddlewareAction,
     MiddlewarePipeline,
     PlanAgentMiddleware,
 )
-from vibe.core.types import AgentStats
+from dotsy.core.types import AgentStats
 
 
 def make_context() -> ConversationContext:

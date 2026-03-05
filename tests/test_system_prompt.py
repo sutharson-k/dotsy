@@ -4,11 +4,11 @@ import sys
 
 import pytest
 
-from vibe.core.agents import AgentManager
-from vibe.core.config import dotsyConfig
-from vibe.core.skills.manager import SkillManager
-from vibe.core.system_prompt import get_universal_system_prompt
-from vibe.core.tools.manager import ToolManager
+from dotsy.core.agents import AgentManager
+from dotsy.core.config import dotsyConfig
+from dotsy.core.skills.manager import SkillManager
+from dotsy.core.system_prompt import get_universal_system_prompt
+from dotsy.core.tools.manager import ToolManager
 
 
 def test_get_universal_system_prompt_includes_windows_prompt_on_windows(

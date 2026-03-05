@@ -4,9 +4,9 @@ import pytest
 
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.types import (
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.types import (
     AssistantEvent,
     CompactEndEvent,
     CompactStartEvent,

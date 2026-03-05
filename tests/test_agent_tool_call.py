@@ -9,12 +9,12 @@ import pytest
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_tool import FakeTool
-from vibe.core.agent_loop import AgentLoop
-from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
-from vibe.core.tools.base import BaseToolConfig, ToolPermission
-from vibe.core.tools.builtins.todo import TodoItem
-from vibe.core.types import (
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.agents.models import BuiltinAgentName
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.tools.base import BaseToolConfig, ToolPermission
+from dotsy.core.tools.builtins.todo import TodoItem
+from dotsy.core.types import (
     ApprovalResponse,
     AssistantEvent,
     BaseEvent,

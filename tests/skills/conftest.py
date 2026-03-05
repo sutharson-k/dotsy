@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from vibe.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture
