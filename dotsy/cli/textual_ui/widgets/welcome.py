@@ -44,8 +44,8 @@ class LineAnimationState:
 
 class WelcomeBanner(Static):
     FLASH_COLOR = "#FFFFFF"
-    TARGET_COLORS = ("#FFD800", "#FFAF00", "#FF8205", "#FA500F", "#E10500")
-    BORDER_TARGET_COLOR = "#b05800"
+    TARGET_COLORS = ("#4A00E0", "#6A00FF", "#8A2BE2", "#9D4EDD", "#B16CF0")
+    BORDER_TARGET_COLOR = "#6A00FF"
 
     LINE_ANIMATION_DURATION_MS = 200
     LINE_STAGGER_MS = 280
@@ -274,10 +274,10 @@ class WelcomeBanner(Static):
         S = self.SPACE
 
         patterns = [
-            f"{S}[{color}]{B}[/]{S}{S}{S}[{color}]{B}[/]{S}{self._static_line1_suffix}",
-            f"{S}[{color}]{B}{B}[/]{S}[{color}]{B}{B}[/]{S}{self._static_line2_suffix}",
-            f"{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{self._static_line3_suffix}",
-            f"{S}[{color}]{B}[/]{S}[{color}]{B}[/]{S}[{color}]{B}[/]{S}",
-            f"[{color}]{B}{B}{B}[/]{S}[{color}]{B}{B}{B}[/]{self._static_line5_suffix}",
+            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{self._static_line1_suffix}",
+            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line2_suffix}",
+            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line3_suffix}",
+            f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}",
+            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{self._static_line5_suffix}",
         ]
         return patterns[line_idx]
