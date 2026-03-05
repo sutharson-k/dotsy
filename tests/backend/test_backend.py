@@ -25,16 +25,16 @@ from tests.backend.data.fireworks import (
     STREAMED_TOOL_CONVERSATION_PARAMS as FIREWORKS_STREAMED_TOOL_CONVERSATION_PARAMS,
     TOOL_CONVERSATION_PARAMS as FIREWORKS_TOOL_CONVERSATION_PARAMS,
 )
-from tests.backend.data.mistral import (
-    SIMPLE_CONVERSATION_PARAMS as MISTRAL_SIMPLE_CONVERSATION_PARAMS,
-    STREAMED_SIMPLE_CONVERSATION_PARAMS as MISTRAL_STREAMED_SIMPLE_CONVERSATION_PARAMS,
-    STREAMED_TOOL_CONVERSATION_PARAMS as MISTRAL_STREAMED_TOOL_CONVERSATION_PARAMS,
-    TOOL_CONVERSATION_PARAMS as MISTRAL_TOOL_CONVERSATION_PARAMS,
+from tests.backend.data.dotsy import (
+    SIMPLE_CONVERSATION_PARAMS as DOTSY_SIMPLE_CONVERSATION_PARAMS,
+    STREAMED_SIMPLE_CONVERSATION_PARAMS as DOTSY_STREAMED_SIMPLE_CONVERSATION_PARAMS,
+    STREAMED_TOOL_CONVERSATION_PARAMS as DOTSY_STREAMED_TOOL_CONVERSATION_PARAMS,
+    TOOL_CONVERSATION_PARAMS as DOTSY_TOOL_CONVERSATION_PARAMS,
 )
 from dotsy.core.config import Backend, ModelConfig, ProviderConfig
 from dotsy.core.llm.backend.factory import BACKEND_FACTORY
+from dotsy.core.llm.backend.dotsy import DotsyBackend
 from dotsy.core.llm.backend.generic import GenericBackend
-from dotsy.core.llm.backend.mistral import MistralBackend
 from dotsy.core.llm.exceptions import BackendError
 from dotsy.core.llm.types import BackendLike
 from dotsy.core.types import LLMChunk, LLMMessage, Role, ToolCall
@@ -48,8 +48,8 @@ class TestBackend:
         [
             *FIREWORKS_SIMPLE_CONVERSATION_PARAMS,
             *FIREWORKS_TOOL_CONVERSATION_PARAMS,
-            *MISTRAL_SIMPLE_CONVERSATION_PARAMS,
-            *MISTRAL_TOOL_CONVERSATION_PARAMS,
+            *DOTSY_SIMPLE_CONVERSATION_PARAMS,
+            *DOTSY_TOOL_CONVERSATION_PARAMS,
         ],
     )
     async def test_backend_complete(
@@ -67,7 +67,7 @@ class TestBackend:
 
             BackendClasses = [
                 GenericBackend,
-                *([MistralBackend] if base_url == "https://api.mistral.ai" else []),
+                *([DotsyBackend] if base_url == "https://api.mistral.ai" else []),
             ]
             for BackendClass in BackendClasses:
                 backend: BackendLike = BackendClass(provider=provider)
@@ -116,8 +116,8 @@ class TestBackend:
         [
             *FIREWORKS_STREAMED_SIMPLE_CONVERSATION_PARAMS,
             *FIREWORKS_STREAMED_TOOL_CONVERSATION_PARAMS,
-            *MISTRAL_STREAMED_SIMPLE_CONVERSATION_PARAMS,
-            *MISTRAL_STREAMED_TOOL_CONVERSATION_PARAMS,
+            *DOTSY_STREAMED_SIMPLE_CONVERSATION_PARAMS,
+            *DOTSY_STREAMED_TOOL_CONVERSATION_PARAMS,
         ],
     )
     async def test_backend_complete_streaming(
@@ -138,7 +138,7 @@ class TestBackend:
             )
             BackendClasses = [
                 GenericBackend,
-                *([MistralBackend] if base_url == "https://api.mistral.ai" else []),
+                *([DotsyBackend] if base_url == "https://api.mistral.ai" else []),
             ]
             for BackendClass in BackendClasses:
                 backend: BackendLike = BackendClass(provider=provider)
@@ -206,12 +206,12 @@ class TestBackend:
             ),
             (
                 "https://api.mistral.ai",
-                MistralBackend,
+                DotsyBackend,
                 httpx.Response(status_code=500, text="Internal Server Error"),
             ),
             (
                 "https://api.mistral.ai",
-                MistralBackend,
+                DotsyBackend,
                 httpx.Response(status_code=429, text="Rate Limit Exceeded"),
             ),
         ],
@@ -219,7 +219,7 @@ class TestBackend:
     async def test_backend_complete_streaming_error(
         self,
         base_url: Url,
-        backend_class: type[MistralBackend | GenericBackend],
+        backend_class: type[DotsyBackend | GenericBackend],
         response: httpx.Response,
     ):
         with respx.mock(base_url=base_url) as mock_api:
@@ -256,7 +256,7 @@ class TestBackend:
             ("https://api.fireworks.ai", "fireworks", {"include_usage": True}),
             (
                 "https://api.mistral.ai",
-                "mistral",
+                "dotsy",
                 {"include_usage": True, "stream_tool_calls": True},
             ),
         ],
@@ -302,7 +302,7 @@ class TestBackend:
             assert payload["stream_options"] == expected_stream_options
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("backend_type", [Backend.MISTRAL, Backend.GENERIC])
+    @pytest.mark.parametrize("backend_type", [Backend.DOTSY, Backend.GENERIC])
     async def test_backend_user_agent(self, backend_type: Backend):
         user_agent = get_user_agent(backend_type)
         base_url = "https://api.example.com"
@@ -357,7 +357,7 @@ class TestBackend:
             assert mock_api.calls.last.request.headers["user-agent"] == user_agent
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("backend_type", [Backend.MISTRAL, Backend.GENERIC])
+    @pytest.mark.parametrize("backend_type", [Backend.DOTSY, Backend.GENERIC])
     async def test_backend_user_agent_when_streaming(self, backend_type: Backend):
         user_agent = get_user_agent(backend_type)
 

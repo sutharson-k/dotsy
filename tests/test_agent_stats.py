@@ -69,14 +69,14 @@ def make_config(
         ProviderConfig(
             name="mistral",
             api_base="https://api.mistral.ai/v1",
-            api_key_env_var="MISTRAL_API_KEY",
-            backend=Backend.MISTRAL,
+            api_key_env_var="DOTSY_API_KEY",
+            backend=Backend.DOTSY,
         ),
         ProviderConfig(
             name="lechat",
             api_base="https://api.mistral.ai/v1",
             api_key_env_var="LECHAT_API_KEY",
-            backend=Backend.MISTRAL,
+            backend=Backend.DOTSY,
         ),
     ]
     return DotsyConfig(

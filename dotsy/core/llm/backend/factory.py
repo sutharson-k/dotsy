@@ -2,6 +2,6 @@ from __future__ import annotations
 
 from dotsy.core.config import Backend
 from dotsy.core.llm.backend.generic import GenericBackend
-from dotsy.core.llm.backend.mistral import MistralBackend
+from dotsy.core.llm.backend.dotsy import DotsyBackend
 
-BACKEND_FACTORY = {Backend.MISTRAL: MistralBackend, Backend.GENERIC: GenericBackend}
+BACKEND_FACTORY = {Backend.DOTSY: DotsyBackend, Backend.GENERIC: GenericBackend}

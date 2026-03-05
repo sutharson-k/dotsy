@@ -32,7 +32,7 @@ class ParsedContent(NamedTuple):
     reasoning_content: Content | None
 
 
-class MistralMapper:
+class DotsyMapper:
     def prepare_message(self, msg: LLMMessage) -> mistralai.Messages:
         match msg.role:
             case Role.system:
@@ -149,11 +149,11 @@ class MistralMapper:
         ]
 
 
-class MistralBackend:
+class DotsyBackend:
     def __init__(self, provider: ProviderConfig, timeout: float = 720.0) -> None:
         self._client: mistralai.Mistral | None = None
         self._provider = provider
-        self._mapper = MistralMapper()
+        self._mapper = DotsyMapper()
         self._api_key = (
             os.getenv(self._provider.api_key_env_var)
             if self._provider.api_key_env_var
@@ -178,7 +178,7 @@ class MistralBackend:
         self._server_url = match.group(1)
         self._timeout = timeout
 
-    async def __aenter__(self) -> MistralBackend:
+    async def __aenter__(self) -> DotsyBackend:
         self._client = mistralai.Mistral(
             api_key=self._api_key,
             server_url=self._server_url,

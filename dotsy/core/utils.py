@@ -149,7 +149,7 @@ logger = logging.getLogger("dotsy")
 
 def get_user_agent(backend: Backend) -> str:
     user_agent = f"Dotsy/{__version__}"
-    if backend == Backend.MISTRAL:
+    if backend == Backend.DOTSY:
         mistral_sdk_prefix = "mistral-client-python/"
         user_agent = f"{mistral_sdk_prefix}{user_agent}"
     return user_agent

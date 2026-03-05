@@ -71,13 +71,13 @@ class MissingPromptFileError(RuntimeError):
 
 
 class WrongBackendError(RuntimeError):
-    def __init__(self, backend: Backend, is_mistral_api: bool) -> None:
+    def __init__(self, backend: Backend, is_dotsy_api: bool) -> None:
         super().__init__(
-            f"Wrong backend '{backend}' for {'' if is_mistral_api else 'non-'}"
-            f"mistral API. Use '{Backend.MISTRAL}' for mistral API and '{Backend.GENERIC}' for others."
+            f"Wrong backend '{backend}' for {'' if is_dotsy_api else 'non-'}"
+            f"Dotsy API. Use '{Backend.DOTSY}' for Dotsy API and '{Backend.GENERIC}' for others."
         )
         self.backend = backend
-        self.is_mistral_api = is_mistral_api
+        self.is_dotsy_api = is_dotsy_api
 
 
 class TomlFileSettingsSource(PydanticBaseSettingsSource):
@@ -136,7 +136,7 @@ class SessionLoggingConfig(BaseSettings):
 
 
 class Backend(StrEnum):
-    MISTRAL = auto()
+    DOTSY = auto()
     GENERIC = auto()
 
 
@@ -261,12 +261,12 @@ class ModelConfig(BaseModel):
 
 
 DEFAULT_PROVIDERS = [
-    # Mistral AI
+    # Dotsy API
     ProviderConfig(
-        name="mistral",
+        name="dotsy",
         api_base="https://api.mistral.ai/v1",
         api_key_env_var="MISTRAL_API_KEY",
-        backend=Backend.MISTRAL,
+        backend=Backend.DOTSY,
     ),
     # OpenAI
     ProviderConfig(
@@ -580,17 +580,17 @@ class DotsyConfig(BaseSettings):
         try:
             active_model = self.get_active_model()
             provider = self.get_provider_for_model(active_model)
-            MISTRAL_API_BASES = [
+            DOTSY_API_BASES = [
                 "https://codestral.mistral.ai",
                 "https://api.mistral.ai",
             ]
-            is_mistral_api = any(
-                provider.api_base.startswith(api_base) for api_base in MISTRAL_API_BASES
+            is_dotsy_api = any(
+                provider.api_base.startswith(api_base) for api_base in DOTSY_API_BASES
             )
-            if (is_mistral_api and provider.backend != Backend.MISTRAL) or (
-                not is_mistral_api and provider.backend != Backend.GENERIC
+            if (is_dotsy_api and provider.backend != Backend.DOTSY) or (
+                not is_dotsy_api and provider.backend != Backend.GENERIC
             ):
-                raise WrongBackendError(provider.backend, is_mistral_api)
+                raise WrongBackendError(provider.backend, is_dotsy_api)
 
         except ValueError:
             pass

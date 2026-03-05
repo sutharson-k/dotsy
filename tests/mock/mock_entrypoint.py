@@ -44,7 +44,7 @@ if __name__ == "__main__":
         yield next(chunk_iterable)
 
     patch(
-        "vibe.core.llm.backend.mistral.MistralBackend.complete",
+        "vibe.core.llm.backend.dotsy.DotsyBackend.complete",
         side_effect=mock_complete,
     ).start()
     patch(
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         side_effect=mock_complete,
     ).start()
     patch(
-        "vibe.core.llm.backend.mistral.MistralBackend.complete_streaming",
+        "vibe.core.llm.backend.dotsy.DotsyBackend.complete_streaming",
         side_effect=mock_complete_streaming,
     ).start()
     patch(

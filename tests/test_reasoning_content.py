@@ -17,7 +17,7 @@ from dotsy.core.config import (
     DotsyConfig,
 )
 from dotsy.core.llm.backend.generic import GenericBackend, OpenAIAdapter
-from dotsy.core.llm.backend.mistral import MistralBackend, MistralMapper, ParsedContent
+from dotsy.core.llm.backend.dotsy import DotsyBackend, DotsyMapper, ParsedContent
 from dotsy.core.llm.format import APIToolFormatHandler
 from dotsy.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
 
@@ -36,15 +36,15 @@ def make_config() -> DotsyConfig:
     )
 
 
-class TestMistralMapperParseContent:
+class TestDotsyMapperParseContent:
     def test_parse_content_string_returns_content_only(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         result = mapper.parse_content("Hello, world!")
 
         assert result == ParsedContent(content="Hello, world!", reasoning_content=None)
 
     def test_parse_content_text_chunk_returns_content_only(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         content: list[mistralai.ContentChunk] = [
             mistralai.TextChunk(type="text", text="Hello from text chunk")
         ]
@@ -56,7 +56,7 @@ class TestMistralMapperParseContent:
         )
 
     def test_parse_content_thinking_chunk_extracts_reasoning(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         content: list[mistralai.ContentChunk] = [
             mistralai.ThinkChunk(
                 type="thinking",
@@ -72,7 +72,7 @@ class TestMistralMapperParseContent:
         )
 
     def test_parse_content_multiple_thinking_chunks_concatenates(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         content: list[mistralai.ContentChunk] = [
             mistralai.ThinkChunk(
                 type="thinking",
@@ -92,7 +92,7 @@ class TestMistralMapperParseContent:
         )
 
     def test_parse_content_thinking_only_returns_empty_content(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         content: list[mistralai.ContentChunk] = [
             mistralai.ThinkChunk(
                 type="thinking",
@@ -105,7 +105,7 @@ class TestMistralMapperParseContent:
         assert result == ParsedContent(content="", reasoning_content="Just thinking...")
 
     def test_parse_content_empty_list_returns_empty(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         content: list[mistralai.ContentChunk] = []
 
         result = mapper.parse_content(content)
@@ -113,9 +113,9 @@ class TestMistralMapperParseContent:
         assert result == ParsedContent(content="", reasoning_content=None)
 
 
-class TestMistralMapperPrepareMessage:
+class TestDotsyMapperPrepareMessage:
     def test_prepare_assistant_message_without_reasoning(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         msg = LLMMessage(role=Role.assistant, content="Hello!")
 
         result = mapper.prepare_message(msg)
@@ -124,7 +124,7 @@ class TestMistralMapperPrepareMessage:
         assert result.content == "Hello!"
 
     def test_prepare_assistant_message_with_reasoning_creates_chunks(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         msg = LLMMessage(
             role=Role.assistant,
             content="The answer is 42.",
@@ -151,7 +151,7 @@ class TestMistralMapperPrepareMessage:
         assert text_chunk.text == "The answer is 42."
 
     def test_prepare_assistant_message_with_reasoning_and_none_content(self):
-        mapper = MistralMapper()
+        mapper = DotsyMapper()
         msg = LLMMessage(
             role=Role.assistant, content=None, reasoning_content="Just thinking..."
         )
@@ -505,28 +505,28 @@ class TestReasoningFieldNameConversion:
             assert results[1].message.content == "Answer"
 
 
-class TestMistralReasoningFieldNameValidation:
-    def test_mistral_backend_rejects_custom_reasoning_field_name(self):
+class TestDotsyReasoningFieldNameValidation:
+    def test_dotsy_backend_rejects_custom_reasoning_field_name(self):
         provider = ProviderConfig(
-            name="mistral",
+            name="dotsy",
             api_base="https://api.mistral.ai/v1",
-            api_key_env_var="MISTRAL_API_KEY",
+            api_key_env_var="DOTSY_API_KEY",
             reasoning_field_name="reasoning",
         )
 
         with pytest.raises(ValueError) as exc_info:
-            MistralBackend(provider=provider)
+            DotsyBackend(provider=provider)
 
         assert "does not support custom reasoning_field_name" in str(exc_info.value)
         assert "reasoning" in str(exc_info.value)
 
-    def test_mistral_backend_accepts_default_reasoning_field_name(self):
+    def test_dotsy_backend_accepts_default_reasoning_field_name(self):
         provider = ProviderConfig(
-            name="mistral",
+            name="dotsy",
             api_base="https://api.mistral.ai/v1",
-            api_key_env_var="MISTRAL_API_KEY",
+            api_key_env_var="DOTSY_API_KEY",
             reasoning_field_name="reasoning_content",
         )
 
-        backend = MistralBackend(provider=provider)
+        backend = DotsyBackend(provider=provider)
         assert backend is not None
