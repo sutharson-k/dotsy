@@ -272,9 +272,9 @@ class WelcomeBanner(Static):
     def _build_line(self, line_idx: int, color: str) -> str:
         # Full ASCII art DOTSY logo with gradient
         if line_idx == 6:
-            # Version line below logo
-            return f"[bold]{__version__}[/]"
-        
+            # Version line below logo - centered with padding
+            return f"{' ' * 21}[bold]17.20.119[/]"
+
         logo_lines = [
             f"[{color}]██████╗ ██████╗ ████████╗███████╗██╗   ██╗[/{color}]",
             f"[{color}]██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝╚██╗ ██╔╝[/{color}]",
