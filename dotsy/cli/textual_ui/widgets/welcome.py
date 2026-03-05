@@ -94,20 +94,12 @@ class WelcomeBanner(Static):
         self._initialize_static_line_suffixes()
 
     def _initialize_static_line_suffixes(self) -> None:
-        # Different text layout - right aligned with different formatting
-        self._static_line1_suffix = (
-            f"{self.LOGO_TEXT_GAP}[bold #FF6B6B]DOTSY[/] [dim]{__version__}[/]"
-        )
-        self._static_line2_suffix = (
-            f"{self.LOGO_TEXT_GAP}[italic dim]model: {self.config.active_model}[/]"
-        )
-        mcp_count = len(self.config.mcp_servers)
-        model_count = len(self.config.models)
-        self._static_line3_suffix = f"{self.LOGO_TEXT_GAP}[dim]{model_count} models · {mcp_count} MCP[/]"
-        self._static_line5_suffix = (
-            f"{self.LOGO_TEXT_GAP}[dim]dir: {self.config.displayed_workdir or Path.cwd()}[/]"
-        )
-        self._static_line7 = f"[dim]Commands:[/] [{self.BORDER_TARGET_COLOR}]/help[/][dim] • [/][{self.BORDER_TARGET_COLOR}]/terminal-setup[/][dim] • [/][{self.BORDER_TARGET_COLOR}]/config[/]"
+        # Minimal - no extra text, just logo
+        self._static_line1_suffix = ""
+        self._static_line2_suffix = ""
+        self._static_line3_suffix = ""
+        self._static_line5_suffix = ""
+        self._static_line7 = ""
 
     @property
     def skeleton_color(self) -> str:
@@ -123,8 +115,7 @@ class WelcomeBanner(Static):
 
     def _init_after_styles(self) -> None:
         self._cache_skeleton_color()
-        self._cached_text_lines[5] = Text("")
-        self._cached_text_lines[6] = Text.from_markup(self._static_line7)
+        self._cached_text_lines[6] = Text.from_markup(self._build_line(6, ""))
         self._update_display()
         self._start_animation()
 
@@ -282,14 +273,14 @@ class WelcomeBanner(Static):
         # Full ASCII art DOTSY logo with gradient
         if line_idx == 6:
             # Version line below logo
-            return f"[dim]version {__version__}[/]"
+            return f"[bold]{__version__}[/]"
         
         logo_lines = [
-            f"[{color}]██████╗ ██████╗ ████████╗███████╗██╗   ██╗[/{color}]{self._static_line1_suffix}",
-            f"[{color}]██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝╚██╗ ██╔╝[/{color}]{self._static_line2_suffix}",
-            f"[{color}]██║  ██║██║   ██║   ██║   ███████╗ ╚████╔╝[/{color}]{self._static_line3_suffix}",
+            f"[{color}]██████╗ ██████╗ ████████╗███████╗██╗   ██╗[/{color}]",
+            f"[{color}]██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝╚██╗ ██╔╝[/{color}]",
+            f"[{color}]██║  ██║██║   ██║   ██║   ███████╗ ╚████╔╝[/{color}]",
             f"[{color}]██║  ██║██║   ██║   ██║   ╚════██║  ╚██╔╝[/{color}]",
-            f"[{color}]██████╔╝╚██████╔╝   ██║   ███████║   ██║[/{color}]{self._static_line5_suffix}",
+            f"[{color}]██████╔╝╚██████╔╝   ██║   ███████║   ██║[/{color}]",
             f"[{color}]╚═════╝  ╚═════╝    ╚═╝   ╚══════╝   ╚═╝[/{color}]",
         ]
         return logo_lines[line_idx] if line_idx < len(logo_lines) else ""
