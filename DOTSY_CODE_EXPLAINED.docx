@@ -1,0 +1,660 @@
+# DOTSY - Complete Code Documentation
+
+## Overview
+
+**Dotsy** is a multi-provider AI CLI coding assistant that I built from scratch. It provides an interactive terminal interface for conversing with AI models while working on codebases. The tool supports multiple AI providers (Mistral, OpenAI, Anthropic, Google) and includes powerful features like file manipulation, code search, bash execution, and session management.
+
+---
+
+## Project Structure
+
+```
+dotsy/
+├── __init__.py              # Package version (__version__ = "17.20.119")
+├── cli/                     # Command-line interface & TUI
+│   ├── entrypoint.py        # Main entry point (dotsy command)
+│   ├── cli.py               # CLI bootstrap logic
+│   ├── textual_ui/          # Terminal user interface
+│   │   ├── app.py           # Main TUI application
+│   │   └── widgets/         # UI components
+│   ├── update_notifier/     # Version update checking
+│   └── autocompletion/      # Tab completion
+├── core/                    # Core engine
+│   ├── agent_loop.py        # Main AI reasoning loop
+│   ├── config.py            # Configuration management
+│   ├── llm/                 # LLM backend abstraction
+│   ├── tools/               # Tool system
+│   ├── agents/              # Agent profiles
+│   ├── session/             # Session save/load
+│   └── skills/              # Custom skill definitions
+├── setup/                   # Onboarding & setup
+└── acp/                     # Agent Communication Protocol (server mode)
+```
+
+---
+
+## How It Works - Complete Flow
+
+### 1. Entry Point (`cli/entrypoint.py`)
+
+**Purpose**: Main entry point when user runs `dotsy`
+
+**What it does**:
+- Parses command-line arguments (prompt, agent mode, workdir, etc.)
+- Checks if current directory is trusted (security feature)
+- Loads configuration from `~/.dotsy/config.toml`
+- Routes to either:
+  - **Interactive mode**: Opens TUI via `run_textual_ui()`
+  - **Programmatic mode**: Runs headless via `run_programmatic()`
+
+**Key code to explain**:
+```python
+def main() -> None:
+    args = parse_arguments()
+    
+    # Handle workdir change
+    if args.workdir:
+        os.chdir(args.workdir)
+    
+    # Check if interactive or programmatic
+    is_interactive = args.prompt is None
+    
+    # Run appropriate mode
+    if is_interactive:
+        run_textual_ui(agent_loop, initial_prompt=args.initial_prompt)
+    else:
+        run_programmatic(config, prompt=args.prompt)
+```
+
+---
+
+### 2. Configuration System (`core/config.py`)
+
+**Purpose**: Manages all configuration (providers, models, agents, tools)
+
+**Key Classes**:
+
+#### `DotsyConfig`
+Main configuration class that:
+- Loads from `~/.dotsy/config.toml`
+- Manages providers, models, agents, tools
+- Validates API keys and backend compatibility
+
+#### `ProviderConfig`
+Defines an AI provider:
+```python
+ProviderConfig(
+    name="dotsy",              # Provider name
+    api_base="https://api.mistral.ai/v1",
+    api_key_env_var="MISTRAL_API_KEY",
+    backend=Backend.DOTSY,     # DOTSY or GENERIC
+)
+```
+
+#### `ModelConfig`
+Defines a model:
+```python
+ModelConfig(
+    name="devstral-small-latest",
+    provider="dotsy",
+    alias="devstral-small",
+    input_price=0.1,
+    output_price=0.3,
+    temperature=0.2,
+)
+```
+
+#### `Backend` Enum
+```python
+class Backend(StrEnum):
+    DOTSY = auto()    # Uses Mistral SDK directly
+    GENERIC = auto()  # Uses OpenAI-compatible API
+```
+
+---
+
+### 3. Agent Loop (`core/agent_loop.py`)
+
+**Purpose**: THE HEART OF DOTSY - manages AI conversation and tool execution
+
+**How it works**:
+```
+User Input → AgentLoop → LLM → Tool Calls → Execute → Response → User
+                ↑                                      ↓
+                └──────────────────────────────────────┘
+```
+
+**Key Methods**:
+
+#### `__init__()`
+- Initializes system prompt
+- Creates LLM backend via `BACKEND_FACTORY`
+- Sets up ToolManager and AgentManager
+- Initializes middleware pipeline
+
+#### `run_turn()`
+Main reasoning loop:
+1. Builds messages (system + conversation history)
+2. Sends to LLM via backend
+3. Receives response with potential tool calls
+4. Executes tools (with approval if needed)
+5. Sends results back to LLM
+6. Repeats until task complete
+
+#### `_handle_tool_call()`
+- Validates tool permissions
+- Shows approval dialog (if safety requires)
+- Executes tool via `ToolManager`
+- Returns result to LLM
+
+**Key code**:
+```python
+async def run_turn(self, user_message: str) -> AssistantEvent:
+    # Add user message to history
+    self.messages.append(LLMMessage(role=Role.user, content=user_message))
+    
+    # Stream LLM response
+    async for chunk in self.backend.complete_streaming(...):
+        if chunk.message.tool_calls:
+            # Execute tools
+            for tool_call in chunk.message.tool_calls:
+                result = await self._handle_tool_call(tool_call)
+                # Send result back to LLM
+```
+
+---
+
+### 4. LLM Backend (`core/llm/`)
+
+**Purpose**: Abstracts different AI providers behind a common interface
+
+**Structure**:
+```
+core/llm/
+├── backend/
+│   ├── factory.py       # Creates backend based on config
+│   ├── dotsy.py         # Dotsy/Mistral SDK integration
+│   └── generic.py       # OpenAI-compatible (OpenAI, Anthropic, Google)
+├── format.py            # Message formatting
+├── types.py             # Backend interface types
+└── exceptions.py        # Error handling
+```
+
+#### `BackendFactory` (`factory.py`)
+```python
+BACKEND_FACTORY = {
+    Backend.DOTSY: DotsyBackend,
+    Backend.GENERIC: GenericBackend
+}
+
+def create_backend(provider: ProviderConfig) -> BackendLike:
+    backend_class = BACKEND_FACTORY[provider.backend]
+    return backend_class(provider)
+```
+
+#### `DotsyBackend` (`dotsy.py`)
+Uses Mistral SDK directly:
+- `complete()` - Non-streaming completion
+- `complete_streaming()` - Streaming completion
+- Handles Mistral-specific features (ThinkChunk for reasoning)
+
+#### `GenericBackend` (`generic.py`)
+Handles OpenAI-compatible APIs:
+- OpenAI (via openai SDK)
+- Anthropic (via anthropic SDK)
+- Google (via google-generativeai SDK)
+
+**Key interface** (`types.py`):
+```python
+class BackendLike(Protocol):
+    async def complete(...) -> LLMChunk: ...
+    async def complete_streaming(...) -> AsyncGenerator[LLMChunk, None]: ...
+```
+
+---
+
+### 5. Tools System (`core/tools/`)
+
+**Purpose**: Tools the AI can use to interact with the codebase
+
+**Built-in Tools**:
+| Tool | File | Purpose |
+|------|------|---------|
+| `bash` | `bash.py` | Execute shell commands |
+| `read_file` | `read_file.py` | Read file contents |
+| `write_file` | `write_file.py` | Create/write files |
+| `search_replace` | `search_replace.py` | Edit files |
+| `grep` | `grep.py` | Search code with regex |
+| `task` | `task.py` | Long-running tasks |
+| `todo` | `todo.py` | Task tracking |
+| `ask_user_question` | `ask_user_question.py` | Ask user for input |
+
+**Tool Architecture**:
+
+#### `BaseTool` (`base.py`)
+```python
+class BaseTool(ABC):
+    name: str
+    description: str
+    parameters: dict  # JSON Schema
+    
+    @abstractmethod
+    async def invoke(self, args: BaseModel, ctx: InvokeContext) -> ToolResult:
+        """Execute the tool"""
+```
+
+#### `ToolManager` (`manager.py`)
+- Loads built-in tools
+- Loads MCP (Model Context Protocol) tools
+- Validates permissions
+- Executes tools with proper context
+
+#### `ToolPermission`
+Controls tool access:
+```python
+class ToolPermission(StrEnum):
+    ALWAYS_ASK = "always_ask"
+    ALWAYS_ALLOW = "always_allow"
+    NEVER = "never"
+```
+
+**How tools work**:
+1. LLM returns `tool_call` with name + arguments
+2. `AgentLoop` checks permissions
+3. If approved, calls `tool.invoke(args)`
+4. Tool executes, returns `ToolResult`
+5. Result sent back to LLM
+
+---
+
+### 6. Agents System (`core/agents/`)
+
+**Purpose**: Different agent personalities with different safety levels
+
+**Built-in Agents** (`models.py`):
+| Agent | Safety | Description |
+|-------|--------|-------------|
+| `default` | NEUTRAL | Standard, asks before destructive |
+| `plan` | SAFE | Creates plan before executing |
+| `accept-edits` | DESTRUCTIVE | Auto-approves file edits |
+| `auto-approve` | YOLO | No approval needed |
+| `explore` | SAFE | Read-only, no modifications |
+
+**AgentSafety**:
+```python
+class AgentSafety(StrEnum):
+    SAFE = "safe"              # No destructive ops
+    NEUTRAL = "neutral"        # Ask before destructive
+    DESTRUCTIVE = "destructive" # Can modify/delete
+    YOLO = "yolo"              # No approval needed
+```
+
+**AgentProfile**:
+```python
+class AgentProfile(BaseModel):
+    name: str
+    system_prompt: str | None
+    safety: AgentSafety
+    tool_permissions: dict[str, ToolPermission]
+    agent_type: AgentType
+```
+
+---
+
+### 7. System Prompt (`core/system_prompt.py`)
+
+**Purpose**: Instructions that tell the AI how to behave
+
+**Loads from**: `core/prompts/cli.md`
+
+**Key sections**:
+- Tool usage guidelines
+- Code modification rules
+- Planning approach
+- Security guidelines
+- Professional tone
+
+**Generated dynamically**:
+```python
+def get_universal_system_prompt(
+    agent_profile: AgentProfile,
+    tool_manager: ToolManager,
+    workdir: Path,
+) -> str:
+    sections = [agent_profile.system_prompt or DEFAULT_PROMPT]
+    sections.append(get_tool_descriptions(tool_manager))
+    sections.append(get_project_context(workdir))
+    sections.append(get_os_specific_info())
+    return "\n\n".join(sections)
+```
+
+---
+
+### 8. Textual UI (`cli/textual_ui/`)
+
+**Purpose**: Beautiful terminal interface using Textual framework
+
+**Structure**:
+```
+textual_ui/
+├── app.py               # Main TUI application (dotsyApp)
+└── widgets/
+    ├── welcome.py       # Welcome banner with D logo
+    ├── chat_input/      # Input with completion
+    ├── messages.py      # User/Assistant messages
+    ├── tools.py         # Tool call/results
+    ├── agent_indicator.py # Current agent display
+    ├── approval_app.py  # Tool approval dialog
+    └── config_app.py    # Settings UI
+```
+
+#### `dotsyApp` (`app.py`)
+Main application class:
+- Mounts widgets (welcome, chat input, messages)
+- Handles user input events
+- Manages agent loop
+- Auto-scrolls to latest message
+
+**Key event handlers**:
+```python
+async def on_chat_input_container_submitted(
+    self, event: ChatInputContainer.Submitted
+) -> None:
+    # User pressed Enter
+    message = event.value
+    
+    # Display user message
+    await self._mount_and_scroll(UserMessage(message))
+    
+    # Run agent loop
+    await self._handle_user_message(message)
+```
+
+#### Auto-scroll feature:
+```python
+def _mount_and_scroll(self, widget: Widget) -> None:
+    await messages_area.mount(widget)
+    # Always scroll to bottom for user messages
+    self.call_after_refresh(self._scroll_to_bottom)
+```
+
+---
+
+### 9. Session Management (`core/session/`)
+
+**Purpose**: Save and load conversations
+
+**Files**:
+- `session_logger.py` - Saves sessions to disk
+- `session_loader.py` - Loads sessions for --continue/--resume
+- `session_migration.py` - Migrates old formats
+
+**Session format** (JSON):
+```json
+{
+  "session_id": "abc123",
+  "messages": [...],
+  "usage": {"prompt_tokens": 1000, "completion_tokens": 500},
+  "cost": 0.05,
+  "timestamp": "2025-03-05T10:00:00Z"
+}
+```
+
+**Usage**:
+```bash
+dotsy --continue          # Resume latest session
+dotsy --resume abc123     # Resume specific session
+```
+
+---
+
+### 10. Skills System (`core/skills/`)
+
+**Purpose**: Custom user-defined workflows
+
+**Structure**:
+```
+skills/
+├── manager.py           # Loads skills from ~/.dotsy/skills/
+├── parser.py            # Parses skill definitions
+└── models.py            # Skill data models
+```
+
+**Skill format** (TOML):
+```toml
+name = "refactor"
+description = "Refactor code with best practices"
+
+[[steps]]
+tool = "read_file"
+args = { path = "{{file_path}}" }
+
+[[steps]]
+tool = "search_replace"
+args = { ... }
+```
+
+**Usage**: `/refactor src/main.py`
+
+---
+
+### 11. Auto-completion (`core/autocompletion/`)
+
+**Purpose**: Smart tab completion
+
+**Components**:
+- `CommandCompleter` - Slash commands (/help, /tools)
+- `PathCompleter` - File paths
+- `FileIndexer` - Fast file lookup
+- `FuzzyMatcher` - Fuzzy search
+
+**How it works**:
+1. User types `/` → Shows slash commands
+2. User types `./` → Shows file paths
+3. Fuzzy matching finds files by partial name
+
+---
+
+### 12. Middleware (`core/middleware.py`)
+
+**Purpose**: Intercept and modify agent loop behavior
+
+**Built-in Middleware**:
+| Middleware | Purpose |
+|------------|---------|
+| `TurnLimitMiddleware` | Stop after N turns |
+| `PriceLimitMiddleware` | Stop if cost exceeds limit |
+| `AutoCompactMiddleware` | Compress old messages |
+| `PlanAgentMiddleware` | Special planning logic |
+
+**How it works**:
+```python
+class MiddlewarePipeline:
+    def process(self, messages: list[LLMMessage]) -> MiddlewareResult:
+        for middleware in self.middlewares:
+            result = middleware.process(messages)
+            if result.action == MiddlewareAction.STOP:
+                return result
+        return MiddlewareResult.continue_()
+```
+
+---
+
+### 13. Update Notifier (`cli/update_notifier/`)
+
+**Purpose**: Check for new versions
+
+**Components**:
+- `update.py` - Check for updates
+- `whats_new.py` - Show changelog
+- `pypi_update_gateway.py` - Check PyPI
+- `github_update_gateway.py` - Check GitHub
+
+**How it works**:
+1. On startup, check cache (avoid repeated checks)
+2. If cache expired, query PyPI/GitHub
+3. If new version available, show notification
+4. Display "What's New" on version change
+
+---
+
+### 14. ACP - Agent Communication Protocol (`acp/`)
+
+**Purpose**: Server mode for external integrations
+
+**Usage**:
+```bash
+dotsy-acp  # Run as server
+```
+
+**Components**:
+- `entrypoint.py` - Server entry point
+- `acp_agent_loop.py` - ACP-compatible agent loop
+- Built-in tools for ACP
+
+**Use cases**:
+- IDE integrations
+- CI/CD pipelines
+- External tool connections
+
+---
+
+## Key Data Flow - Complete Example
+
+**User**: "Create a Python file that prints hello"
+
+```
+1. User types in ChatInputContainer
+   ↓
+2. ChatTextArea detects Enter key
+   ↓
+3. ChatInputBody.on_chat_text_area_submitted()
+   - Adds to history
+   - Clears input
+   - Posts Submitted event
+   ↓
+4. ChatInputContainer.on_chat_input_body_submitted()
+   - Posts Submitted event up to app
+   ↓
+5. dotsyApp.on_chat_input_container_submitted()
+   - Gets message value
+   - Clears input
+   ↓
+6. dotsyApp._handle_user_message()
+   - Creates UserMessage widget
+   - Calls _mount_and_scroll()
+   ↓
+7. _mount_and_scroll()
+   - Mounts UserMessage to messages area
+   - Calls _scroll_to_bottom()
+   ↓
+8. dotsyApp._handle_agent_loop_turn()
+   - Calls AgentLoop.run_turn()
+   ↓
+9. AgentLoop.run_turn()
+   - Adds user message to self.messages
+   - Calls backend.complete_streaming()
+   ↓
+10. DotsyBackend.complete_streaming()
+    - Converts messages to Mistral format
+    - Calls Mistral SDK stream_async()
+    - Yields LLMChunk as they arrive
+    ↓
+11. AgentLoop processes chunks
+    - Detects tool_call: write_file
+    - Calls _handle_tool_call()
+    ↓
+12. _handle_tool_call()
+    - Checks permissions (auto-approve for this agent)
+    - Calls ToolManager.get_tool("write_file")
+    - Executes tool.invoke(args)
+    ↓
+13. WriteFile.invoke()
+    - Writes file to disk
+    - Returns ToolResult(success=True)
+    ↓
+14. AgentLoop sends result to LLM
+    ↓
+15. LLM confirms completion
+    ↓
+16. AgentLoop yields AssistantEvent
+    ↓
+17. dotsyApp displays AssistantMessage
+    ↓
+18. Auto-scroll to bottom
+```
+
+---
+
+## Configuration Files
+
+### `~/.dotsy/config.toml`
+```toml
+active_model = "devstral-small"
+
+[[providers]]
+name = "dotsy"
+api_base = "https://api.mistral.ai/v1"
+api_key_env_var = "MISTRAL_API_KEY"
+backend = "DOTSY"
+
+[[models]]
+name = "devstral-small-latest"
+provider = "dotsy"
+alias = "devstral-small"
+input_price = 0.1
+output_price = 0.3
+```
+
+### `~/.dotsy/.env`
+```bash
+MISTRAL_API_KEY=your-api-key-here
+```
+
+---
+
+## Common Interview Questions & Answers
+
+### Q: "How does Dotsy support multiple AI providers?"
+**A**: Through the `Backend` abstraction in `core/llm/backend/`. The `BackendFactory` creates either `DotsyBackend` (for Mistral) or `GenericBackend` (for OpenAI-compatible APIs). Each implements the `BackendLike` protocol with `complete()` and `complete_streaming()` methods.
+
+### Q: "How do tools work?"
+**A**: Tools extend `BaseTool` and implement `invoke()`. The `ToolManager` loads all tools, validates permissions, and executes them. When the LLM returns a `tool_call`, the `AgentLoop` checks permissions, executes the tool, and sends the result back.
+
+### Q: "How does the agent loop prevent infinite loops?"
+**A**: Through middleware. `TurnLimitMiddleware` stops after N turns, `PriceLimitMiddleware` stops if cost exceeds limit, and the agent can be interrupted via Ctrl+C.
+
+### Q: "How does auto-scroll work?"
+**A**: In `_mount_and_scroll()`, after mounting a widget, I call `self.call_after_refresh(self._scroll_to_bottom)` which scrolls the `VerticalScroll` container to `max_scroll_y`.
+
+### Q: "What's the difference between DOTSY and GENERIC backends?"
+**A**: `DOTSY` uses the Mistral SDK directly and supports Mistral-specific features like `ThinkChunk` for reasoning. `GENERIC` uses OpenAI-compatible APIs and works with OpenAI, Anthropic, Google, and any OpenAI-compatible endpoint.
+
+---
+
+## Files to Reference for Specific Questions
+
+| Question | File to Show |
+|----------|--------------|
+| How does the agent loop work? | `core/agent_loop.py` |
+| How are tools executed? | `core/tools/manager.py`, `core/tools/base.py` |
+| How does multi-provider support work? | `core/llm/backend/factory.py`, `core/llm/backend/dotsy.py` |
+| How does the TUI work? | `cli/textual_ui/app.py` |
+| How is configuration managed? | `core/config.py` |
+| How does auto-scroll work? | `cli/textual_ui/app.py` (_mount_and_scroll, _scroll_to_bottom) |
+| How are agents different? | `core/agents/models.py` |
+| How does session save/load work? | `core/session/session_logger.py` |
+
+---
+
+## Version
+
+**Current Version**: 17.20.119
+
+---
+
+## Author
+
+**Built by**: Sutharson
+
+**Repository**: https://github.com/sutharson-k/dotsy
