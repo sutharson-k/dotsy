@@ -273,7 +273,7 @@ class WelcomeBanner(Static):
         # Full ASCII art DOTSY logo with gradient
         if line_idx == 6:
             # Version line below logo - centered with padding
-            return f"{' ' * 21}[bold]17.20.119[/]"
+            return f"{' ' * 18}[bold]17.20.119[/]"
 
         logo_lines = [
             f"[{color}]██████╗ ██████╗ ████████╗███████╗██╗   ██╗[/{color}]",
