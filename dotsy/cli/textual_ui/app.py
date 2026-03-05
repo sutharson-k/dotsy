@@ -1141,10 +1141,8 @@ class DotsyApp(App):  # noqa: PLR0904
             await self._finalize_current_streaming_message()
             await messages_area.mount(widget)
 
-            is_tool_message = isinstance(widget, (ToolCallMessage, ToolResultMessage))
-
-            if not is_tool_message:
-                self.call_after_refresh(self._scroll_to_bottom)
+            # Always scroll to bottom for user messages
+            self.call_after_refresh(self._scroll_to_bottom)
 
         if was_at_bottom:
             self.call_after_refresh(self._anchor_if_scrollable)
