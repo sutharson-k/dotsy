@@ -1,0 +1,27 @@
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Dotsy Icon - Modern dot pattern design -->
+<!-- Top row -->
+<path d="M4 4h3v3H4V4z" fill="currentColor"/>
+<path d="M7 4h3v3H7V4z" fill="currentColor" opacity="0.8"/>
+<path d="M10 4h3v3h-3V4z" fill="currentColor" opacity="0.6"/>
+<!-- Second row -->
+<path d="M4 7h3v3H4V7z" fill="currentColor" opacity="0.8"/>
+<path d="M7 7h3v3H7V7z" fill="currentColor"/>
+<path d="M10 7h3v3h-3V7z" fill="currentColor" opacity="0.8"/>
+<!-- Third row -->
+<path d="M4 10h3v3H4v-3z" fill="currentColor" opacity="0.6"/>
+<path d="M7 10h3v3H7v-3z" fill="currentColor" opacity="0.8"/>
+<path d="M10 10h3v3h-3v-3z" fill="currentColor"/>
+<!-- Fourth row - extended -->
+<path d="M13 4h3v3h-3V4z" fill="currentColor"/>
+<path d="M13 7h3v3h-3V7z" fill="currentColor" opacity="0.8"/>
+<path d="M13 10h3v3h-3v-3z" fill="currentColor" opacity="0.6"/>
+<path d="M16 4h3v3h-3V4z" fill="currentColor" opacity="0.8"/>
+<path d="M16 7h3v3h-3V7z" fill="currentColor"/>
+<path d="M16 10h3v3h-3v-3z" fill="currentColor" opacity="0.8"/>
+<!-- Bottom section -->
+<path d="M4 13h15v3H4v-3z" fill="currentColor" opacity="0.4"/>
+<path d="M4 16h12v3H4v-3z" fill="currentColor" opacity="0.5"/>
+<path d="M4 19h9v3H4v-3z" fill="currentColor" opacity="0.6"/>
+<path d="M4 22h6v3H4v-3z" fill="currentColor"/>
+</svg>

@@ -1,0 +1,35 @@
+id = "dotsy"
+name = "Dotsy"
+description = "Multi-provider AI coding assistant"
+version = "1.0.0"
+schema_version = 1
+authors = ["Your Name"]
+repository = "https://github.com/sutharson-k/dotsy"
+
+[agent_servers.dotsy]
+name = "Dotsy"
+icon = "./icons/dotsy.svg"
+
+[agent_servers.dotsy.targets.darwin-aarch64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-darwin-aarch64-1.0.0.zip"
+cmd = "./dotsy-acp"
+
+[agent_servers.dotsy.targets.darwin-x86_64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-darwin-x86_64-1.0.0.zip"
+cmd = "./dotsy-acp"
+
+[agent_servers.dotsy.targets.linux-aarch64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-linux-aarch64-1.0.0.zip"
+cmd = "./dotsy-acp"
+
+[agent_servers.dotsy.targets.linux-x86_64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-linux-x86_64-1.0.0.zip"
+cmd = "./dotsy-acp"
+
+[agent_servers.dotsy.targets.windows-aarch64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-windows-aarch64-1.0.0.zip"
+cmd = "./dotsy-acp.exe"
+
+[agent_servers.dotsy.targets.windows-x86_64]
+archive = "https://github.com/sutharson-k/dotsy/releases/download/v1.0.0/dotsy-acp-windows-x86_64-1.0.0.zip"
+cmd = "./dotsy-acp.exe"

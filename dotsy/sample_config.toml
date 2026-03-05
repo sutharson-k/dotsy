@@ -1,0 +1,208 @@
+# Dotsy Configuration File
+# Located at ~/.dotsy/config.toml
+
+# Active model alias (choose from the models listed below)
+active_model = "devstral-2"
+
+# UI Theme: "terminal", "textual-dark", "textual-light", etc.
+textual_theme = "terminal"
+
+# Enable Vim keybindings
+vim_keybindings = false
+
+# Disable welcome banner animation
+disable_welcome_banner_animation = false
+
+# Auto-approve tool executions (use with caution)
+auto_approve = false
+
+# System prompt ID
+system_prompt_id = "cli"
+
+# Include commit signature in commits
+include_commit_signature = true
+
+# Include model info in responses
+include_model_info = true
+
+# Include project context
+include_project_context = true
+
+# Include prompt detail
+include_prompt_detail = true
+
+# Enable update checks
+enable_update_checks = true
+
+# Enable auto update
+enable_auto_update = true
+
+# API timeout in seconds
+api_timeout = 720.0
+
+# Auto-compact threshold (tokens)
+auto_compact_threshold = 200000
+
+# Context warnings
+context_warnings = false
+
+# Providers configuration
+[[providers]]
+name = "mistral"
+api_base = "https://api.mistral.ai/v1"
+api_key_env_var = "MISTRAL_API_KEY"
+api_style = "openai"
+backend = "mistral"
+
+[[providers]]
+name = "openai"
+api_base = "https://api.openai.com/v1"
+api_key_env_var = "OPENAI_API_KEY"
+api_style = "openai"
+backend = "generic"
+
+[[providers]]
+name = "anthropic"
+api_base = "https://api.anthropic.com/v1"
+api_key_env_var = "ANTHROPIC_API_KEY"
+api_style = "anthropic"
+backend = "generic"
+
+[[providers]]
+name = "google"
+api_base = "https://generativelanguage.googleapis.com/v1beta"
+api_key_env_var = "GOOGLE_API_KEY"
+api_style = "openai"
+backend = "generic"
+
+[[providers]]
+name = "llamacpp"
+api_base = "http://127.0.0.1:8080/v1"
+api_key_env_var = ""
+api_style = "openai"
+backend = "generic"
+
+[[providers]]
+name = "ollama"
+api_base = "http://127.0.0.1:11434/v1"
+api_key_env_var = ""
+api_style = "openai"
+backend = "generic"
+
+# Models configuration
+[[models]]
+name = "mistral-vibe-cli-latest"
+provider = "mistral"
+alias = "devstral-2"
+input_price = 0.4
+output_price = 2.0
+temperature = 0.2
+
+[[models]]
+name = "devstral-small-latest"
+provider = "mistral"
+alias = "devstral-small"
+input_price = 0.1
+output_price = 0.3
+temperature = 0.2
+
+[[models]]
+name = "mistral-large-latest"
+provider = "mistral"
+alias = "mistral-large"
+input_price = 2.0
+output_price = 6.0
+temperature = 0.2
+
+[[models]]
+name = "gpt-4o"
+provider = "openai"
+alias = "gpt-4o"
+input_price = 5.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "gpt-4-turbo"
+provider = "openai"
+alias = "gpt-4-turbo"
+input_price = 10.0
+output_price = 30.0
+temperature = 0.2
+
+[[models]]
+name = "gpt-3.5-turbo"
+provider = "openai"
+alias = "gpt-3.5-turbo"
+input_price = 0.5
+output_price = 1.5
+temperature = 0.2
+
+[[models]]
+name = "claude-sonnet-4-20250514"
+provider = "anthropic"
+alias = "claude-sonnet"
+input_price = 3.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "claude-3-5-sonnet-latest"
+provider = "anthropic"
+alias = "claude-3-5-sonnet"
+input_price = 3.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "claude-3-opus-20240229"
+provider = "anthropic"
+alias = "claude-opus"
+input_price = 15.0
+output_price = 75.0
+temperature = 0.2
+
+[[models]]
+name = "gemini-2.0-flash"
+provider = "google"
+alias = "gemini-2.0-flash"
+input_price = 0.1
+output_price = 0.4
+temperature = 0.2
+
+[[models]]
+name = "gemini-1.5-pro"
+provider = "google"
+alias = "gemini-1.5-pro"
+input_price = 1.25
+output_price = 5.0
+temperature = 0.2
+
+[[models]]
+name = "devstral"
+provider = "llamacpp"
+alias = "local"
+input_price = 0.0
+output_price = 0.0
+temperature = 0.2
+
+# Tool configurations (optional)
+# [tools.bash]
+# permission = "ask"  # "ask", "always", or "never"
+
+# [tools.read_file]
+# permission = "always"
+
+# [tools.write_file]
+# permission = "ask"
+
+# Session logging configuration
+# [session_logging]
+# enabled = true
+# save_dir = ""  # Empty uses default ~/.dotsy/logs/session
+
+# Project context configuration
+# [project_context]
+# max_chars = 40000
+# max_depth = 3
+# max_files = 1000
