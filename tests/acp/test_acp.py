@@ -62,12 +62,12 @@ def deep_merge(target: dict, source: dict) -> None:
             target[key] = value
 
 
-def _create_vibe_home_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
+def _create_DOTSY_HOME_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
     """Create a temporary vibe home directory with a minimal config file."""
-    vibe_home = tmp_path / ".vibe"
-    vibe_home.mkdir()
+    DOTSY_HOME = tmp_path / ".vibe"
+    DOTSY_HOME.mkdir()
 
-    config_file = vibe_home / "config.toml"
+    config_file = DOTSY_HOME / "config.toml"
     base_config_dict = get_base_config()
 
     base_config_dict["active_model"] = "devstral-latest"
@@ -83,22 +83,22 @@ def _create_vibe_home_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
     with config_file.open("wb") as f:
         tomli_w.dump(base_config_dict, f)
 
-    trusted_folters_file = vibe_home / "trusted_folders.toml"
+    trusted_folters_file = DOTSY_HOME / "trusted_folders.toml"
     trusted_folters_file.write_text("trusted = []\nuntrusted = []", encoding="utf-8")
 
-    return vibe_home
+    return DOTSY_HOME
 
 
 @pytest.fixture
-def vibe_home_dir(tmp_path: Path) -> Path:
+def DOTSY_HOME_dir(tmp_path: Path) -> Path:
     """Create a temporary vibe home directory with a minimal config file."""
-    return _create_vibe_home_dir(tmp_path)
+    return _create_DOTSY_HOME_dir(tmp_path)
 
 
 @pytest.fixture
-def vibe_home_grep_ask(tmp_path: Path) -> Path:
+def DOTSY_HOME_grep_ask(tmp_path: Path) -> Path:
     """Create a temporary vibe home directory with grep configured to ask permission."""
-    return _create_vibe_home_dir(tmp_path, {"tools": {"grep": {"permission": "ask"}}})
+    return _create_DOTSY_HOME_dir(tmp_path, {"tools": {"grep": {"permission": "ask"}}})
 
 
 class JsonRpcRequest(BaseModel):
@@ -190,7 +190,7 @@ class WriteTextFileJsonRpcResponse(JsonRpcResponse):
 
 
 async def get_acp_agent_loop_process(
-    mock_env: dict[str, str], vibe_home: Path
+    mock_env: dict[str, str], DOTSY_HOME: Path
 ) -> AsyncGenerator[asyncio.subprocess.Process]:
     current_env = os.environ.copy()
     cmd = ["uv", "run", MOCK_ENTRYPOINT_PATH]
@@ -198,7 +198,7 @@ async def get_acp_agent_loop_process(
     env = dict(current_env)
     env.update(mock_env)
     env["MISTRAL_API_KEY"] = "mock"
-    env["VIBE_HOME"] = str(vibe_home)
+    env["DOTSY_HOME"] = str(DOTSY_HOME)
 
     process = await asyncio.create_subprocess_exec(
         *cmd,
@@ -386,10 +386,10 @@ async def initialize_session(acp_agent_loop_process: asyncio.subprocess.Process)
 
 class TestSessionManagement:
     @pytest.mark.asyncio
-    async def test_multiple_sessions_unique_ids(self, vibe_home_dir: Path) -> None:
+    async def test_multiple_sessions_unique_ids(self, DOTSY_HOME_dir: Path) -> None:
         mock_env = get_mocking_env(mock_chunks=[mock_llm_chunk() for _ in range(3)])
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_dir
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_dir
         ):
             await send_json_rpc(
                 process,
@@ -426,11 +426,11 @@ class TestSessionManagement:
 class TestSessionUpdates:
     @pytest.mark.asyncio
     async def test_agent_loop_message_chunk_structure(
-        self, vibe_home_dir: Path
+        self, DOTSY_HOME_dir: Path
     ) -> None:
         mock_env = get_mocking_env([mock_llm_chunk(content="Hi")])
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_dir
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_dir
         ):
             # Check stderr for error details if process failed
             if process.returncode is not None and process.stderr:
@@ -474,7 +474,7 @@ class TestSessionUpdates:
             assert response.params.update.content.text == "Hi"
 
     @pytest.mark.asyncio
-    async def test_tool_call_update_structure(self, vibe_home_dir: Path) -> None:
+    async def test_tool_call_update_structure(self, DOTSY_HOME_dir: Path) -> None:
         mock_env = get_mocking_env([
             mock_llm_chunk(
                 tool_calls=[
@@ -490,7 +490,7 @@ class TestSessionUpdates:
             mock_llm_chunk(content="The files containing the pattern 'auth' are ..."),
         ])
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_dir
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_dir
         ):
             session_id = await initialize_session(process)
 
@@ -569,7 +569,7 @@ async def start_session_with_request_permission(
 class TestToolCallStructure:
     @pytest.mark.asyncio
     async def test_tool_call_request_permission_structure(
-        self, vibe_home_grep_ask: Path
+        self, DOTSY_HOME_grep_ask: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -587,7 +587,7 @@ class TestToolCallStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_grep_ask
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_grep_ask
         ):
             session_id = await initialize_session(process)
             await send_json_rpc(
@@ -627,7 +627,7 @@ class TestToolCallStructure:
 
     @pytest.mark.asyncio
     async def test_tool_call_update_approved_structure(
-        self, vibe_home_grep_ask: Path
+        self, DOTSY_HOME_grep_ask: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -647,7 +647,7 @@ class TestToolCallStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_grep_ask
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_grep_ask
         ):
             permission_request = await start_session_with_request_permission(
                 process, "Search for files containing the pattern 'auth'"
@@ -687,7 +687,7 @@ class TestToolCallStructure:
 
     @pytest.mark.asyncio
     async def test_tool_call_update_rejected_structure(
-        self, vibe_home_grep_ask: Path
+        self, DOTSY_HOME_grep_ask: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -709,7 +709,7 @@ class TestToolCallStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_grep_ask
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_grep_ask
         ):
             permission_request = await start_session_with_request_permission(
                 process, "Search for files containing the pattern 'auth'"
@@ -750,7 +750,7 @@ class TestToolCallStructure:
     @pytest.mark.skip(reason="Long running tool call updates are not implemented yet")
     @pytest.mark.asyncio
     async def test_tool_call_in_progress_update_structure(
-        self, vibe_home_grep_ask: Path
+        self, DOTSY_HOME_grep_ask: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -770,7 +770,7 @@ class TestToolCallStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_grep_ask
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_grep_ask
         ):
             session_id = await initialize_session(process)
             await send_json_rpc(
@@ -807,7 +807,7 @@ class TestToolCallStructure:
 
     @pytest.mark.asyncio
     async def test_tool_call_result_update_failure_structure(
-        self, vibe_home_grep_ask: Path
+        self, DOTSY_HOME_grep_ask: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -829,7 +829,7 @@ class TestToolCallStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_grep_ask
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_grep_ask
         ):
             permission_request = await start_session_with_request_permission(
                 process,
@@ -877,7 +877,7 @@ class TestCancellationStructure:
     )
     @pytest.mark.asyncio
     async def test_tool_call_update_cancelled_structure(
-        self, vibe_home_dir: Path
+        self, DOTSY_HOME_dir: Path
     ) -> None:
         custom_results = [
             mock_llm_chunk(
@@ -900,7 +900,7 @@ class TestCancellationStructure:
         ]
         mock_env = get_mocking_env(custom_results)
         async for process in get_acp_agent_loop_process(
-            mock_env=mock_env, vibe_home=vibe_home_dir
+            mock_env=mock_env, DOTSY_HOME=DOTSY_HOME_dir
         ):
             permission_request = await start_session_with_request_permission(
                 process, "Create a file named test.txt"

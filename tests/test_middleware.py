@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from vibe.core.agents.models import BUILTIN_AGENTS, AgentProfile, BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.middleware import (
     PLAN_AGENT_REMINDER,
     ConversationContext,
@@ -15,7 +15,7 @@ from vibe.core.types import AgentStats
 
 
 def make_context() -> ConversationContext:
-    config = VibeConfig(session_logging=SessionLoggingConfig(enabled=False))
+    config = DotsyConfig(session_logging=SessionLoggingConfig(enabled=False))
     return ConversationContext(messages=[], stats=AgentStats(), config=config)
 
 

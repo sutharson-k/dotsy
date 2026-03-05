@@ -7,7 +7,7 @@ import pytest
 from tests.mock.utils import collect_result
 from vibe.core.agents.manager import AgentManager
 from vibe.core.agents.models import BUILTIN_AGENTS, AgentType
-from vibe.core.config import VibeConfig
+from vibe.core.config import dotsyConfig
 from vibe.core.tools.base import BaseToolState, InvokeContext, ToolError
 from vibe.core.tools.builtins.task import Task, TaskArgs, TaskResult, TaskToolConfig
 from vibe.core.types import AssistantEvent, LLMMessage, Role
@@ -32,7 +32,7 @@ class TestTaskArgs:
 class TestTaskToolValidation:
     @pytest.fixture
     def ctx(self) -> InvokeContext:
-        config = VibeConfig(include_project_context=False, include_prompt_detail=False)
+        config = DotsyConfig(include_project_context=False, include_prompt_detail=False)
         manager = AgentManager(lambda: config)
         return InvokeContext(tool_call_id="test-call-id", agent_manager=manager)
 
@@ -77,7 +77,7 @@ class TestTaskToolValidation:
 class TestTaskToolExecution:
     @pytest.fixture
     def ctx(self) -> InvokeContext:
-        config = VibeConfig(include_project_context=False, include_prompt_detail=False)
+        config = DotsyConfig(include_project_context=False, include_prompt_detail=False)
         manager = AgentManager(lambda: config)
         return InvokeContext(tool_call_id="test-call-id", agent_manager=manager)
 

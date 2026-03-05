@@ -13,7 +13,7 @@ from vibe.core.config import (
     ModelConfig,
     ProviderConfig,
     SessionLoggingConfig,
-    VibeConfig,
+    DotsyConfig,
 )
 from vibe.core.tools.base import BaseToolConfig, ToolPermission
 from vibe.core.types import (
@@ -41,7 +41,7 @@ def make_config(
     include_prompt_detail: bool = False,
     enabled_tools: list[str] | None = None,
     todo_permission: ToolPermission = ToolPermission.ALWAYS,
-) -> VibeConfig:
+) -> DotsyConfig:
     models = [
         ModelConfig(
             name="mistral-vibe-cli-latest",
@@ -79,7 +79,7 @@ def make_config(
             backend=Backend.MISTRAL,
         ),
     ]
-    return VibeConfig(
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=not disable_logging),
         auto_compact_threshold=auto_compact_threshold,
         system_prompt_id=system_prompt_id,
@@ -506,7 +506,7 @@ class TestAutoCompactIntegration:
             [mock_llm_chunk(content="<summary>")],
             [mock_llm_chunk(content="<final>")],
         ])
-        cfg = VibeConfig(
+        cfg = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=1,
         )

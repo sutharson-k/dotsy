@@ -7,20 +7,20 @@ from textual.content import Content
 from textual.style import Style
 from textual.widgets import Markdown
 
-from vibe.cli.textual_ui.app import VibeApp
+from vibe.cli.textual_ui.app import dotsyApp
 from vibe.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
 from vibe.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture
-def vibe_config() -> VibeConfig:
-    return VibeConfig(session_logging=SessionLoggingConfig(enabled=False))
+def vibe_config() -> DotsyConfig:
+    return DotsyConfig(session_logging=SessionLoggingConfig(enabled=False))
 
 
 @pytest.fixture
-def vibe_app(vibe_config: VibeConfig) -> VibeApp:
+def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
     agent_loop = AgentLoop(vibe_config)
     return VibeApp(agent_loop=agent_loop)
 

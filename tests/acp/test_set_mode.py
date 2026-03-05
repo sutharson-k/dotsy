@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from vibe.acp.acp_agent_loop import dotsyAcpAgentLoop
 from vibe.core.agents.models import BuiltinAgentName
 
 

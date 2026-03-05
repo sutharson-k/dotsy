@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from vibe.core.agents.models import AgentProfile, AgentSafety
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.session.session_logger import SessionLogger
 from vibe.core.tools.manager import ToolManager
 from vibe.core.types import AgentStats, LLMMessage, Role, SessionMetadata
@@ -60,9 +60,9 @@ def mock_tool_manager() -> ToolManager:
 
 
 @pytest.fixture
-def mock_vibe_config() -> VibeConfig:
+def mock_vibe_config() -> DotsyConfig:
     """Create a mock vibe config for testing."""
-    return VibeConfig(active_model="test-model", models=[], providers=[])
+    return DotsyConfig(active_model="test-model", models=[], providers=[])
 
 
 class TestSessionLoggerInitialization:
@@ -171,7 +171,7 @@ class TestSessionLoggerSaveInteraction:
         result = await logger.save_interaction(
             messages=[],
             stats=AgentStats(),
-            base_config=VibeConfig(active_model="test", models=[], providers=[]),
+            base_config=DotsyConfig(active_model="test", models=[], providers=[]),
             tool_manager=MagicMock(),
             agent_profile=AgentProfile(
                 name="test",
@@ -188,7 +188,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_success(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:
@@ -237,7 +237,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_system_prompt_in_metadata(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:
@@ -286,7 +286,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_with_existing_messages(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:
@@ -351,7 +351,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_no_new_messages_is_noop(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:
@@ -408,7 +408,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_no_user_messages(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:
@@ -454,7 +454,7 @@ class TestSessionLoggerSaveInteraction:
     async def test_save_interaction_long_user_message(
         self,
         session_config: SessionLoggingConfig,
-        mock_vibe_config: VibeConfig,
+        mock_vibe_config: DotsyConfig,
         mock_tool_manager: ToolManager,
         mock_agent_profile: AgentProfile,
     ) -> None:

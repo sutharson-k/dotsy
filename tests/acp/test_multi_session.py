@@ -11,7 +11,7 @@ from pytest import raises
 
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from vibe.acp.acp_agent_loop import dotsyAcpAgentLoop
 from vibe.core.types import Role
 
 

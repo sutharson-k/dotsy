@@ -9,9 +9,9 @@ import pytest
 
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_client import FakeClient
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from vibe.acp.acp_agent_loop import dotsyAcpAgentLoop
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def acp_agent_loop(backend: FakeBackend) -> VibeAcpAgentLoop:
     class PatchedAgent(AgentLoop):
         def __init__(self, *args, **kwargs) -> None:
             # Force our config with auto_compact_threshold=1
-            kwargs["config"] = VibeConfig(
+            kwargs["config"] = DotsyConfig(
                 session_logging=SessionLoggingConfig(enabled=False),
                 auto_compact_threshold=1,
             )

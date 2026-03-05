@@ -3,24 +3,24 @@ from __future__ import annotations
 import pytest
 
 from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
-from vibe.cli.textual_ui.app import VibeApp
+from vibe.cli.textual_ui.app import dotsyApp
 from vibe.cli.textual_ui.widgets.messages import AssistantMessage, UserMessage
 from vibe.cli.textual_ui.widgets.tools import ToolCallMessage, ToolResultMessage
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.types import FunctionCall, LLMMessage, Role, ToolCall
 
 
 @pytest.fixture
-def vibe_config() -> VibeConfig:
-    return VibeConfig(
+def vibe_config() -> DotsyConfig:
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False), enable_update_checks=False
     )
 
 
 @pytest.mark.asyncio
 async def test_ui_displays_messages_when_resuming_session(
-    vibe_config: VibeConfig,
+    vibe_config: DotsyConfig,
 ) -> None:
     """Test that messages are properly displayed when resuming a session."""
     agent_loop = AgentLoop(config=vibe_config, enable_streaming=False)
@@ -79,7 +79,7 @@ async def test_ui_displays_messages_when_resuming_session(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_display_messages_when_only_system_messages_exist(
-    vibe_config: VibeConfig,
+    vibe_config: DotsyConfig,
 ) -> None:
     """Test that no messages are displayed when only system messages exist."""
     agent_loop = AgentLoop(config=vibe_config, enable_streaming=False)
@@ -103,7 +103,7 @@ async def test_ui_does_not_display_messages_when_only_system_messages_exist(
 
 @pytest.mark.asyncio
 async def test_ui_displays_multiple_user_assistant_turns(
-    vibe_config: VibeConfig,
+    vibe_config: DotsyConfig,
 ) -> None:
     """Test that multiple conversation turns are properly displayed."""
     agent_loop = AgentLoop(config=vibe_config, enable_streaming=False)

@@ -11,7 +11,7 @@ from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_tool import FakeTool
 from vibe.core.agent_loop import AgentLoop
 from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.tools.base import BaseToolConfig, ToolPermission
 from vibe.core.tools.builtins.todo import TodoItem
 from vibe.core.types import (
@@ -33,8 +33,8 @@ async def act_and_collect_events(agent_loop: AgentLoop, prompt: str) -> list[Bas
     return [ev async for ev in agent_loop.act(prompt)]
 
 
-def make_config(todo_permission: ToolPermission = ToolPermission.ALWAYS) -> VibeConfig:
-    return VibeConfig(
+def make_config(todo_permission: ToolPermission = ToolPermission.ALWAYS) -> DotsyConfig:
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         auto_compact_threshold=0,
         enabled_tools=["todo"],
@@ -410,7 +410,7 @@ async def test_tool_call_can_be_interrupted() -> None:
     tool_call = ToolCall(
         id="call_8", index=0, function=FunctionCall(name="stub_tool", arguments="{}")
     )
-    config = VibeConfig(
+    config = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         auto_compact_threshold=0,
         enabled_tools=["stub_tool"],

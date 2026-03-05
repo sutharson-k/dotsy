@@ -17,7 +17,7 @@ from vibe.core.agents.models import (
     BuiltinAgentName,
     _deep_merge,
 )
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.paths.config_paths import ConfigPath
 from vibe.core.paths.global_paths import GlobalPath
 from vibe.core.tools.base import ToolPermission
@@ -192,7 +192,7 @@ class TestAgentApplyToConfig:
             "vibe.core.config.GLOBAL_PROMPTS_DIR", GlobalPath(lambda: global_prompts)
         )
 
-        base = VibeConfig(include_project_context=False, include_prompt_detail=False)
+        base = DotsyConfig(include_project_context=False, include_prompt_detail=False)
         agent = AgentProfile(
             name="cc",
             display_name="Cc",
@@ -230,8 +230,8 @@ class TestAgentProfileOverrides:
 
 class TestAgentManagerCycling:
     @pytest.fixture
-    def base_config(self) -> VibeConfig:
-        return VibeConfig(
+    def base_config(self) -> DotsyConfig:
+        return DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
             include_project_context=False,
@@ -248,7 +248,7 @@ class TestAgentManagerCycling:
         ])
 
     def test_get_agent_order_includes_primary_agents(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -261,7 +261,7 @@ class TestAgentManagerCycling:
         assert BuiltinAgentName.ACCEPT_EDITS in order
 
     def test_next_agent_cycles_through_all(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -275,7 +275,7 @@ class TestAgentManagerCycling:
         assert len(set(visited)) == len(order)
 
     def test_next_agent_wraps_around(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -300,8 +300,8 @@ class TestAgentProfileConfig:
 
 class TestAgentSwitchAgent:
     @pytest.fixture
-    def base_config(self) -> VibeConfig:
-        return VibeConfig(
+    def base_config(self) -> DotsyConfig:
+        return DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
             include_project_context=False,
@@ -319,7 +319,7 @@ class TestAgentSwitchAgent:
 
     @pytest.mark.asyncio
     async def test_switch_to_plan_agent_restricts_tools(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -335,7 +335,7 @@ class TestAgentSwitchAgent:
 
     @pytest.mark.asyncio
     async def test_switch_from_plan_to_default_restores_tools(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.PLAN, backend=backend
@@ -349,7 +349,7 @@ class TestAgentSwitchAgent:
 
     @pytest.mark.asyncio
     async def test_switch_agent_preserves_conversation_history(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -367,7 +367,7 @@ class TestAgentSwitchAgent:
 
     @pytest.mark.asyncio
     async def test_switch_to_same_agent_is_noop(
-        self, base_config: VibeConfig, backend: FakeBackend
+        self, base_config: DotsyConfig, backend: FakeBackend
     ) -> None:
         agent = AgentLoop(
             base_config, agent_name=BuiltinAgentName.DEFAULT, backend=backend
@@ -393,7 +393,7 @@ class TestAcceptEditsAgent:
     async def test_accept_edits_agent_auto_approves_write_file(self) -> None:
         backend = FakeBackend([])
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
             enabled_tools=["write_file"],
@@ -409,7 +409,7 @@ class TestAcceptEditsAgent:
     async def test_accept_edits_agent_requires_approval_for_other_tools(self) -> None:
         backend = FakeBackend([])
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
             enabled_tools=["bash"],
@@ -431,7 +431,7 @@ class TestPlanAgentToolRestriction:
                 usage=LLMUsage(prompt_tokens=10, completion_tokens=5),
             )
         ])
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
         )
@@ -457,7 +457,7 @@ class TestPlanAgentToolRestriction:
             mock_llm_chunk(content="Tool not available"),
         ])
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             auto_compact_threshold=0,
         )
@@ -476,7 +476,7 @@ class TestPlanAgentToolRestriction:
 
 class TestAgentManagerFiltering:
     def test_enabled_agents_filters_to_only_enabled(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             enabled_agents=["default", "plan"],
@@ -491,7 +491,7 @@ class TestAgentManagerFiltering:
         assert "accept-edits" not in agents
 
     def test_disabled_agents_excludes_disabled(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             disabled_agents=["auto-approve", "accept-edits"],
@@ -506,7 +506,7 @@ class TestAgentManagerFiltering:
         assert "accept-edits" not in agents
 
     def test_enabled_agents_takes_precedence_over_disabled(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             enabled_agents=["default"],
@@ -519,7 +519,7 @@ class TestAgentManagerFiltering:
         assert "default" in agents
 
     def test_glob_pattern_matching(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             disabled_agents=["auto-*", "accept-*"],
@@ -533,7 +533,7 @@ class TestAgentManagerFiltering:
         assert "accept-edits" not in agents
 
     def test_regex_pattern_matching(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             enabled_agents=["re:^(default|plan)$"],
@@ -546,7 +546,7 @@ class TestAgentManagerFiltering:
         assert "plan" in agents
 
     def test_empty_enabled_agents_returns_all(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             enabled_agents=[],
@@ -560,7 +560,7 @@ class TestAgentManagerFiltering:
         assert "explore" in agents
 
     def test_get_subagents_respects_filtering(self) -> None:
-        config = VibeConfig(
+        config = DotsyConfig(
             include_project_context=False,
             include_prompt_detail=False,
             disabled_agents=["explore"],

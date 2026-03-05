@@ -6,7 +6,7 @@ import pytest
 
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_client import FakeClient
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from vibe.acp.acp_agent_loop import dotsyAcpAgentLoop
 from vibe.core.agent_loop import AgentLoop
 from vibe.core.types import LLMChunk, LLMMessage, LLMUsage, Role
 

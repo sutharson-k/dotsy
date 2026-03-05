@@ -13,7 +13,7 @@ from tests.update_notifier.adapters.fake_update_cache_repository import (
     FakeUpdateCacheRepository,
 )
 from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
-from vibe.cli.textual_ui.app import VibeApp
+from vibe.cli.textual_ui.app import dotsyApp
 from vibe.cli.textual_ui.widgets.messages import WhatsNewMessage
 from vibe.cli.update_notifier import (
     Update,
@@ -23,7 +23,7 @@ from vibe.cli.update_notifier import (
 )
 from vibe.core.agent_loop import AgentLoop
 from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 
 
 async def _wait_for_notification(
@@ -56,8 +56,8 @@ async def _assert_no_notifications(
 
 
 @pytest.fixture
-def vibe_config_with_update_checks_enabled() -> VibeConfig:
-    return VibeConfig(
+def vibe_config_with_update_checks_enabled() -> DotsyConfig:
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False), enable_update_checks=True
     )
 
@@ -68,14 +68,14 @@ class VibeAppFactory(Protocol):
         *,
         notifier: FakeUpdateGateway,
         update_cache_repository: FakeUpdateCacheRepository | None = None,
-        config: VibeConfig | None = None,
+        config: DotsyConfig | None = None,
         initial_agent_name: str = BuiltinAgentName.DEFAULT,
         current_version: str = "0.1.0",
     ) -> VibeApp: ...
 
 
 @pytest.fixture
-def make_vibe_app(vibe_config_with_update_checks_enabled: VibeConfig) -> VibeAppFactory:
+def make_vibe_app(vibe_config_with_update_checks_enabled: DotsyConfig) -> VibeAppFactory:
     update_cache_repository = FakeUpdateCacheRepository()
 
     def _make_app(
@@ -83,7 +83,7 @@ def make_vibe_app(vibe_config_with_update_checks_enabled: VibeConfig) -> VibeApp
         notifier: FakeUpdateGateway,
         update_cache_repository: FakeUpdateCacheRepository
         | None = update_cache_repository,
-        config: VibeConfig | None = None,
+        config: DotsyConfig | None = None,
         initial_agent_name: str = BuiltinAgentName.DEFAULT,
         current_version: str = "0.1.0",
     ) -> VibeApp:
@@ -150,7 +150,7 @@ async def test_ui_displays_warning_toast_when_check_fails(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_invoke_gateway_nor_show_error_notification_when_update_checks_are_disabled(
-    vibe_config_with_update_checks_enabled: VibeConfig, make_vibe_app: VibeAppFactory
+    vibe_config_with_update_checks_enabled: DotsyConfig, make_vibe_app: VibeAppFactory
 ) -> None:
     config = vibe_config_with_update_checks_enabled
     config.enable_update_checks = False
@@ -354,7 +354,7 @@ async def test_ui_does_not_display_whats_new_when_file_does_not_exist(
 async def test_ui_displays_success_notification_when_auto_update_succeeds(
     make_vibe_app: VibeAppFactory,
 ) -> None:
-    config = VibeConfig(
+    config = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         enable_update_checks=True,
         enable_auto_update=True,
@@ -374,7 +374,7 @@ async def test_ui_displays_success_notification_when_auto_update_succeeds(
     assert notification.title == "Update successful"
     assert (
         notification.message
-        == "0.1.0 => 0.2.0\nVibe was updated successfully. Please restart to use the new version."
+        == "0.1.0 => 0.2.0.dotsy was updated successfully. Please restart to use the new version."
     )
 
 
@@ -382,7 +382,7 @@ async def test_ui_displays_success_notification_when_auto_update_succeeds(
 async def test_ui_displays_update_notification_when_auto_update_fails(
     make_vibe_app: VibeAppFactory,
 ) -> None:
-    config = VibeConfig(
+    config = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         enable_update_checks=True,
         enable_auto_update=True,

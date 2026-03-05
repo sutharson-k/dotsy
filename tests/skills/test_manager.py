@@ -5,13 +5,13 @@ from pathlib import Path
 import pytest
 
 from tests.skills.conftest import create_skill
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.skills.manager import SkillManager
 
 
 @pytest.fixture
-def config() -> VibeConfig:
-    return VibeConfig(
+def config() -> DotsyConfig:
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         system_prompt_id="tests",
         include_project_context=False,
@@ -19,7 +19,7 @@ def config() -> VibeConfig:
 
 
 @pytest.fixture
-def skill_manager(config: VibeConfig) -> SkillManager:
+def skill_manager(config: DotsyConfig) -> SkillManager:
     return SkillManager(lambda: config)
 
 
@@ -32,7 +32,7 @@ class TestSkillManagerDiscovery:
     def test_discovers_skill_from_skill_paths(self, skills_dir: Path) -> None:
         create_skill(skills_dir, "test-skill", "A test skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -48,7 +48,7 @@ class TestSkillManagerDiscovery:
         create_skill(skills_dir, "skill-two", "Second skill")
         create_skill(skills_dir, "skill-three", "Third skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -70,7 +70,7 @@ class TestSkillManagerDiscovery:
         # Create a valid skill
         create_skill(skills_dir, "valid-skill", "A valid skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -90,7 +90,7 @@ class TestSkillManagerDiscovery:
         # Create a valid skill
         create_skill(skills_dir, "valid-skill", "A valid skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -115,7 +115,7 @@ class TestSkillManagerParsing:
             allowed_tools="bash read_file",
         )
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -135,7 +135,7 @@ class TestSkillManagerParsing:
     def test_sets_correct_skill_path(self, skills_dir: Path) -> None:
         create_skill(skills_dir, "test-skill", "A test skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -157,7 +157,7 @@ class TestSkillManagerParsing:
         # Create a valid skill
         create_skill(skills_dir, "valid-skill", "A valid skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -179,7 +179,7 @@ class TestSkillManagerParsing:
         # Create a valid skill
         create_skill(skills_dir, "valid-skill", "A valid skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -203,7 +203,7 @@ class TestSkillManagerSearchPaths:
         skills_dir_2.mkdir()
         create_skill(skills_dir_2, "skill-from-dir2", "Skill from directory 2")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -226,7 +226,7 @@ class TestSkillManagerSearchPaths:
         skills_dir_2.mkdir()
         create_skill(skills_dir_2, "duplicate-skill", "Second version")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -243,7 +243,7 @@ class TestSkillManagerSearchPaths:
         skills_dir.mkdir()
         create_skill(skills_dir, "valid-skill", "A valid skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -259,7 +259,7 @@ class TestSkillManagerGetSkill:
     def test_returns_skill_by_name(self, skills_dir: Path) -> None:
         create_skill(skills_dir, "test-skill", "A test skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -281,7 +281,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "skill-b", "Skill B")
         create_skill(skills_dir, "skill-c", "Skill C")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -301,7 +301,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "skill-b", "Skill B")
         create_skill(skills_dir, "skill-c", "Skill C")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -322,7 +322,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "skill-a", "Skill A")
         create_skill(skills_dir, "skill-b", "Skill B")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -341,7 +341,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "search-docs", "Search docs")
         create_skill(skills_dir, "other-skill", "Other skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -361,7 +361,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "skill-v2", "Skill v2")
         create_skill(skills_dir, "other-skill", "Other skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -380,7 +380,7 @@ class TestSkillManagerFiltering:
         create_skill(skills_dir, "enabled-skill", "Enabled")
         create_skill(skills_dir, "disabled-skill", "Disabled")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -397,7 +397,7 @@ class TestSkillUserInvocable:
     def test_user_invocable_defaults_to_true(self, skills_dir: Path) -> None:
         create_skill(skills_dir, "default-skill", "A default skill")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -412,7 +412,7 @@ class TestSkillUserInvocable:
     def test_user_invocable_can_be_set_to_false(self, skills_dir: Path) -> None:
         create_skill(skills_dir, "hidden-skill", "A hidden skill", user_invocable=False)
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -431,7 +431,7 @@ class TestSkillUserInvocable:
             skills_dir, "explicit-skill", "An explicit skill", user_invocable=True
         )
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,
@@ -448,7 +448,7 @@ class TestSkillUserInvocable:
         create_skill(skills_dir, "hidden-skill", "Hidden", user_invocable=False)
         create_skill(skills_dir, "default-skill", "Default")
 
-        config = VibeConfig(
+        config = DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             system_prompt_id="tests",
             include_project_context=False,

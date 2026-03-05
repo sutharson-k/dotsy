@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from vibe.core.paths.config_paths import CONFIG_FILE
-from vibe.core.paths.global_paths import GLOBAL_CONFIG_FILE, VIBE_HOME
+from vibe.core.paths.global_paths import GLOBAL_CONFIG_FILE, DOTSY_HOME
 from vibe.core.trusted_folders import trusted_folders_manager
 
 
@@ -45,9 +45,9 @@ class TestResolveConfigFile:
 
         assert CONFIG_FILE.path == GLOBAL_CONFIG_FILE.path
 
-    def test_respects_vibe_home_env_var(
+    def test_respects_DOTSY_HOME_env_var(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        assert VIBE_HOME.path != tmp_path
-        monkeypatch.setenv("VIBE_HOME", str(tmp_path))
-        assert VIBE_HOME.path == tmp_path
+        assert DOTSY_HOME.path != tmp_path
+        monkeypatch.setenv("DOTSY_HOME", str(tmp_path))
+        assert DOTSY_HOME.path == tmp_path

@@ -7,9 +7,9 @@ from textual.selection import Selection
 from textual.widget import Widget
 
 from vibe.cli.clipboard import copy_selection_to_clipboard
-from vibe.cli.textual_ui.app import VibeApp
+from vibe.cli.textual_ui.app import dotsyApp
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 
 
 class ClipboardSelectionWidget(Widget):
@@ -30,7 +30,7 @@ async def test_ui_clipboard_notification_does_not_crash_on_markup_text(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     agent_loop = AgentLoop(
-        config=VibeConfig(
+        config=DotsyConfig(
             session_logging=SessionLoggingConfig(enabled=False),
             enable_update_checks=False,
         )

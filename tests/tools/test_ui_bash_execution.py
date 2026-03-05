@@ -6,21 +6,21 @@ import time
 import pytest
 from textual.widgets import Static
 
-from vibe.cli.textual_ui.app import VibeApp
+from vibe.cli.textual_ui.app import dotsyApp
 from vibe.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from vibe.cli.textual_ui.widgets.messages import BashOutputMessage, ErrorMessage
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture
-def vibe_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> VibeConfig:
+def vibe_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> DotsyConfig:
     monkeypatch.chdir(tmp_path)
-    return VibeConfig(session_logging=SessionLoggingConfig(enabled=False))
+    return DotsyConfig(session_logging=SessionLoggingConfig(enabled=False))
 
 
 @pytest.fixture
-def vibe_app(vibe_config: VibeConfig) -> VibeApp:
+def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
     agent_loop = AgentLoop(vibe_config)
     return VibeApp(agent_loop=agent_loop)
 

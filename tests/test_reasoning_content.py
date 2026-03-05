@@ -14,7 +14,7 @@ from vibe.core.config import (
     ModelConfig,
     ProviderConfig,
     SessionLoggingConfig,
-    VibeConfig,
+    DotsyConfig,
 )
 from vibe.core.llm.backend.generic import GenericBackend, OpenAIAdapter
 from vibe.core.llm.backend.mistral import MistralBackend, MistralMapper, ParsedContent
@@ -22,8 +22,8 @@ from vibe.core.llm.format import APIToolFormatHandler
 from vibe.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
 
 
-def make_config() -> VibeConfig:
-    return VibeConfig(
+def make_config() -> DotsyConfig:
+    return DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
         auto_compact_threshold=0,
         system_prompt_id="tests",

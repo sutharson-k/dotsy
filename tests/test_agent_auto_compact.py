@@ -5,7 +5,7 @@ import pytest
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.types import (
     AssistantEvent,
     CompactEndEvent,
@@ -27,7 +27,7 @@ async def test_auto_compact_triggers_and_batches_observer() -> None:
         [mock_llm_chunk(content="<summary>")],
         [mock_llm_chunk(content="<final>")],
     ])
-    cfg = VibeConfig(
+    cfg = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False), auto_compact_threshold=1
     )
     agent = AgentLoop(cfg, message_observer=observer, backend=backend)

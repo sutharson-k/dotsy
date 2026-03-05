@@ -12,7 +12,7 @@ from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
 from vibe.core.agent_loop import AgentLoop
 from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, DotsyConfig
 from vibe.core.llm.exceptions import BackendErrorBuilder
 from vibe.core.middleware import (
     ConversationContext,
@@ -60,8 +60,8 @@ def make_config(
     disable_logging: bool = True,
     enabled_tools: list[str] | None = None,
     tools: dict[str, BaseToolConfig] | None = None,
-) -> VibeConfig:
-    cfg = VibeConfig(
+) -> DotsyConfig:
+    cfg = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=not disable_logging),
         auto_compact_threshold=0,
         system_prompt_id="tests",
