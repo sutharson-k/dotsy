@@ -43,24 +43,24 @@ class LineAnimationState:
 
 
 class WelcomeBanner(Static):
-    FLASH_COLOR = "#FFFFFF"
-    # Unique emerald/teal gradient - completely different from Mistral
-    TARGET_COLORS = ("#00C9A7", "#00B894", "#00A383", "#009172", "#007F61", "#006D50")
-    BORDER_TARGET_COLOR = "#00C9A7"
+    FLASH_COLOR = "#FFD700"
+    # Warm sunset gradient - orange/coral/pink (opposite of Mistral's cool colors)
+    TARGET_COLORS = ("#FF6B6B", "#FF8E72", "#FFB385", "#FFD79D", "#FFE5AD", "#FFF0C7")
+    BORDER_TARGET_COLOR = "#FF6B6B"
 
-    LINE_ANIMATION_DURATION_MS = 200
-    LINE_STAGGER_MS = 280
-    FLASH_RESET_DURATION_MS = 400
-    ANIMATION_TICK_INTERVAL = 0.1
+    LINE_ANIMATION_DURATION_MS = 300
+    LINE_STAGGER_MS = 150
+    FLASH_RESET_DURATION_MS = 600
+    ANIMATION_TICK_INTERVAL = 0.15
 
-    COLOR_FLASH_MIDPOINT = 0.5
-    COLOR_PHASE_SCALE = 2.0
+    COLOR_FLASH_MIDPOINT = 0.4
+    COLOR_PHASE_SCALE = 2.5
     COLOR_CACHE_THRESHOLD = 0.001
     BORDER_PROGRESS_THRESHOLD = 0.01
 
-    BLOCK = "█"
+    BLOCK = "▓"
     SPACE = " "
-    LOGO_TEXT_GAP = "   "
+    LOGO_TEXT_GAP = "  "
 
     def __init__(self, config: DotsyConfig) -> None:
         super().__init__(" ")
@@ -94,19 +94,20 @@ class WelcomeBanner(Static):
         self._initialize_static_line_suffixes()
 
     def _initialize_static_line_suffixes(self) -> None:
+        # Different text layout - right aligned with different formatting
         self._static_line1_suffix = (
-            f"{self.LOGO_TEXT_GAP}[b]Dotsy v{__version__}[/]"
+            f"{self.LOGO_TEXT_GAP}[bold #FF6B6B]DOTSY[/] [dim]{__version__}[/]"
         )
         self._static_line2_suffix = (
-            f"{self.LOGO_TEXT_GAP}[dim]{self.config.active_model}[/]"
+            f"{self.LOGO_TEXT_GAP}[italic dim]model: {self.config.active_model}[/]"
         )
         mcp_count = len(self.config.mcp_servers)
         model_count = len(self.config.models)
-        self._static_line3_suffix = f"{self.LOGO_TEXT_GAP}[dim]{model_count} models · {mcp_count} MCP servers[/]"
+        self._static_line3_suffix = f"{self.LOGO_TEXT_GAP}[dim]{model_count} models · {mcp_count} MCP[/]"
         self._static_line5_suffix = (
-            f"{self.LOGO_TEXT_GAP}[dim]{self.config.displayed_workdir or Path.cwd()}[/]"
+            f"{self.LOGO_TEXT_GAP}[dim]dir: {self.config.displayed_workdir or Path.cwd()}[/]"
         )
-        self._static_line7 = f"[dim]Type[/] [{self.BORDER_TARGET_COLOR}]/help[/] [dim]for more information • [/][{self.BORDER_TARGET_COLOR}]/terminal-setup[/][dim] for shift+enter[/]"
+        self._static_line7 = f"[dim]Commands:[/] [{self.BORDER_TARGET_COLOR}]/help[/][dim] • [/][{self.BORDER_TARGET_COLOR}]/terminal-setup[/][dim] • [/][{self.BORDER_TARGET_COLOR}]/config[/]"
 
     @property
     def skeleton_color(self) -> str:
@@ -237,7 +238,7 @@ class WelcomeBanner(Static):
         return interpolate_color(self._flash_rgb, target_rgb, phase)
 
     def _update_display(self) -> None:
-        for idx in range(5):
+        for idx in range(6):
             self._update_colored_line(idx, idx)
 
         lines = [line if line else Text("") for line in self._cached_text_lines]
@@ -274,13 +275,13 @@ class WelcomeBanner(Static):
         B = self.BLOCK
         S = self.SPACE
 
-        # Unique geometric diamond pattern - original design
+        # D shape with new block character for different texture
         patterns = [
-            f"{S}{S}{S}{S}[{color}]{B}[/]{S}{S}{S}{S}{self._static_line1_suffix}",
-            f"{S}{S}{S}[{color}]{B}{B}{B}[/]{S}{S}{S}{self._static_line2_suffix}",
-            f"{S}{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{S}{self._static_line3_suffix}",
-            f"{S}{S}{S}[{color}]{B}{B}{B}[/]{S}{S}{S}",
-            f"{S}{S}{S}{S}[{color}]{B}[/]{S}{S}{S}{S}{self._static_line5_suffix}",
-            f"{S}",
+            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}╗[/]{S}{self._static_line1_suffix}",
+            f"{S}[{color}]{B}{B}╔══{B}{B}╗[/]{S}{self._static_line2_suffix}",
+            f"{S}[{color}]{B}{B}║  {B}{B}║[/]{S}{self._static_line3_suffix}",
+            f"{S}[{color}]{B}{B}║  {B}{B}║[/]{S}",
+            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}╚╝[/]{S}{self._static_line5_suffix}",
+            f"{S}[{color}]╚════════╝[/]",
         ]
         return patterns[line_idx]
