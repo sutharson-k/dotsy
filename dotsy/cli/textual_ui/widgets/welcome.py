@@ -239,7 +239,9 @@ class WelcomeBanner(Static):
 
     def _update_display(self) -> None:
         for idx in range(7):
-            self._update_colored_line(idx, idx)
+            # Line 6 (version) doesn't use gradient
+            color_idx = idx if idx < len(self.TARGET_COLORS) else 0
+            self._update_colored_line(idx, color_idx)
 
         lines = [line if line else Text("") for line in self._cached_text_lines]
         self.update(Align.center(Group(*lines)))
@@ -260,6 +262,11 @@ class WelcomeBanner(Static):
         return color
 
     def _update_colored_line(self, slot_idx: int, line_idx: int) -> None:
+        # Version line (index 6) doesn't use gradient animation
+        if slot_idx == 6:
+            self._cached_text_lines[6] = Text.from_markup(self._build_line(slot_idx, ""))
+            return
+            
         color = self._get_color(line_idx)
         state = self._line_states[line_idx]
 
