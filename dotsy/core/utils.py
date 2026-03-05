@@ -112,7 +112,6 @@ def is_dangerous_directory(path: Path | str = ".") -> tuple[bool, str]:
     home_dir = Path.home()
 
     dangerous_paths = {
-        home_dir: "home directory",
         home_dir / "Documents": "Documents folder",
         home_dir / "Desktop": "Desktop folder",
         home_dir / "Downloads": "Downloads folder",
