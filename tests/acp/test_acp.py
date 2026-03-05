@@ -73,7 +73,7 @@ def _create_DOTSY_HOME_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
     base_config_dict["active_model"] = "devstral-latest"
     if base_config_dict.get("models"):
         for model in base_config_dict["models"]:
-            if model.get("name") == "mistral-vibe-cli-latest":
+            if model.get("name") == "dotsy-cli-latest":
                 model["alias"] = "devstral-latest"
 
     if sections:

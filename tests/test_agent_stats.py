@@ -44,7 +44,7 @@ def make_config(
 ) -> DotsyConfig:
     models = [
         ModelConfig(
-            name="mistral-vibe-cli-latest",
+            name="dotsy-cli-latest",
             provider="mistral",
             alias="devstral-latest",
             input_price=input_price,
