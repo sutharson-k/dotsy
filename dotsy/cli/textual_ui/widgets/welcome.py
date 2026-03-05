@@ -44,7 +44,7 @@ class LineAnimationState:
 
 class WelcomeBanner(Static):
     FLASH_COLOR = "#FFFFFF"
-    TARGET_COLORS = ("#4A00E0", "#6A00FF", "#8A2BE2", "#9D4EDD", "#B16CF0")
+    TARGET_COLORS = ("#4A00E0", "#6A00FF", "#8A2BE2", "#9D4EDD", "#B16CF0", "#C77DFF")
     BORDER_TARGET_COLOR = "#6A00FF"
 
     LINE_ANIMATION_DURATION_MS = 200
@@ -89,7 +89,7 @@ class WelcomeBanner(Static):
             + self.LINE_ANIMATION_DURATION_MS
         ) / 1000
 
-        self._cached_text_lines: list[Text | None] = [None] * 7
+        self._cached_text_lines: list[Text | None] = [None] * 8
         self._initialize_static_line_suffixes()
 
     def _initialize_static_line_suffixes(self) -> None:
@@ -236,7 +236,7 @@ class WelcomeBanner(Static):
         return interpolate_color(self._flash_rgb, target_rgb, phase)
 
     def _update_display(self) -> None:
-        for idx in range(5):
+        for idx in range(6):
             self._update_colored_line(idx, idx)
 
         lines = [line if line else Text("") for line in self._cached_text_lines]
@@ -274,10 +274,11 @@ class WelcomeBanner(Static):
         S = self.SPACE
 
         patterns = [
-            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{self._static_line1_suffix}",
+            f"{S}[{color}]{B}{B}{B}{B}{B}{B}[/]{S}{self._static_line1_suffix}",
             f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line2_suffix}",
             f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}{self._static_line3_suffix}",
             f"{S}[{color}]{B}[/]{S}{S}{S}{S}{S}[{color}]{B}[/]{S}",
-            f"{S}{S}{S}[{color}]{B}{B}{B}{B}{B}[/]{S}{self._static_line5_suffix}",
+            f"{S}[{color}]{B}{B}{B}{B}{B}{B}[/]{S}{self._static_line5_suffix}",
+            f"{S}",
         ]
         return patterns[line_idx]
