@@ -48,11 +48,11 @@ context_warnings = false
 
 # Providers configuration
 [[providers]]
-name = "mistral"
+name = "dotsy"
 api_base = "https://api.mistral.ai/v1"
 api_key_env_var = "MISTRAL_API_KEY"
 api_style = "openai"
-backend = "mistral"
+backend = "dotsy"
 
 [[providers]]
 name = "openai"
@@ -91,8 +91,8 @@ backend = "generic"
 
 # Models configuration
 [[models]]
-name = "mistral-vibe-cli-latest"
-provider = "mistral"
+name = "dotsy-cli-latest"
+provider = "dotsy"
 alias = "devstral-2"
 input_price = 0.4
 output_price = 2.0
@@ -100,7 +100,7 @@ temperature = 0.2
 
 [[models]]
 name = "devstral-small-latest"
-provider = "mistral"
+provider = "dotsy"
 alias = "devstral-small"
 input_price = 0.1
 output_price = 0.3
@@ -108,7 +108,7 @@ temperature = 0.2
 
 [[models]]
 name = "mistral-large-latest"
-provider = "mistral"
+provider = "dotsy"
 alias = "mistral-large"
 input_price = 2.0
 output_price = 6.0
