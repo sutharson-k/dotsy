@@ -43,10 +43,10 @@ class LineAnimationState:
 
 
 class WelcomeBanner(Static):
-    FLASH_COLOR = "#FFD700"
-    # Warm sunset gradient - orange/coral/pink (opposite of Mistral's cool colors)
-    TARGET_COLORS = ("#FF6B6B", "#FF8E72", "#FFB385", "#FFD79D", "#FFE5AD", "#FFF0C7")
-    BORDER_TARGET_COLOR = "#FF6B6B"
+    FLASH_COLOR = "#FFFFFF"
+    # Blue to violet gradient - horizontal across the logo
+    TARGET_COLORS = ("#4A00E0", "#6A00FF", "#8A2BE2", "#9D4EDD", "#B16CF0", "#C77DFF")
+    BORDER_TARGET_COLOR = "#6A00FF"
 
     LINE_ANIMATION_DURATION_MS = 300
     LINE_STAGGER_MS = 150
