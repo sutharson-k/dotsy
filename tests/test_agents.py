@@ -186,10 +186,10 @@ class TestAgentApplyToConfig:
         (global_prompts / "cc.md").write_text("Global custom prompt")
 
         monkeypatch.setattr(
-            "vibe.core.config.PROMPTS_DIR", ConfigPath(lambda: project_prompts)
+            "dotsy.core.config.PROMPTS_DIR", ConfigPath(lambda: project_prompts)
         )
         monkeypatch.setattr(
-            "vibe.core.config.GLOBAL_PROMPTS_DIR", GlobalPath(lambda: global_prompts)
+            "dotsy.core.config.GLOBAL_PROMPTS_DIR", GlobalPath(lambda: global_prompts)
         )
 
         base = DotsyConfig(include_project_context=False, include_prompt_detail=False)

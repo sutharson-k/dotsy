@@ -124,7 +124,7 @@ def test_snapshot_shows_whats_new_and_plan_offer(
     whats_new_file = tmp_path / "whats_new.md"
     whats_new_file.write_text("# What's New\n\n- Feature 1\n- Feature 2")
 
-    with patch("vibe.cli.update_notifier.whats_new.VIBE_ROOT", tmp_path):
+    with patch("dotsy.cli.update_notifier.whats_new.DOTSY_ROOT", tmp_path):
         assert snap_compare(
             "test_ui_snapshot_plan_offer.py:SnapshotAppWhatsNewAndPlanOffer",
             terminal_size=(120, 36),

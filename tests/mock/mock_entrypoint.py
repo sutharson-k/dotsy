@@ -44,18 +44,18 @@ if __name__ == "__main__":
         yield next(chunk_iterable)
 
     patch(
-        "vibe.core.llm.backend.dotsy.DotsyBackend.complete", side_effect=mock_complete
+        "dotsy.core.llm.backend.dotsy.DotsyBackend.complete", side_effect=mock_complete
     ).start()
     patch(
-        "vibe.core.llm.backend.generic.GenericBackend.complete",
+        "dotsy.core.llm.backend.generic.GenericBackend.complete",
         side_effect=mock_complete,
     ).start()
     patch(
-        "vibe.core.llm.backend.dotsy.DotsyBackend.complete_streaming",
+        "dotsy.core.llm.backend.dotsy.DotsyBackend.complete_streaming",
         side_effect=mock_complete_streaming,
     ).start()
     patch(
-        "vibe.core.llm.backend.generic.GenericBackend.complete_streaming",
+        "dotsy.core.llm.backend.generic.GenericBackend.complete_streaming",
         side_effect=mock_complete_streaming,
     ).start()
 

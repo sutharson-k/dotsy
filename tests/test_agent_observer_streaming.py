@@ -167,11 +167,11 @@ async def test_act_streams_batched_chunks_in_order() -> None:
     assistant_events = [e for e in events if isinstance(e, AssistantEvent)]
     assert len(assistant_events) == 2
     assert [event.content for event in assistant_events] == [
-        "Hello from Vibe! More",
+        "Hello from Dotsy! More",
         " and end",
     ]
     assert agent.messages[-1].role == Role.assistant
-    assert agent.messages[-1].content == "Hello from Vibe! More and end"
+    assert agent.messages[-1].content == "Hello from Dotsy! More and end"
 
 
 @pytest.mark.asyncio

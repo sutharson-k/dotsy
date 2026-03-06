@@ -29,7 +29,7 @@ def test_run_programmatic_preload_streaming_is_batched(
 ) -> None:
     spy = SpyStreamingFormatter()
     monkeypatch.setattr(
-        "vibe.core.programmatic.create_formatter", lambda *_args, **_kwargs: spy
+        "dotsy.core.programmatic.create_formatter", lambda *_args, **_kwargs: spy
     )
 
     with mock_backend_factory(
@@ -78,7 +78,7 @@ def test_run_programmatic_preload_streaming_is_batched(
             Role.assistant,
         ]
         assert (
-            spy.emitted[0][1] == "You are Vibe, a super useful programming assistant."
+            spy.emitted[0][1] == "You are Dotsy, a super useful programming assistant."
         )
         assert spy.emitted[1][1] == "Previously, you told me about decorators."
         assert spy.emitted[2][1] == "Sure, decorators allow you to wrap functions."
@@ -94,7 +94,7 @@ def test_run_programmatic_ignores_system_messages_in_previous(
 ) -> None:
     spy = SpyStreamingFormatter()
     monkeypatch.setattr(
-        "vibe.core.programmatic.create_formatter", lambda *_args, **_kwargs: spy
+        "dotsy.core.programmatic.create_formatter", lambda *_args, **_kwargs: spy
     )
 
     with mock_backend_factory(
@@ -130,7 +130,7 @@ def test_run_programmatic_ignores_system_messages_in_previous(
         roles = [r for r, _ in spy.emitted]
         assert roles == [Role.system, Role.user, Role.user, Role.assistant]
         assert (
-            spy.emitted[0][1] == "You are Vibe, a super useful programming assistant."
+            spy.emitted[0][1] == "You are Dotsy, a super useful programming assistant."
         )
         assert spy.emitted[1][1] == "Continue our previous discussion."
         assert spy.emitted[2][1] == "Let's move on to practical examples."

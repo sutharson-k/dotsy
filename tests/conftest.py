@@ -46,8 +46,8 @@ def tmp_working_directory(
 def config_dir(
     monkeypatch: pytest.MonkeyPatch, tmp_path_factory: pytest.TempPathFactory
 ) -> Path:
-    tmp_path = tmp_path_factory.mktemp("vibe")
-    config_dir = tmp_path / ".vibe"
+    tmp_path = tmp_path_factory.mktemp("dotsy")
+    config_dir = tmp_path / ".dotsy"
     config_dir.mkdir(parents=True, exist_ok=True)
     config_file = config_dir / "config.toml"
     config_file.write_text(tomli_w.dumps(get_base_config()), encoding="utf-8")
