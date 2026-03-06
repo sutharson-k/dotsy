@@ -1,6 +1,6 @@
 [project]
 name = "dotsy"
-version = "17.20.119"
+version = "17.21.129"
 description = "Multi-provider AI CLI coding assistant"
 readme = "README.md"
 requires-python = ">=3.12"
