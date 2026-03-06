@@ -66,15 +66,34 @@ def test_snapshot_cycle_to_auto_approve_mode(snap_compare: SnapCompare) -> None:
     )
 
 
-def test_snapshot_cycle_wraps_to_default(snap_compare: SnapCompare) -> None:
-    """Test that shift+tab cycles back to default mode after auto approve."""
+def test_snapshot_cycle_to_explore_mode(snap_compare: SnapCompare) -> None:
+    """Test that shift+tab cycles to explore mode."""
 
     async def run_before(pilot: Pilot) -> None:
         await pilot.pause(0.1)
         await pilot.press("shift+tab")  # default -> plan
         await pilot.press("shift+tab")  # plan -> accept edits
         await pilot.press("shift+tab")  # accept edits -> auto approve
-        await pilot.press("shift+tab")  # auto approve -> default (wrap)
+        await pilot.press("shift+tab")  # auto approve -> explore
+        await pilot.pause(0.1)
+
+    assert snap_compare(
+        "base_snapshot_test_app.py:BaseSnapshotTestApp",
+        terminal_size=(120, 36),
+        run_before=run_before,
+    )
+
+
+def test_snapshot_cycle_wraps_to_default(snap_compare: SnapCompare) -> None:
+    """Test that shift+tab cycles back to default mode after explore."""
+
+    async def run_before(pilot: Pilot) -> None:
+        await pilot.pause(0.1)
+        await pilot.press("shift+tab")  # default -> plan
+        await pilot.press("shift+tab")  # plan -> accept edits
+        await pilot.press("shift+tab")  # accept edits -> auto approve
+        await pilot.press("shift+tab")  # auto approve -> explore
+        await pilot.press("shift+tab")  # explore -> default (wrap)
         await pilot.pause(0.1)
 
     assert snap_compare(
