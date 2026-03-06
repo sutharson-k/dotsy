@@ -261,9 +261,9 @@ class ModelConfig(BaseModel):
 
 
 DEFAULT_PROVIDERS = [
-    # Dotsy API
+    # Mistral AI API
     ProviderConfig(
-        name="dotsy",
+        name="mistral",
         api_base="https://api.mistral.ai/v1",
         api_key_env_var="MISTRAL_API_KEY",
         backend=Backend.DOTSY,
