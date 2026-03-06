@@ -16,6 +16,20 @@ from dotsy.setup.onboarding.screens.api_key import ApiKeyScreen
 from dotsy.setup.onboarding.screens.theme_selection import ThemeSelectionScreen
 
 
+@pytest.fixture
+def onboarding_config_dir(
+    monkeypatch: pytest.MonkeyPatch, tmp_path_factory: pytest.TempPathFactory
+) -> Path:
+    """Set up a clean config directory for onboarding tests."""
+    tmp_path = tmp_path_factory.mktemp("onboarding_dotsy")
+    config_dir = tmp_path / ".dotsy"
+    config_dir.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(
+        "dotsy.core.paths.global_paths._DEFAULT_DOTSY_HOME", config_dir
+    )
+    return config_dir
+
+
 async def _wait_for(
     condition: Callable[[], bool],
     pilot: Pilot,
@@ -40,7 +54,9 @@ async def pass_welcome_screen(pilot: Pilot) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_gets_through_the_onboarding_successfully() -> None:
+async def test_ui_gets_through_the_onboarding_successfully(
+    onboarding_config_dir: Path,
+) -> None:
     app = OnboardingApp()
     api_key_value = "sk-onboarding-test-key"
 
@@ -71,7 +87,9 @@ async def test_ui_gets_through_the_onboarding_successfully() -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_can_pick_a_theme_and_saves_selection(config_dir: Path) -> None:
+async def test_ui_can_pick_a_theme_and_saves_selection(
+    onboarding_config_dir: Path,
+) -> None:
     app = OnboardingApp()
 
     async with app.run_test() as pilot:

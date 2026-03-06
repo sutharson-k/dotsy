@@ -176,12 +176,12 @@ class TestAgentApplyToConfig:
 
         When a custom prompt .md file is absent from the project-local prompts
         directory, the system_prompt property should fall back to the global
-        ~/.vibe/prompts/ directory and load the file from there.
+        ~/.dotsy/prompts/ directory and load the file from there.
         """
-        project_prompts = tmp_path / "project" / ".vibe" / "prompts"
+        project_prompts = tmp_path / "project" / ".dotsy" / "prompts"
         project_prompts.mkdir(parents=True)
 
-        global_prompts = tmp_path / "home" / ".vibe" / "prompts"
+        global_prompts = tmp_path / "home" / ".dotsy" / "prompts"
         global_prompts.mkdir(parents=True)
         (global_prompts / "cc.md").write_text("Global custom prompt")
 

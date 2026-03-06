@@ -16,7 +16,15 @@ class PathCompletionController:
         self._selected_index = 0
 
     def can_handle(self, text: str, cursor_index: int) -> bool:
-        return "@" in text
+        if not text or cursor_index <= 0:
+            return False
+        
+        # Find the last "@" before the cursor
+        prefix = text[:cursor_index]
+        at_index = prefix.rfind("@")
+        
+        # Handle if there's an "@" and cursor is after it
+        return at_index >= 0
 
     def reset(self) -> None:
         if self._suggestions:
@@ -52,16 +60,11 @@ class PathCompletionController:
             return CompletionResult.IGNORED
 
         match event.key:
-            case "tab":
+            case "tab" | "enter":
                 if self._apply_selected_completion(text, cursor_index):
                     result = CompletionResult.HANDLED
                 else:
                     result = CompletionResult.IGNORED
-            case "enter":
-                if self._apply_selected_completion(text, cursor_index):
-                    result = CompletionResult.SUBMIT
-                else:
-                    result = CompletionResult.HANDLED
             case "down":
                 self._move_selection(1)
                 result = CompletionResult.HANDLED

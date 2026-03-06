@@ -63,8 +63,8 @@ def deep_merge(target: dict, source: dict) -> None:
 
 
 def _create_DOTSY_HOME_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
-    """Create a temporary vibe home directory with a minimal config file."""
-    DOTSY_HOME = tmp_path / ".vibe"
+    """Create a temporary dotsy home directory with a minimal config file."""
+    DOTSY_HOME = tmp_path / ".dotsy"
     DOTSY_HOME.mkdir()
 
     config_file = DOTSY_HOME / "config.toml"
@@ -91,13 +91,13 @@ def _create_DOTSY_HOME_dir(tmp_path: Path, *sections: dict[str, Any]) -> Path:
 
 @pytest.fixture
 def DOTSY_HOME_dir(tmp_path: Path) -> Path:
-    """Create a temporary vibe home directory with a minimal config file."""
+    """Create a temporary dotsy home directory with a minimal config file."""
     return _create_DOTSY_HOME_dir(tmp_path)
 
 
 @pytest.fixture
 def DOTSY_HOME_grep_ask(tmp_path: Path) -> Path:
-    """Create a temporary vibe home directory with grep configured to ask permission."""
+    """Create a temporary dotsy home directory with grep configured to ask permission."""
     return _create_DOTSY_HOME_dir(tmp_path, {"tools": {"grep": {"permission": "ask"}}})
 
 
