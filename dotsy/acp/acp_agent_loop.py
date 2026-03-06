@@ -155,9 +155,7 @@ class DotsyAcpAgentLoop(AcpAgent):
             ),
             protocol_version=PROTOCOL_VERSION,
             agent_info=Implementation(
-                name="@mistralai/Dotsy",
-                title="Dotsy",
-                version=__version__,
+                name="@mistralai/Dotsy", title="Dotsy", version=__version__
             ),
             auth_methods=auth_methods,
         )

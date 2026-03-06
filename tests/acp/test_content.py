@@ -10,7 +10,7 @@ from acp.schema import (
     TextResourceContents,
 )
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 from dotsy.core.types import Role
 from tests.stubs.fake_backend import FakeBackend
@@ -19,7 +19,7 @@ from tests.stubs.fake_backend import FakeBackend
 class TestACPContent:
     @pytest.mark.asyncio
     async def test_text_content(
-        self, acp_agent_loop: VibeAcpAgentLoop, backend: FakeBackend
+        self, acp_agent_loop: DotsyAcpAgentLoop, backend: FakeBackend
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -43,7 +43,7 @@ class TestACPContent:
 
     @pytest.mark.asyncio
     async def test_resource_content(
-        self, acp_agent_loop: VibeAcpAgentLoop, backend: FakeBackend
+        self, acp_agent_loop: DotsyAcpAgentLoop, backend: FakeBackend
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -79,7 +79,7 @@ class TestACPContent:
 
     @pytest.mark.asyncio
     async def test_resource_link_content(
-        self, acp_agent_loop: VibeAcpAgentLoop, backend: FakeBackend
+        self, acp_agent_loop: DotsyAcpAgentLoop, backend: FakeBackend
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -120,7 +120,7 @@ class TestACPContent:
 
     @pytest.mark.asyncio
     async def test_resource_link_minimal(
-        self, acp_agent_loop: VibeAcpAgentLoop, backend: FakeBackend
+        self, acp_agent_loop: DotsyAcpAgentLoop, backend: FakeBackend
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]

@@ -580,10 +580,7 @@ class DotsyConfig(BaseSettings):
         try:
             active_model = self.get_active_model()
             provider = self.get_provider_for_model(active_model)
-            DOTSY_API_BASES = [
-                "https://codestral.mistral.ai",
-                "https://api.mistral.ai",
-            ]
+            DOTSY_API_BASES = ["https://codestral.mistral.ai", "https://api.mistral.ai"]
             is_dotsy_api = any(
                 provider.api_base.startswith(api_base) for api_base in DOTSY_API_BASES
             )

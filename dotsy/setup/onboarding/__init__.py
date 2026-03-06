@@ -50,6 +50,4 @@ def run_onboarding(app: App | None = None) -> None:
                 f"You may need to set it manually in {GLOBAL_ENV_FILE.path}[/]\n"
             )
         case "completed":
-            rprint(
-                '\nSetup complete 🎉. Run "dotsy" to start using the Dotsy CLI.\n'
-            )
+            rprint('\nSetup complete 🎉. Run "dotsy" to start using the Dotsy CLI.\n')

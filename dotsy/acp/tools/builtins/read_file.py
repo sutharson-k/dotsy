@@ -22,7 +22,9 @@ class AcpReadFileState(ReadFileState, AcpToolState):
 
 class ReadFile(CoreReadFileTool, BaseAcpTool[AcpReadFileState]):
     state: AcpReadFileState
-    prompt_path = DOTSY_ROOT / "core" / "tools" / "builtins" / "prompts" / "read_file.md"
+    prompt_path = (
+        DOTSY_ROOT / "core" / "tools" / "builtins" / "prompts" / "read_file.md"
+    )
 
     @classmethod
     def _get_tool_state_class(cls) -> type[AcpReadFileState]:

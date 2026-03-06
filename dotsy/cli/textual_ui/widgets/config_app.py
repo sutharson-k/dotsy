@@ -50,7 +50,9 @@ class ConfigApp(Container):
             super().__init__()
             self.changes = changes
 
-    def __init__(self, config: DotsyConfig, *, has_terminal_theme: bool = False) -> None:
+    def __init__(
+        self, config: DotsyConfig, *, has_terminal_theme: bool = False
+    ) -> None:
         super().__init__(id="config-app")
         self.config = config
         self.selected_index = 0

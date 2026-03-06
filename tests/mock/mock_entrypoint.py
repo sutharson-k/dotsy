@@ -44,8 +44,7 @@ if __name__ == "__main__":
         yield next(chunk_iterable)
 
     patch(
-        "vibe.core.llm.backend.dotsy.DotsyBackend.complete",
-        side_effect=mock_complete,
+        "vibe.core.llm.backend.dotsy.DotsyBackend.complete", side_effect=mock_complete
     ).start()
     patch(
         "vibe.core.llm.backend.generic.GenericBackend.complete",

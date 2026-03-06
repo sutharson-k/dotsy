@@ -176,28 +176,28 @@ def main() -> None:
 def _handle_set_api_key(api_key: str, provider_name: str) -> None:
     """Set API key for the specified provider."""
     from dotenv import set_key
-    
+
     from dotsy.core.config import DEFAULT_PROVIDERS
     from dotsy.core.paths.global_paths import GLOBAL_ENV_FILE
-    
+
     # Find provider config
     provider = None
     for p in DEFAULT_PROVIDERS:
         if p.name == provider_name:
             provider = p
             break
-    
+
     if not provider:
         rprint(f"[red]Error: Unknown provider '{provider_name}'[/]")
         sys.exit(1)
-    
+
     if not provider.api_key_env_var:
         rprint(f"[yellow]Warning: {provider_name} does not require an API key[/]")
         return
-    
+
     # Set in environment for current session
     os.environ[provider.api_key_env_var] = api_key
-    
+
     # Save to .env file
     try:
         GLOBAL_ENV_FILE.path.parent.mkdir(parents=True, exist_ok=True)

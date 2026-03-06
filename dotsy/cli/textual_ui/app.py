@@ -1219,7 +1219,9 @@ class DotsyApp(App):  # noqa: PLR0904
             )
             return
 
-        message = f"{update_message_prefix}\nPlease update Dotsy with your package manager"
+        message = (
+            f"{update_message_prefix}\nPlease update Dotsy with your package manager"
+        )
 
         self.notify(
             message, title="Update available", severity="information", timeout=10

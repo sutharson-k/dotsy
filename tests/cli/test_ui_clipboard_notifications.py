@@ -7,7 +7,7 @@ from textual.selection import Selection
 from textual.widget import Widget
 
 from dotsy.cli.clipboard import copy_selection_to_clipboard
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 
@@ -35,7 +35,7 @@ async def test_ui_clipboard_notification_does_not_crash_on_markup_text(
             enable_update_checks=False,
         )
     )
-    app = VibeApp(agent_loop=agent_loop)
+    app = DotsyApp(agent_loop=agent_loop)
 
     async with app.run_test(notifications=True) as pilot:
         await app.mount(ClipboardSelectionWidget("[/]"))

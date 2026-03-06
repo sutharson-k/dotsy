@@ -8,12 +8,12 @@ from acp.schema import (
     PromptCapabilities,
 )
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 
 class TestACPInitialize:
     @pytest.mark.asyncio
-    async def test_initialize(self, acp_agent_loop: VibeAcpAgentLoop) -> None:
+    async def test_initialize(self, acp_agent_loop: DotsyAcpAgentLoop) -> None:
         response = await acp_agent_loop.initialize(protocol_version=PROTOCOL_VERSION)
 
         assert response.protocol_version == PROTOCOL_VERSION
@@ -31,7 +31,7 @@ class TestACPInitialize:
 
     @pytest.mark.asyncio
     async def test_initialize_with_terminal_auth(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         """Test initialize with terminal-auth capabilities to check it was included."""
         client_capabilities = ClientCapabilities(field_meta={"terminal-auth": True})

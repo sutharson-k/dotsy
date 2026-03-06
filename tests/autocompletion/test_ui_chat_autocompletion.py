@@ -7,7 +7,7 @@ from textual.content import Content
 from textual.style import Style
 from textual.widgets import Markdown
 
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.core.agent_loop import AgentLoop
@@ -20,13 +20,13 @@ def vibe_config() -> DotsyConfig:
 
 
 @pytest.fixture
-def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
+def vibe_app(vibe_config: DotsyConfig) -> DotsyApp:
     agent_loop = AgentLoop(vibe_config)
-    return VibeApp(agent_loop=agent_loop)
+    return DotsyApp(agent_loop=agent_loop)
 
 
 @pytest.mark.asyncio
-async def test_popup_appears_with_matching_suggestions(vibe_app: VibeApp) -> None:
+async def test_popup_appears_with_matching_suggestions(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         popup = vibe_app.query_one(CompletionPopup)
@@ -41,7 +41,7 @@ async def test_popup_appears_with_matching_suggestions(vibe_app: VibeApp) -> Non
 
 
 @pytest.mark.asyncio
-async def test_popup_hides_when_input_cleared(vibe_app: VibeApp) -> None:
+async def test_popup_hides_when_input_cleared(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
 
@@ -53,7 +53,7 @@ async def test_popup_hides_when_input_cleared(vibe_app: VibeApp) -> None:
 
 @pytest.mark.asyncio
 async def test_pressing_tab_writes_selected_command_and_keeps_popup_visible(
-    vibe_app: VibeApp,
+    vibe_app: DotsyApp,
 ) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
@@ -84,7 +84,7 @@ def ensure_selected_command(popup: CompletionPopup, expected_alias: str) -> None
 
 
 @pytest.mark.asyncio
-async def test_arrow_navigation_updates_selected_suggestion(vibe_app: VibeApp) -> None:
+async def test_arrow_navigation_updates_selected_suggestion(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
 
@@ -98,7 +98,7 @@ async def test_arrow_navigation_updates_selected_suggestion(vibe_app: VibeApp) -
 
 
 @pytest.mark.asyncio
-async def test_arrow_navigation_cycles_through_suggestions(vibe_app: VibeApp) -> None:
+async def test_arrow_navigation_cycles_through_suggestions(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
 
@@ -113,7 +113,7 @@ async def test_arrow_navigation_cycles_through_suggestions(vibe_app: VibeApp) ->
 
 @pytest.mark.asyncio
 async def test_pressing_enter_submits_selected_command_and_hides_popup(
-    vibe_app: VibeApp,
+    vibe_app: DotsyApp,
 ) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
@@ -150,7 +150,7 @@ def file_tree(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
 
 @pytest.mark.asyncio
 async def test_path_completion_popup_lists_files_and_directories(
-    vibe_app: VibeApp, file_tree: Path
+    vibe_app: DotsyApp, file_tree: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
@@ -164,7 +164,7 @@ async def test_path_completion_popup_lists_files_and_directories(
 
 @pytest.mark.asyncio
 async def test_path_completion_popup_shows_up_to_ten_results(
-    vibe_app: VibeApp, file_tree: Path
+    vibe_app: DotsyApp, file_tree: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         (file_tree / "src" / "core" / "extra").mkdir(parents=True)
@@ -194,7 +194,7 @@ async def test_path_completion_popup_shows_up_to_ten_results(
 
 @pytest.mark.asyncio
 async def test_pressing_tab_writes_selected_path_name_and_hides_popup(
-    vibe_app: VibeApp, file_tree: Path
+    vibe_app: DotsyApp, file_tree: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
@@ -209,7 +209,7 @@ async def test_pressing_tab_writes_selected_path_name_and_hides_popup(
 
 @pytest.mark.asyncio
 async def test_pressing_enter_writes_selected_path_name_and_hides_popup(
-    vibe_app: VibeApp, file_tree: Path
+    vibe_app: DotsyApp, file_tree: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
@@ -224,7 +224,7 @@ async def test_pressing_enter_writes_selected_path_name_and_hides_popup(
 
 @pytest.mark.asyncio
 async def test_fuzzy_matches_subsequence_characters(
-    file_tree: Path, vibe_app: VibeApp
+    file_tree: Path, vibe_app: DotsyApp
 ) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
@@ -238,7 +238,7 @@ async def test_fuzzy_matches_subsequence_characters(
 
 @pytest.mark.asyncio
 async def test_fuzzy_matches_word_boundaries(
-    file_tree: Path, vibe_app: VibeApp
+    file_tree: Path, vibe_app: DotsyApp
 ) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
@@ -252,7 +252,7 @@ async def test_fuzzy_matches_word_boundaries(
 
 @pytest.mark.asyncio
 async def test_finds_files_recursively_by_filename(
-    file_tree: Path, vibe_app: VibeApp
+    file_tree: Path, vibe_app: DotsyApp
 ) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
@@ -266,7 +266,7 @@ async def test_finds_files_recursively_by_filename(
 
 @pytest.mark.asyncio
 async def test_finds_files_recursively_with_partial_path(
-    file_tree: Path, vibe_app: VibeApp
+    file_tree: Path, vibe_app: DotsyApp
 ) -> None:
     async with vibe_app.run_test() as pilot:
         popup = vibe_app.query_one(CompletionPopup)
@@ -280,7 +280,7 @@ async def test_finds_files_recursively_with_partial_path(
 
 @pytest.mark.asyncio
 async def test_does_not_trigger_completion_when_navigating_history(
-    file_tree: Path, vibe_app: VibeApp
+    file_tree: Path, vibe_app: DotsyApp
 ) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)

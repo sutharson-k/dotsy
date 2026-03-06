@@ -3,14 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 from dotsy.core.agents.models import BuiltinAgentName
 
 
 class TestACPSetMode:
     @pytest.mark.asyncio
-    async def test_set_mode_to_default(self, acp_agent_loop: VibeAcpAgentLoop) -> None:
+    async def test_set_mode_to_default(self, acp_agent_loop: DotsyAcpAgentLoop) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
         )
@@ -32,7 +32,7 @@ class TestACPSetMode:
 
     @pytest.mark.asyncio
     async def test_set_mode_to_auto_approve(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -57,7 +57,7 @@ class TestACPSetMode:
         assert acp_session.agent_loop.auto_approve is True
 
     @pytest.mark.asyncio
-    async def test_set_mode_to_plan(self, acp_agent_loop: VibeAcpAgentLoop) -> None:
+    async def test_set_mode_to_plan(self, acp_agent_loop: DotsyAcpAgentLoop) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
         )
@@ -81,7 +81,7 @@ class TestACPSetMode:
 
     @pytest.mark.asyncio
     async def test_set_mode_to_accept_edits(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -108,7 +108,7 @@ class TestACPSetMode:
 
     @pytest.mark.asyncio
     async def test_set_mode_invalid_mode_returns_none(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -132,7 +132,7 @@ class TestACPSetMode:
 
     @pytest.mark.asyncio
     async def test_set_mode_to_same_mode(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -155,7 +155,7 @@ class TestACPSetMode:
 
     @pytest.mark.asyncio
     async def test_set_mode_with_empty_string(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]

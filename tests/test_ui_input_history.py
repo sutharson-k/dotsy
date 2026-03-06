@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from dotsy.cli.history_manager import HistoryManager
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input.body import ChatInputBody
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.core.agent_loop import AgentLoop
@@ -35,7 +35,7 @@ def history_file(tmp_path: Path) -> Path:
     return history_file
 
 
-def inject_history_file(vibe_app: VibeApp, history_file: Path) -> None:
+def inject_history_file(vibe_app: DotsyApp, history_file: Path) -> None:
     # Dependency Injection would help here, but as we don't have it yet: manual injection
     chat_input_body = vibe_app.query_one(ChatInputBody)
     chat_input_body.history = HistoryManager(history_file)
@@ -43,7 +43,7 @@ def inject_history_file(vibe_app: VibeApp, history_file: Path) -> None:
 
 @pytest.mark.asyncio
 async def test_ui_navigation_through_input_history(
-    vibe_app: VibeApp, history_file: Path
+    vibe_app: DotsyApp, history_file: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         inject_history_file(vibe_app, history_file)
@@ -68,7 +68,7 @@ async def test_ui_navigation_through_input_history(
 
 @pytest.mark.asyncio
 async def test_ui_does_nothing_if_command_completion_is_active(
-    vibe_app: VibeApp, history_file: Path
+    vibe_app: DotsyApp, history_file: Path
 ) -> None:
     async with vibe_app.run_test() as pilot:
         inject_history_file(vibe_app, history_file)
@@ -84,7 +84,7 @@ async def test_ui_does_nothing_if_command_completion_is_active(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_prevent_arrow_down_to_move_cursor_to_bottom_lines(
-    vibe_app: VibeApp,
+    vibe_app: DotsyApp,
 ):
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
@@ -110,7 +110,7 @@ async def test_ui_does_not_prevent_arrow_down_to_move_cursor_to_bottom_lines(
 
 @pytest.mark.asyncio
 async def test_ui_resumes_arrow_down_after_manual_move(
-    vibe_app: VibeApp, tmp_path: Path
+    vibe_app: DotsyApp, tmp_path: Path
 ) -> None:
     history_path = tmp_path / "history.jsonl"
     history_path.write_text(

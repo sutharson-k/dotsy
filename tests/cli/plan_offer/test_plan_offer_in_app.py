@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from dotsy.cli.plan_offer.ports.whoami_gateway import WhoAmIResponse
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.messages import PlanOfferMessage
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
@@ -11,12 +11,12 @@ from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 from tests.stubs.fake_backend import FakeBackend
 
 
-def _make_app(gateway: FakeWhoAmIGateway, config: DotsyConfig | None = None) -> VibeApp:
+def _make_app(gateway: FakeWhoAmIGateway, config: DotsyConfig | None = None) -> DotsyApp:
     config = config or DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False), enable_update_checks=False
     )
     agent_loop = AgentLoop(config=config, backend=FakeBackend())
-    return VibeApp(agent_loop=agent_loop, plan_offer_gateway=gateway)
+    return DotsyApp(agent_loop=agent_loop, plan_offer_gateway=gateway)
 
 
 @pytest.mark.asyncio

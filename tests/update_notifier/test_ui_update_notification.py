@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 from textual.app import Notification
 
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.messages import WhatsNewMessage
 from dotsy.cli.update_notifier import (
     Update,
@@ -27,7 +27,7 @@ from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
 
 
 async def _wait_for_notification(
-    app: VibeApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
+    app: DotsyApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
 ) -> Notification:
     loop = asyncio.get_running_loop()
     deadline = loop.time() + timeout
@@ -42,7 +42,7 @@ async def _wait_for_notification(
 
 
 async def _assert_no_notifications(
-    app: VibeApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
+    app: DotsyApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
 ) -> None:
     loop = asyncio.get_running_loop()
     deadline = loop.time() + timeout
@@ -62,7 +62,7 @@ def vibe_config_with_update_checks_enabled() -> DotsyConfig:
     )
 
 
-class VibeAppFactory(Protocol):
+class DotsyAppFactory(Protocol):
     def __call__(
         self,
         *,
@@ -71,11 +71,13 @@ class VibeAppFactory(Protocol):
         config: DotsyConfig | None = None,
         initial_agent_name: str = BuiltinAgentName.DEFAULT,
         current_version: str = "0.1.0",
-    ) -> VibeApp: ...
+    ) -> DotsyApp: ...
 
 
 @pytest.fixture
-def make_vibe_app(vibe_config_with_update_checks_enabled: DotsyConfig) -> VibeAppFactory:
+def make_vibe_app(
+    vibe_config_with_update_checks_enabled: DotsyConfig,
+) -> DotsyAppFactory:
     update_cache_repository = FakeUpdateCacheRepository()
 
     def _make_app(
@@ -86,12 +88,12 @@ def make_vibe_app(vibe_config_with_update_checks_enabled: DotsyConfig) -> VibeAp
         config: DotsyConfig | None = None,
         initial_agent_name: str = BuiltinAgentName.DEFAULT,
         current_version: str = "0.1.0",
-    ) -> VibeApp:
+    ) -> DotsyApp:
         app_config = config or vibe_config_with_update_checks_enabled
         agent_loop = AgentLoop(
             app_config, agent_name=initial_agent_name, enable_streaming=False
         )
-        return VibeApp(
+        return DotsyApp(
             agent_loop=agent_loop,
             update_notifier=notifier,
             update_cache_repository=update_cache_repository,
@@ -102,7 +104,7 @@ def make_vibe_app(vibe_config_with_update_checks_enabled: DotsyConfig) -> VibeAp
 
 
 @pytest.mark.asyncio
-async def test_ui_displays_update_notification(make_vibe_app: VibeAppFactory) -> None:
+async def test_ui_displays_update_notification(make_vibe_app: DotsyAppFactory) -> None:
     notifier = FakeUpdateGateway(update=Update(latest_version="0.2.0"))
     app = make_vibe_app(notifier=notifier)
 
@@ -119,7 +121,7 @@ async def test_ui_displays_update_notification(make_vibe_app: VibeAppFactory) ->
 
 @pytest.mark.asyncio
 async def test_ui_does_not_display_update_notification_when_not_available(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     notifier = FakeUpdateGateway(update=None)
     app = make_vibe_app(notifier=notifier)
@@ -131,7 +133,7 @@ async def test_ui_does_not_display_update_notification_when_not_available(
 
 @pytest.mark.asyncio
 async def test_ui_displays_warning_toast_when_check_fails(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     notifier = FakeUpdateGateway(
         error=UpdateGatewayError(cause=UpdateGatewayCause.FORBIDDEN)
@@ -150,7 +152,7 @@ async def test_ui_displays_warning_toast_when_check_fails(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_invoke_gateway_nor_show_error_notification_when_update_checks_are_disabled(
-    vibe_config_with_update_checks_enabled: DotsyConfig, make_vibe_app: VibeAppFactory
+    vibe_config_with_update_checks_enabled: DotsyConfig, make_vibe_app: DotsyAppFactory
 ) -> None:
     config = vibe_config_with_update_checks_enabled
     config.enable_update_checks = False
@@ -165,7 +167,7 @@ async def test_ui_does_not_invoke_gateway_nor_show_error_notification_when_updat
 
 @pytest.mark.asyncio
 async def test_ui_does_not_show_toast_when_update_is_known_in_recent_cache_already(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     timestamp_two_hours_ago = int(time.time()) - 2 * 60 * 60
     notifier = FakeUpdateGateway(update=Update(latest_version="0.2.0"))
@@ -185,7 +187,7 @@ async def test_ui_does_not_show_toast_when_update_is_known_in_recent_cache_alrea
 
 @pytest.mark.asyncio
 async def test_ui_does_show_toast_when_cache_entry_is_too_old(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     timestamp_two_days_ago = int(time.time()) - 2 * 24 * 60 * 60
     notifier = FakeUpdateGateway(update=Update(latest_version="0.2.0"))
@@ -213,7 +215,7 @@ async def test_ui_does_show_toast_when_cache_entry_is_too_old(
 
 
 async def _wait_for_whats_new_message(
-    app: VibeApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
+    app: DotsyApp, pilot, *, timeout: float = 1.0, interval: float = 0.05
 ) -> WhatsNewMessage:
     loop = asyncio.get_running_loop()
     deadline = loop.time() + timeout
@@ -232,7 +234,7 @@ async def _wait_for_whats_new_message(
 
 @pytest.mark.asyncio
 async def test_ui_displays_whats_new_message_when_content_exists(
-    make_vibe_app: VibeAppFactory, tmp_path: Path
+    make_vibe_app: DotsyAppFactory, tmp_path: Path
 ) -> None:
     notifier = FakeUpdateGateway(update=None)
     cache = UpdateCache(
@@ -246,7 +248,7 @@ async def test_ui_displays_whats_new_message_when_content_exists(
     )
 
     whats_new_content = "# What's New\n\n- Feature 1\n- Feature 2"
-    with patch("vibe.cli.update_notifier.whats_new.VIBE_ROOT", tmp_path):
+    with patch("dotsy.cli.update_notifier.whats_new.DOTSY_ROOT", tmp_path):
         whats_new_file = tmp_path / "whats_new.md"
         whats_new_file.write_text(whats_new_content)
 
@@ -262,7 +264,7 @@ async def test_ui_displays_whats_new_message_when_content_exists(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_display_whats_new_when_seen_whats_new_version_matches(
-    make_vibe_app: VibeAppFactory, tmp_path: Path
+    make_vibe_app: DotsyAppFactory, tmp_path: Path
 ) -> None:
     notifier = FakeUpdateGateway(update=None)
     cache = UpdateCache(
@@ -275,7 +277,7 @@ async def test_ui_does_not_display_whats_new_when_seen_whats_new_version_matches
         notifier=notifier, update_cache_repository=repository, current_version="1.0.0"
     )
 
-    with patch("vibe.cli.update_notifier.whats_new.VIBE_ROOT", tmp_path):
+    with patch("dotsy.cli.update_notifier.whats_new.DOTSY_ROOT", tmp_path):
         whats_new_file = tmp_path / "whats_new.md"
         whats_new_file.write_text("# What's New\n\n- Feature 1")
 
@@ -291,7 +293,7 @@ async def test_ui_does_not_display_whats_new_when_seen_whats_new_version_matches
 
 @pytest.mark.asyncio
 async def test_ui_does_not_display_whats_new_when_file_is_empty(
-    make_vibe_app: VibeAppFactory, tmp_path: Path
+    make_vibe_app: DotsyAppFactory, tmp_path: Path
 ) -> None:
     notifier = FakeUpdateGateway(update=None)
     cache = UpdateCache(
@@ -304,7 +306,7 @@ async def test_ui_does_not_display_whats_new_when_file_is_empty(
         notifier=notifier, update_cache_repository=repository, current_version="1.0.0"
     )
 
-    with patch("vibe.cli.update_notifier.whats_new.VIBE_ROOT", tmp_path):
+    with patch("dotsy.cli.update_notifier.whats_new.DOTSY_ROOT", tmp_path):
         whats_new_file = tmp_path / "whats_new.md"
         whats_new_file.write_text("")
 
@@ -323,7 +325,7 @@ async def test_ui_does_not_display_whats_new_when_file_is_empty(
 
 @pytest.mark.asyncio
 async def test_ui_does_not_display_whats_new_when_file_does_not_exist(
-    make_vibe_app: VibeAppFactory, tmp_path: Path
+    make_vibe_app: DotsyAppFactory, tmp_path: Path
 ) -> None:
     notifier = FakeUpdateGateway(update=None)
     cache = UpdateCache(
@@ -336,7 +338,7 @@ async def test_ui_does_not_display_whats_new_when_file_does_not_exist(
         notifier=notifier, update_cache_repository=repository, current_version="1.0.0"
     )
 
-    with patch("vibe.cli.update_notifier.whats_new.VIBE_ROOT", tmp_path):
+    with patch("dotsy.cli.update_notifier.whats_new.DOTSY_ROOT", tmp_path):
         async with app.run_test() as pilot:
             await pilot.pause(0.5)
 
@@ -352,7 +354,7 @@ async def test_ui_does_not_display_whats_new_when_file_does_not_exist(
 
 @pytest.mark.asyncio
 async def test_ui_displays_success_notification_when_auto_update_succeeds(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     config = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
@@ -361,7 +363,7 @@ async def test_ui_displays_success_notification_when_auto_update_succeeds(
     )
     notifier = FakeUpdateGateway(update=Update(latest_version="0.2.0"))
 
-    with patch("vibe.cli.update_notifier.update.UPDATE_COMMANDS", ["true"]):
+    with patch("dotsy.cli.update_notifier.update.UPDATE_COMMANDS", ["true"]):
         app = make_vibe_app(notifier=notifier, config=config)
 
         async with app.run_test() as pilot:
@@ -380,7 +382,7 @@ async def test_ui_displays_success_notification_when_auto_update_succeeds(
 
 @pytest.mark.asyncio
 async def test_ui_displays_update_notification_when_auto_update_fails(
-    make_vibe_app: VibeAppFactory,
+    make_vibe_app: DotsyAppFactory,
 ) -> None:
     config = DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False),
@@ -389,7 +391,7 @@ async def test_ui_displays_update_notification_when_auto_update_fails(
     )
     notifier = FakeUpdateGateway(update=Update(latest_version="0.2.0"))
 
-    with patch("vibe.cli.update_notifier.update.UPDATE_COMMANDS", ["false"]):
+    with patch("dotsy.cli.update_notifier.update.UPDATE_COMMANDS", ["false"]):
         app = make_vibe_app(notifier=notifier, config=config)
 
         async with app.run_test() as pilot:

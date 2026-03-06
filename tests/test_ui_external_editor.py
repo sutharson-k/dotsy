@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
@@ -32,7 +32,7 @@ def mock_suspend():
 
 @pytest.mark.asyncio
 async def test_ctrl_g_opens_external_editor_and_updates_input(
-    vibe_app: VibeApp,
+    vibe_app: DotsyApp,
 ) -> None:
     """Test that Ctrl+G triggers external editor and updates input with result."""
     with patch(
@@ -58,7 +58,7 @@ async def test_ctrl_g_opens_external_editor_and_updates_input(
 
 
 @pytest.mark.asyncio
-async def test_ctrl_g_works_with_empty_input(vibe_app: VibeApp) -> None:
+async def test_ctrl_g_works_with_empty_input(vibe_app: DotsyApp) -> None:
     """Test that Ctrl+G works when input is empty."""
     with patch(
         "vibe.cli.textual_ui.widgets.chat_input.text_area.ExternalEditor"

@@ -3,8 +3,8 @@ from __future__ import annotations
 from unittest.mock import patch
 
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.types import LLMChunk, LLMMessage, LLMUsage, Role
 from tests.stubs.fake_backend import FakeBackend
@@ -22,18 +22,18 @@ def backend() -> FakeBackend:
     return backend
 
 
-def _create_acp_agent() -> VibeAcpAgentLoop:
-    vibe_acp_agent = VibeAcpAgentLoop()
+def _create_acp_agent() -> DotsyAcpAgentLoop:
+    dotsy_acp_agent = DotsyAcpAgentLoop()
     client = FakeClient()
 
-    vibe_acp_agent.on_connect(client)
-    client.on_connect(vibe_acp_agent)
+    dotsy_acp_agent.on_connect(client)
+    client.on_connect(dotsy_acp_agent)
 
-    return vibe_acp_agent  # pyright: ignore[reportReturnType]
+    return dotsy_acp_agent  # pyright: ignore[reportReturnType]
 
 
 @pytest.fixture
-def acp_agent_loop(backend: FakeBackend) -> VibeAcpAgentLoop:
+def acp_agent_loop(backend: FakeBackend) -> DotsyAcpAgentLoop:
     class PatchedAgent(AgentLoop):
         def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, **kwargs, backend=backend)

@@ -410,7 +410,7 @@ class QuestionApp(Container):
         elif event.key == "right":
             self.action_next_question()
             event.stop()
-        elif event.key == "tab" and event.shift:
+        elif event.key == "tab" and "shift" in event.modifiers:
             # Allow shift+tab to propagate for agent cycling
             return
 

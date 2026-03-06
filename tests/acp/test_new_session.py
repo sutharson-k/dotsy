@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
@@ -13,7 +13,7 @@ from tests.acp.conftest import _create_acp_agent
 
 
 @pytest.fixture
-def acp_agent_loop(backend) -> VibeAcpAgentLoop:
+def acp_agent_loop(backend) -> DotsyAcpAgentLoop:
     config = DotsyConfig(
         active_model="devstral-latest",
         models=[
@@ -40,7 +40,7 @@ def acp_agent_loop(backend) -> VibeAcpAgentLoop:
 class TestACPNewSession:
     @pytest.mark.asyncio
     async def test_new_session_response_structure(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]
@@ -92,7 +92,7 @@ class TestACPNewSession:
     @pytest.mark.skip(reason="TODO: Fix this test")
     @pytest.mark.asyncio
     async def test_new_session_preserves_model_after_set_model(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         session_response = await acp_agent_loop.new_session(
             cwd=str(Path.cwd()), mcp_servers=[]

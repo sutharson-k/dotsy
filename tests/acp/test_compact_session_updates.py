@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from acp.schema import TextContentBlock, ToolCallProgress, ToolCallStart
 import pytest
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
@@ -15,7 +15,7 @@ from tests.stubs.fake_client import FakeClient
 
 
 @pytest.fixture
-def acp_agent_loop(backend: FakeBackend) -> VibeAcpAgentLoop:
+def acp_agent_loop(backend: FakeBackend) -> DotsyAcpAgentLoop:
     class PatchedAgent(AgentLoop):
         def __init__(self, *args, **kwargs) -> None:
             # Force our config with auto_compact_threshold=1
@@ -36,7 +36,7 @@ def acp_agent_loop(backend: FakeBackend) -> VibeAcpAgentLoop:
 class TestCompactEventHandling:
     @pytest.mark.asyncio
     async def test_prompt_handles_compact_events(
-        self, acp_agent_loop: VibeAcpAgentLoop
+        self, acp_agent_loop: DotsyAcpAgentLoop
     ) -> None:
         """Verify prompt() sends tool_call session updates for compact events."""
         session_response = await acp_agent_loop.new_session(

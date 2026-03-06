@@ -6,7 +6,7 @@ import time
 import pytest
 from textual.widgets import Static
 
-from dotsy.cli.textual_ui.app import VibeApp
+from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.cli.textual_ui.widgets.messages import BashOutputMessage, ErrorMessage
 from dotsy.core.agent_loop import AgentLoop
@@ -26,7 +26,7 @@ def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
 
 
 async def _wait_for_bash_output_message(
-    vibe_app: VibeApp, pilot, timeout: float = 1.0
+    vibe_app: DotsyApp, pilot, timeout: float = 1.0
 ) -> BashOutputMessage:
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
@@ -36,7 +36,7 @@ async def _wait_for_bash_output_message(
     raise TimeoutError(f"BashOutputMessage did not appear within {timeout}s")
 
 
-def assert_no_command_error(vibe_app: VibeApp) -> None:
+def assert_no_command_error(vibe_app: DotsyApp) -> None:
     errors = list(vibe_app.query(ErrorMessage))
     if not errors:
         return
@@ -56,7 +56,7 @@ def assert_no_command_error(vibe_app: VibeApp) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_reports_no_output(vibe_app: VibeApp) -> None:
+async def test_ui_reports_no_output(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         chat_input.value = "!true"
@@ -69,7 +69,7 @@ async def test_ui_reports_no_output(vibe_app: VibeApp) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_shows_success_in_case_of_zero_code(vibe_app: VibeApp) -> None:
+async def test_ui_shows_success_in_case_of_zero_code(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         chat_input.value = "!true"
@@ -82,7 +82,7 @@ async def test_ui_shows_success_in_case_of_zero_code(vibe_app: VibeApp) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_shows_failure_in_case_of_non_zero_code(vibe_app: VibeApp) -> None:
+async def test_ui_shows_failure_in_case_of_non_zero_code(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         chat_input.value = "!bash -lc 'exit 7'"
@@ -97,7 +97,7 @@ async def test_ui_shows_failure_in_case_of_non_zero_code(vibe_app: VibeApp) -> N
 
 
 @pytest.mark.asyncio
-async def test_ui_handles_non_utf8_output(vibe_app: VibeApp) -> None:
+async def test_ui_handles_non_utf8_output(vibe_app: DotsyApp) -> None:
     """Assert the UI accepts decoding a non-UTF8 sequence like `printf '\xf0\x9f\x98'`.
     Whereas `printf '\xf0\x9f\x98\x8b'` prints a smiley face (😋) and would work even without those changes.
     """
@@ -114,7 +114,7 @@ async def test_ui_handles_non_utf8_output(vibe_app: VibeApp) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_handles_utf8_output(vibe_app: VibeApp) -> None:
+async def test_ui_handles_utf8_output(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         chat_input.value = "!echo hello"
@@ -127,7 +127,7 @@ async def test_ui_handles_utf8_output(vibe_app: VibeApp) -> None:
 
 
 @pytest.mark.asyncio
-async def test_ui_handles_non_utf8_stderr(vibe_app: VibeApp) -> None:
+async def test_ui_handles_non_utf8_stderr(vibe_app: DotsyApp) -> None:
     async with vibe_app.run_test() as pilot:
         chat_input = vibe_app.query_one(ChatInputContainer)
         chat_input.value = "!bash -lc \"printf '\\\\xff\\\\xfe' 1>&2\""

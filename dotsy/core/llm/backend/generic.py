@@ -215,7 +215,7 @@ class AnthropicAdapter(APIAdapter):
         # System message is separate in Anthropic API
         system_content = ""
         anthropic_messages = []
-        
+
         for msg in converted_messages:
             if msg.get("role") == "system":
                 system_content = msg.get("content", "")
@@ -234,7 +234,7 @@ class AnthropicAdapter(APIAdapter):
 
         if tools:
             payload["tools"] = [tool.model_dump(exclude_none=True) for tool in tools]
-        
+
         if tool_choice:
             if isinstance(tool_choice, str):
                 if tool_choice == "auto":
@@ -306,7 +306,7 @@ class AnthropicAdapter(APIAdapter):
         if data.get("type") == "message":
             content = ""
             tool_calls = []
-            
+
             for content_block in data.get("content", []):
                 if content_block.get("type") == "text":
                     content += content_block.get("text", "")
@@ -319,22 +319,19 @@ class AnthropicAdapter(APIAdapter):
                             "arguments": json.dumps(content_block.get("input", {})),
                         },
                     })
-            
+
             msg_dict = {"role": "assistant", "content": content}
             if tool_calls:
                 msg_dict["tool_calls"] = tool_calls
             msg_dict = self._reasoning_from_api(msg_dict, field_name)
             return LLMMessage.model_validate(msg_dict)
-        
+
         # Handle streaming delta
         if data.get("type") == "content_block_delta":
             delta = data.get("delta", {})
             if delta.get("type") == "text_delta":
-                return LLMMessage(
-                    role="assistant",
-                    content=delta.get("text", ""),
-                )
-        
+                return LLMMessage(role=Role.assistant, content=delta.get("text", ""))
+
         return None
 
     def parse_response(
