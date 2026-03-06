@@ -77,7 +77,7 @@ class TestACPNewSession:
         assert session_response.modes is not None
         assert session_response.modes.current_mode_id is not None
         assert session_response.modes.available_modes is not None
-        assert len(session_response.modes.available_modes) == 4
+        assert len(session_response.modes.available_modes) == 5
 
         assert session_response.modes.current_mode_id == BuiltinAgentName.DEFAULT
         # Check that all primary agents are available (order may vary)

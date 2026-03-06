@@ -54,7 +54,7 @@ class TestACPInitialize:
         assert response.auth_methods is not None
         assert len(response.auth_methods) == 1
         auth_method = response.auth_methods[0]
-        assert auth_method.id == "vibe-setup"
+        assert auth_method.id == "dotsy-setup"
         assert auth_method.name == "Register your API Key"
         assert auth_method.description == "Register your API Key inside Dotsy"
         assert auth_method.field_meta is not None
