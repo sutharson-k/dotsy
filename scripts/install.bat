@@ -26,7 +26,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [INFO] Found Python: 
+echo [INFO] Found Python:
 python --version
 
 REM Get the script directory (Dotsy root)
