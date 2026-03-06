@@ -4,12 +4,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 from dotsy.core.config import DotsyConfig, ModelConfig
 from tests.acp.conftest import _create_acp_agent
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 @pytest.fixture

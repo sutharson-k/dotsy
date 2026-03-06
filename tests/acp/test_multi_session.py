@@ -8,11 +8,11 @@ from acp import PROTOCOL_VERSION, RequestError
 from acp.schema import TextContentBlock
 import pytest
 from pytest import raises
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 from dotsy.core.types import Role
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 class TestMultiSessionCore:

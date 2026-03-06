@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.plan_offer.ports.whoami_gateway import WhoAmIResponse
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.textual_ui.widgets.messages import PlanOfferMessage
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig

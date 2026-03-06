@@ -8,7 +8,6 @@ from acp.schema import (
     PromptCapabilities,
 )
 import pytest
-
 from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 

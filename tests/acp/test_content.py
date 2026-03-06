@@ -10,10 +10,10 @@ from acp.schema import (
     TextResourceContents,
 )
 import pytest
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 from dotsy.core.types import Role
 from tests.stubs.fake_backend import FakeBackend
-from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 class TestACPContent:

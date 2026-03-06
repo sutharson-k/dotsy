@@ -119,7 +119,7 @@ async def test_pressing_enter_submits_selected_command_and_hides_popup(
         chat_input = vibe_app.query_one(ChatInputContainer)
         popup = vibe_app.query_one(CompletionPopup)
 
-        await pilot.press(*"/hel")  # noqa: E501
+        await pilot.press(*"/hel")
         await pilot.press("enter")
 
         assert chat_input.value == ""
