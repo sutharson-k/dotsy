@@ -963,7 +963,7 @@ class DotsyApp(App):  # noqa: PLR0904
                 await result.set_collapsed(self._todos_collapsed)
 
     def action_cycle_mode(self) -> None:
-        if self._current_bottom_app != BottomApp.Input:
+        if self._current_bottom_app not in (BottomApp.Input, BottomApp.Question):
             return
         self._refresh_profile_widgets()
         self._focus_current_bottom_app()
