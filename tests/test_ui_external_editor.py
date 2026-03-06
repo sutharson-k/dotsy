@@ -7,10 +7,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 
 
 @pytest.fixture

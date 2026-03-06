@@ -16,7 +16,7 @@ from dotsy.core.utils import is_dangerous_directory, is_windows
 
 if TYPE_CHECKING:
     from dotsy.core.agents import AgentManager
-    from dotsy.core.config import ProjectContextConfig, DotsyConfig
+    from dotsy.core.config import DotsyConfig, ProjectContextConfig
     from dotsy.core.skills.manager import SkillManager
     from dotsy.core.tools.manager import ToolManager
 

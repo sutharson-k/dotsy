@@ -7,11 +7,10 @@ from unittest.mock import patch
 from acp.schema import TextContentBlock, ToolCallProgress, ToolCallStart
 import pytest
 
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_client import FakeClient
-from dotsy.acp.acp_agent_loop import dotsyAcpAgentLoop
-from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture

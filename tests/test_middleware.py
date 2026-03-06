@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from dotsy.core.agents.models import BUILTIN_AGENTS, AgentProfile, BuiltinAgentName
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.middleware import (
     PLAN_AGENT_REMINDER,
     ConversationContext,

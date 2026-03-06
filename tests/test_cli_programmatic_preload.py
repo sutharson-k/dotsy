@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import pytest
 
+from dotsy.core import run_programmatic
+from dotsy.core.config import Backend, DotsyConfig, SessionLoggingConfig
+from dotsy.core.types import LLMMessage, OutputFormat, Role
 from tests.mock.mock_backend_factory import mock_backend_factory
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from dotsy.core import run_programmatic
-from dotsy.core.config import Backend, SessionLoggingConfig, DotsyConfig
-from dotsy.core.types import LLMMessage, OutputFormat, Role
 
 
 class SpyStreamingFormatter:

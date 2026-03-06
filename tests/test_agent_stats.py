@@ -4,16 +4,14 @@ from collections.abc import Callable
 
 import pytest
 
-from tests.mock.utils import mock_llm_chunk
-from tests.stubs.fake_backend import FakeBackend
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 from dotsy.core.config import (
     Backend,
+    DotsyConfig,
     ModelConfig,
     ProviderConfig,
     SessionLoggingConfig,
-    DotsyConfig,
 )
 from dotsy.core.tools.base import BaseToolConfig, ToolPermission
 from dotsy.core.types import (
@@ -27,6 +25,8 @@ from dotsy.core.types import (
     ToolCall,
     UserMessageEvent,
 )
+from tests.mock.utils import mock_llm_chunk
+from tests.stubs.fake_backend import FakeBackend
 
 
 def make_config(

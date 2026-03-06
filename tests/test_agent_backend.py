@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pytest
 
+from dotsy.core.agent_loop import AgentLoop
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
 
 
 @pytest.fixture

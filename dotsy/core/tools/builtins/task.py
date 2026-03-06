@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import AgentType
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.tools.base import (
     BaseTool,
     BaseToolConfig,

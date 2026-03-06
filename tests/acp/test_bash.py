@@ -5,10 +5,10 @@ import asyncio
 from acp.schema import EnvVariable, TerminalOutputResponse, WaitForTerminalExitResponse
 import pytest
 
-from tests.mock.utils import collect_result
 from dotsy.acp.tools.builtins.bash import AcpBashState, Bash
 from dotsy.core.tools.base import ToolError
 from dotsy.core.tools.builtins.bash import BashArgs, BashResult, BashToolConfig
+from tests.mock.utils import collect_result
 
 
 class MockTerminalHandle:

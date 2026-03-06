@@ -205,7 +205,7 @@ def _handle_set_api_key(api_key: str, provider_name: str) -> None:
         rprint(f"[green]✓ API key saved for {provider_name}![/]")
         rprint(f"[dim]  Stored in: {GLOBAL_ENV_FILE.path}[/]")
         rprint(f"[dim]  Environment variable: {provider.api_key_env_var}[/]")
-        rprint(f"\n[green]You can now run 'dotsy' to start![/]")
+        rprint("\n[green]You can now run 'dotsy' to start![/]")
     except OSError as e:
         rprint(f"[red]Error saving API key: {e}[/]")
         sys.exit(1)

@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 
-from tests.mock.utils import collect_result
 from dotsy.acp.tools.builtins.write_file import AcpWriteFileState, WriteFile
 from dotsy.core.tools.base import ToolError
 from dotsy.core.tools.builtins.write_file import (
@@ -13,6 +12,7 @@ from dotsy.core.tools.builtins.write_file import (
     WriteFileResult,
 )
 from dotsy.core.types import ToolCallEvent, ToolResultEvent
+from tests.mock.utils import collect_result
 
 
 class MockClient:

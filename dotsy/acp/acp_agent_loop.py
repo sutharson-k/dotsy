@@ -65,7 +65,7 @@ from dotsy.acp.utils import (
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 from dotsy.core.autocompletion.path_prompt_adapter import render_path_prompt
-from dotsy.core.config import MissingAPIKeyError, DotsyConfig, load_dotenv_values
+from dotsy.core.config import DotsyConfig, MissingAPIKeyError, load_dotenv_values
 from dotsy.core.tools.base import BaseToolConfig, ToolPermission
 from dotsy.core.types import (
     ApprovalResponse,

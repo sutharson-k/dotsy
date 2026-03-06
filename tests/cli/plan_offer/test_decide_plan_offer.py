@@ -4,13 +4,13 @@ import logging
 
 import pytest
 
-from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 from dotsy.cli.plan_offer.decide_plan_offer import (
     PlanOfferAction,
     PlanType,
     decide_plan_offer,
 )
 from dotsy.cli.plan_offer.ports.whoami_gateway import WhoAmIResponse
+from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 
 
 @pytest.mark.asyncio

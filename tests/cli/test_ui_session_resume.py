@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
-from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.textual_ui.widgets.messages import AssistantMessage, UserMessage
 from dotsy.cli.textual_ui.widgets.tools import ToolCallMessage, ToolResultMessage
 from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.types import FunctionCall, LLMMessage, Role, ToolCall
+from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 
 
 @pytest.fixture

@@ -282,7 +282,6 @@ class AnthropicAdapter(APIAdapter):
         provider: ProviderConfig,
         api_key: str | None = None,
     ) -> PreparedRequest:
-        field_name = provider.reasoning_field_name
         converted_messages = [
             msg.model_dump(exclude_none=True, exclude={"message_id"})
             for msg in messages

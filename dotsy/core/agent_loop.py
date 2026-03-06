@@ -16,7 +16,11 @@ from dotsy.core.agents.models import AgentProfile, BuiltinAgentName
 from dotsy.core.config import DotsyConfig
 from dotsy.core.llm.backend.factory import BACKEND_FACTORY
 from dotsy.core.llm.exceptions import BackendError
-from dotsy.core.llm.format import APIToolFormatHandler, ResolvedMessage, ResolvedToolCall
+from dotsy.core.llm.format import (
+    APIToolFormatHandler,
+    ResolvedMessage,
+    ResolvedToolCall,
+)
 from dotsy.core.llm.types import BackendLike
 from dotsy.core.middleware import (
     AutoCompactMiddleware,
@@ -67,8 +71,8 @@ from dotsy.core.types import (
     UserMessageEvent,
 )
 from dotsy.core.utils import (
-    TOOL_ERROR_TAG,
     DOTSY_STOP_EVENT_TAG,
+    TOOL_ERROR_TAG,
     CancellationReason,
     get_user_agent,
     get_user_cancellation_message,

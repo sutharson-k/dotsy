@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.tools.base import BaseToolConfig, ToolPermission
 from dotsy.core.tools.manager import ToolManager
 

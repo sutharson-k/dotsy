@@ -9,9 +9,9 @@ from dotsy.cli.textual_ui.app import run_textual_ui
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 from dotsy.core.config import (
+    DotsyConfig,
     MissingAPIKeyError,
     MissingPromptFileError,
-    DotsyConfig,
     load_dotenv_values,
 )
 from dotsy.core.paths.config_paths import CONFIG_FILE, HISTORY_FILE

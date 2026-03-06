@@ -9,11 +9,7 @@ from unittest.mock import patch
 import pytest
 from textual.app import Notification
 
-from tests.update_notifier.adapters.fake_update_cache_repository import (
-    FakeUpdateCacheRepository,
-)
-from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
-from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.textual_ui.widgets.messages import WhatsNewMessage
 from dotsy.cli.update_notifier import (
     Update,
@@ -23,7 +19,11 @@ from dotsy.cli.update_notifier import (
 )
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
+from tests.update_notifier.adapters.fake_update_cache_repository import (
+    FakeUpdateCacheRepository,
+)
+from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
 
 
 async def _wait_for_notification(

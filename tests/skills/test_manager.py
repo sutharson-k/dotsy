@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from tests.skills.conftest import create_skill
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.skills.manager import SkillManager
+from tests.skills.conftest import create_skill
 
 
 @pytest.fixture

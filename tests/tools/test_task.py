@@ -4,13 +4,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from tests.mock.utils import collect_result
 from dotsy.core.agents.manager import AgentManager
 from dotsy.core.agents.models import BUILTIN_AGENTS, AgentType
-from dotsy.core.config import dotsyConfig
+from dotsy.core.config import DotsyConfig
 from dotsy.core.tools.base import BaseToolState, InvokeContext, ToolError
 from dotsy.core.tools.builtins.task import Task, TaskArgs, TaskResult, TaskToolConfig
 from dotsy.core.types import AssistantEvent, LLMMessage, Role
+from tests.mock.utils import collect_result
 
 
 @pytest.fixture

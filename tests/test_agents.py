@@ -4,8 +4,6 @@ from pathlib import Path
 
 import pytest
 
-from tests.mock.utils import mock_llm_chunk
-from tests.stubs.fake_backend import FakeBackend
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.manager import AgentManager
 from dotsy.core.agents.models import (
@@ -17,7 +15,7 @@ from dotsy.core.agents.models import (
     BuiltinAgentName,
     _deep_merge,
 )
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.paths.config_paths import ConfigPath
 from dotsy.core.paths.global_paths import GlobalPath
 from dotsy.core.tools.base import ToolPermission
@@ -30,6 +28,8 @@ from dotsy.core.types import (
     ToolCall,
     ToolResultEvent,
 )
+from tests.mock.utils import mock_llm_chunk
+from tests.stubs.fake_backend import FakeBackend
 
 
 class TestDeepMerge:

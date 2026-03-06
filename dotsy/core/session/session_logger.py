@@ -15,7 +15,7 @@ from dotsy.core.utils import is_windows
 
 if TYPE_CHECKING:
     from dotsy.core.agents.models import AgentProfile
-    from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+    from dotsy.core.config import DotsyConfig, SessionLoggingConfig
     from dotsy.core.tools.manager import ToolManager
 
 

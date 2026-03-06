@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from textual.pilot import Pilot
 
-from tests.snapshots.base_snapshot_test_app import BaseSnapshotTestApp
-from tests.snapshots.snap_compare import SnapCompare
 from dotsy.cli.textual_ui.widgets.tools import ToolResultMessage
 from dotsy.core.tools.builtins.ask_user_question import (
     Answer,
@@ -11,6 +9,8 @@ from dotsy.core.tools.builtins.ask_user_question import (
     AskUserQuestionResult,
 )
 from dotsy.core.types import ToolResultEvent
+from tests.snapshots.base_snapshot_test_app import BaseSnapshotTestApp
+from tests.snapshots.snap_compare import SnapCompare
 
 
 class AskUserQuestionResultApp(BaseSnapshotTestApp):

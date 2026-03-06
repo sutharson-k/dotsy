@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 
-from dotsy.acp.acp_agent_loop import dotsyAcpAgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 
 

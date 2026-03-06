@@ -4,7 +4,7 @@ import pytest
 
 from dotsy.core.agents.manager import AgentManager
 from dotsy.core.agents.models import BUILTIN_AGENTS, EXPLORE, AgentSafety, AgentType
-from dotsy.core.config import dotsyConfig
+from dotsy.core.config import DotsyConfig
 
 
 class TestAgentProfile:

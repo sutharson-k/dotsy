@@ -5,9 +5,9 @@ from collections.abc import AsyncGenerator
 from pydantic import BaseModel
 import pytest
 
-from tests.mock.utils import collect_result
 from dotsy.core.tools.base import BaseTool, BaseToolConfig, BaseToolState, InvokeContext
 from dotsy.core.types import ApprovalCallback, ApprovalResponse, ToolStreamEvent
+from tests.mock.utils import collect_result
 
 
 class SimpleArgs(BaseModel):

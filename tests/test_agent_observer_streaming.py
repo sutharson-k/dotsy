@@ -8,11 +8,9 @@ from unittest.mock import AsyncMock
 import httpx
 import pytest
 
-from tests.mock.utils import mock_llm_chunk
-from tests.stubs.fake_backend import FakeBackend
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.llm.exceptions import BackendErrorBuilder
 from dotsy.core.middleware import (
     ConversationContext,
@@ -37,6 +35,8 @@ from dotsy.core.types import (
     UserMessageEvent,
 )
 from dotsy.core.utils import CancellationReason, get_user_cancellation_message
+from tests.mock.utils import mock_llm_chunk
+from tests.stubs.fake_backend import FakeBackend
 
 
 class InjectBeforeMiddleware:

@@ -9,8 +9,6 @@ from acp.schema import (
 )
 import pytest
 
-from dotsy.acp.acp_agent_loop import dotsyAcpAgentLoop
-
 
 class TestACPInitialize:
     @pytest.mark.asyncio

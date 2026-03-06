@@ -5,7 +5,6 @@ from pathlib import Path
 from acp import ReadTextFileResponse
 import pytest
 
-from tests.mock.utils import collect_result
 from dotsy.acp.tools.builtins.search_replace import AcpSearchReplaceState, SearchReplace
 from dotsy.core.tools.base import ToolError
 from dotsy.core.tools.builtins.search_replace import (
@@ -14,6 +13,7 @@ from dotsy.core.tools.builtins.search_replace import (
     SearchReplaceResult,
 )
 from dotsy.core.types import ToolCallEvent, ToolResultEvent
+from tests.mock.utils import collect_result
 
 
 class MockClient:

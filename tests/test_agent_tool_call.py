@@ -6,12 +6,9 @@ import json
 from pydantic import BaseModel
 import pytest
 
-from tests.mock.utils import mock_llm_chunk
-from tests.stubs.fake_backend import FakeBackend
-from tests.stubs.fake_tool import FakeTool
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from dotsy.core.tools.base import BaseToolConfig, ToolPermission
 from dotsy.core.tools.builtins.todo import TodoItem
 from dotsy.core.types import (
@@ -27,6 +24,9 @@ from dotsy.core.types import (
     ToolResultEvent,
     UserMessageEvent,
 )
+from tests.mock.utils import mock_llm_chunk
+from tests.stubs.fake_backend import FakeBackend
+from tests.stubs.fake_tool import FakeTool
 
 
 async def act_and_collect_events(agent_loop: AgentLoop, prompt: str) -> list[BaseEvent]:

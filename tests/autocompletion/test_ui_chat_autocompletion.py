@@ -7,11 +7,11 @@ from textual.content import Content
 from textual.style import Style
 from textual.widgets import Markdown
 
-from dotsy.cli.textual_ui.app import dotsyApp
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
 from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 
 
 @pytest.fixture
@@ -119,7 +119,7 @@ async def test_pressing_enter_submits_selected_command_and_hides_popup(
         chat_input = vibe_app.query_one(ChatInputContainer)
         popup = vibe_app.query_one(CompletionPopup)
 
-        await pilot.press(*"/hel")  # typos:disable-line
+        await pilot.press(*"/hel")  # noqa: E501
         await pilot.press("enter")
 
         assert chat_input.value == ""

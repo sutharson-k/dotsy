@@ -7,19 +7,19 @@ import mistralai
 import pytest
 import respx
 
-from tests.mock.utils import mock_llm_chunk
-from tests.stubs.fake_backend import FakeBackend
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import (
+    DotsyConfig,
     ModelConfig,
     ProviderConfig,
     SessionLoggingConfig,
-    DotsyConfig,
 )
-from dotsy.core.llm.backend.generic import GenericBackend, OpenAIAdapter
 from dotsy.core.llm.backend.dotsy import DotsyBackend, DotsyMapper, ParsedContent
+from dotsy.core.llm.backend.generic import GenericBackend, OpenAIAdapter
 from dotsy.core.llm.format import APIToolFormatHandler
 from dotsy.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
+from tests.mock.utils import mock_llm_chunk
+from tests.stubs.fake_backend import FakeBackend
 
 
 def make_config() -> DotsyConfig:

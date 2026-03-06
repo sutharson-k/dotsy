@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
 from time import monotonic
 
 from rich.align import Align
@@ -10,7 +9,6 @@ from rich.text import Text
 from textual.color import Color
 from textual.widgets import Static
 
-from dotsy import __version__
 from dotsy.core.config import DotsyConfig
 
 

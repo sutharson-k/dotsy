@@ -18,27 +18,27 @@ import httpx
 import pytest
 import respx
 
+from dotsy.core.config import Backend, ModelConfig, ProviderConfig
+from dotsy.core.llm.backend.dotsy import DotsyBackend
+from dotsy.core.llm.backend.factory import BACKEND_FACTORY
+from dotsy.core.llm.backend.generic import GenericBackend
+from dotsy.core.llm.exceptions import BackendError
+from dotsy.core.llm.types import BackendLike
+from dotsy.core.types import LLMChunk, LLMMessage, Role, ToolCall
+from dotsy.core.utils import get_user_agent
 from tests.backend.data import Chunk, JsonResponse, ResultData, Url
-from tests.backend.data.fireworks import (
-    SIMPLE_CONVERSATION_PARAMS as FIREWORKS_SIMPLE_CONVERSATION_PARAMS,
-    STREAMED_SIMPLE_CONVERSATION_PARAMS as FIREWORKS_STREAMED_SIMPLE_CONVERSATION_PARAMS,
-    STREAMED_TOOL_CONVERSATION_PARAMS as FIREWORKS_STREAMED_TOOL_CONVERSATION_PARAMS,
-    TOOL_CONVERSATION_PARAMS as FIREWORKS_TOOL_CONVERSATION_PARAMS,
-)
 from tests.backend.data.dotsy import (
     SIMPLE_CONVERSATION_PARAMS as DOTSY_SIMPLE_CONVERSATION_PARAMS,
     STREAMED_SIMPLE_CONVERSATION_PARAMS as DOTSY_STREAMED_SIMPLE_CONVERSATION_PARAMS,
     STREAMED_TOOL_CONVERSATION_PARAMS as DOTSY_STREAMED_TOOL_CONVERSATION_PARAMS,
     TOOL_CONVERSATION_PARAMS as DOTSY_TOOL_CONVERSATION_PARAMS,
 )
-from dotsy.core.config import Backend, ModelConfig, ProviderConfig
-from dotsy.core.llm.backend.factory import BACKEND_FACTORY
-from dotsy.core.llm.backend.dotsy import DotsyBackend
-from dotsy.core.llm.backend.generic import GenericBackend
-from dotsy.core.llm.exceptions import BackendError
-from dotsy.core.llm.types import BackendLike
-from dotsy.core.types import LLMChunk, LLMMessage, Role, ToolCall
-from dotsy.core.utils import get_user_agent
+from tests.backend.data.fireworks import (
+    SIMPLE_CONVERSATION_PARAMS as FIREWORKS_SIMPLE_CONVERSATION_PARAMS,
+    STREAMED_SIMPLE_CONVERSATION_PARAMS as FIREWORKS_STREAMED_SIMPLE_CONVERSATION_PARAMS,
+    STREAMED_TOOL_CONVERSATION_PARAMS as FIREWORKS_STREAMED_TOOL_CONVERSATION_PARAMS,
+    TOOL_CONVERSATION_PARAMS as FIREWORKS_TOOL_CONVERSATION_PARAMS,
+)
 
 
 class TestBackend:

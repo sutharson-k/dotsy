@@ -3,13 +3,13 @@ from __future__ import annotations
 from rich.style import Style
 from textual.widgets.text_area import TextAreaTheme
 
-from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
-from tests.stubs.fake_backend import FakeBackend
 from dotsy.cli.textual_ui.app import DotsyApp
 from dotsy.cli.textual_ui.widgets.chat_input import ChatTextArea
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
+from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
+from tests.stubs.fake_backend import FakeBackend
 
 
 def default_config() -> DotsyConfig:

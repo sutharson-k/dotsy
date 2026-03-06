@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from dotsy.core.agents import AgentManager
-from dotsy.core.config import dotsyConfig
+from dotsy.core.config import DotsyConfig
 from dotsy.core.skills.manager import SkillManager
 from dotsy.core.system_prompt import get_universal_system_prompt
 from dotsy.core.tools.manager import ToolManager

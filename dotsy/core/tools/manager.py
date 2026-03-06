@@ -25,7 +25,7 @@ from dotsy.core.utils import name_matches, run_sync
 logger = getLogger("dotsy")
 
 if TYPE_CHECKING:
-    from dotsy.core.config import MCPHttp, MCPStdio, MCPStreamableHttp, DotsyConfig
+    from dotsy.core.config import DotsyConfig, MCPHttp, MCPStdio, MCPStreamableHttp
 
 
 def _try_canonical_module_name(path: Path) -> str | None:

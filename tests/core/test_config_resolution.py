@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from dotsy.core.paths.config_paths import CONFIG_FILE
-from dotsy.core.paths.global_paths import GLOBAL_CONFIG_FILE, DOTSY_HOME
+from dotsy.core.paths.global_paths import DOTSY_HOME, GLOBAL_CONFIG_FILE
 from dotsy.core.trusted_folders import trusted_folders_manager
 
 

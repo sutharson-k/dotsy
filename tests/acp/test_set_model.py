@@ -5,11 +5,10 @@ from unittest.mock import patch
 
 import pytest
 
-from tests.acp.conftest import _create_acp_agent
-from dotsy.acp.acp_agent_loop import dotsyAcpAgentLoop
 from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import ModelConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, ModelConfig
 from dotsy.core.types import LLMMessage, Role
+from tests.acp.conftest import _create_acp_agent
 
 
 @pytest.fixture

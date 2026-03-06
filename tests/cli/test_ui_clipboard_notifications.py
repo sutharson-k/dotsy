@@ -6,10 +6,10 @@ import pytest
 from textual.selection import Selection
 from textual.widget import Widget
 
+from dotsy.cli.textual_ui.app import VibeApp
 from dotsy.cli.clipboard import copy_selection_to_clipboard
-from dotsy.cli.textual_ui.app import dotsyApp
 from dotsy.core.agent_loop import AgentLoop
-from dotsy.core.config import SessionLoggingConfig, DotsyConfig
+from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 
 
 class ClipboardSelectionWidget(Widget):

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from textual.pilot import Pilot
 
+from dotsy.core.types import FunctionCall, LLMMessage, Role, ToolCall
 from tests.snapshots.base_snapshot_test_app import BaseSnapshotTestApp
 from tests.snapshots.snap_compare import SnapCompare
-from dotsy.core.types import FunctionCall, LLMMessage, Role, ToolCall
 
 
 class SnapshotTestAppWithResumedSession(BaseSnapshotTestApp):
