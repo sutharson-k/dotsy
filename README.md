@@ -28,7 +28,7 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows
 - **Highly Configurable**: Customize models, providers, and tool permissions
--**Upcoming Ai Models**:I try to add new ai models such as Ollama for locally runnable models and Groq or Openrouter to access multiple ai models
+- **Upcoming Ai Models**:I try to add new ai models such as Ollama for locally runnable models and Groq or Openrouter to access multiple ai models
 ## Quick Start
 
 ### Installation
