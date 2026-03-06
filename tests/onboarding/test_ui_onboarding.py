@@ -24,9 +24,7 @@ def onboarding_config_dir(
     tmp_path = tmp_path_factory.mktemp("onboarding_dotsy")
     config_dir = tmp_path / ".dotsy"
     config_dir.mkdir(parents=True, exist_ok=True)
-    monkeypatch.setattr(
-        "dotsy.core.paths.global_paths._DEFAULT_DOTSY_HOME", config_dir
-    )
+    monkeypatch.setattr("dotsy.core.paths.global_paths._DEFAULT_DOTSY_HOME", config_dir)
     return config_dir
 
 

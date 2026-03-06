@@ -18,11 +18,11 @@ class PathCompletionController:
     def can_handle(self, text: str, cursor_index: int) -> bool:
         if not text or cursor_index <= 0:
             return False
-        
+
         # Find the last "@" before the cursor
         prefix = text[:cursor_index]
         at_index = prefix.rfind("@")
-        
+
         # Handle if there's an "@" and cursor is after it
         return at_index >= 0
 

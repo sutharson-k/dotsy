@@ -84,7 +84,9 @@ def ensure_selected_command(popup: CompletionPopup, expected_alias: str) -> None
 
 
 @pytest.mark.asyncio
-async def test_arrow_navigation_updates_selected_suggestion(dotsy_app: DotsyApp) -> None:
+async def test_arrow_navigation_updates_selected_suggestion(
+    dotsy_app: DotsyApp,
+) -> None:
     async with dotsy_app.run_test() as pilot:
         popup = dotsy_app.query_one(CompletionPopup)
 

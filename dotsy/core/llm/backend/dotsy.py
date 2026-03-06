@@ -301,7 +301,6 @@ class DotsyBackend:
                 tool_choice=self._mapper.prepare_tool_choice(tool_choice)
                 if tool_choice
                 else None,
-                stream_options={"include_usage": True, "stream_tool_calls": True},
                 http_headers=extra_headers,
             ):
                 parsed = (
