@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from dotsy.core.agents.models import BuiltinAgentName
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 class TestACPSetMode:

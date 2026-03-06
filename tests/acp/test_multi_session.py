@@ -12,6 +12,7 @@ from pytest import raises
 from dotsy.core.types import Role
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 class TestMultiSessionCore:

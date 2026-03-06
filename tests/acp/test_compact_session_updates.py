@@ -11,6 +11,7 @@ from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_client import FakeClient
+from vibe.acp.acp_agent_loop import VibeAcpAgentLoop
 
 
 @pytest.fixture
