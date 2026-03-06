@@ -22,13 +22,13 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 
 ## Features
 
-- **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible API
+- **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible API(Use Mistral Api)
 - **Interactive Chat**: Conversational AI agent that understands your requests
 - **Powerful Toolset**: File manipulation, code search, version control, and command execution
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows
 - **Highly Configurable**: Customize models, providers, and tool permissions
-
+-**Upcoming Ai Models**:I try to add new ai models such as Ollama for locally runnable models and Groq or Openrouter to access multiple ai models
 ## Quick Start
 
 ### Installation
