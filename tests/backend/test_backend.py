@@ -256,7 +256,7 @@ class TestBackend:
             ("https://api.fireworks.ai", "fireworks", {"include_usage": True}),
             (
                 "https://api.mistral.ai",
-                "dotsy",
+                "mistral",
                 {"include_usage": True, "stream_tool_calls": True},
             ),
         ],

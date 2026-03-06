@@ -109,7 +109,7 @@ EXPLORE = AgentProfile(
     display_name="Explore",
     description="Read-only agent for codebase exploration",
     safety=AgentSafety.SAFE,
-    agent_type=AgentType.SUBAGENT,
+    agent_type=AgentType.AGENT,
     overrides={"enabled_tools": ["grep", "read_file"]},
 )
 
