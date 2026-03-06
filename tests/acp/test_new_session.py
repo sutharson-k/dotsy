@@ -83,10 +83,11 @@ class TestACPNewSession:
         # Check that all primary agents are available (order may vary)
         mode_ids = {m.id for m in session_response.modes.available_modes}
         assert mode_ids == {
-            BuiltinAgentName.DEFAULT,
-            BuiltinAgentName.AUTO_APPROVE,
-            BuiltinAgentName.PLAN,
-            BuiltinAgentName.ACCEPT_EDITS,
+            BuiltinAgentName.DEFAULT.value,
+            BuiltinAgentName.AUTO_APPROVE.value,
+            BuiltinAgentName.PLAN.value,
+            BuiltinAgentName.ACCEPT_EDITS.value,
+            "explore",
         }
 
     @pytest.mark.skip(reason="TODO: Fix this test")
