@@ -166,8 +166,8 @@ async def test_respects_default_ignore_patterns(grep, tmp_path):
 
 
 @pytest.mark.asyncio
-async def test_respects_vibeignore_file(grep, tmp_path):
-    (tmp_path / ".vibeignore").write_text("custom_dir/\n*.tmp\n")
+async def test_respects_dotsyignore_file(grep, tmp_path):
+    (tmp_path / ".dotsyignore").write_text("custom_dir/\n*.tmp\n")
     custom_dir = tmp_path / "custom_dir"
     custom_dir.mkdir()
     (custom_dir / "excluded.py").write_text("match\n")
@@ -182,8 +182,8 @@ async def test_respects_vibeignore_file(grep, tmp_path):
 
 
 @pytest.mark.asyncio
-async def test_ignores_comments_in_vibeignore(grep, tmp_path):
-    (tmp_path / ".vibeignore").write_text("# comment\npattern/\n# another comment\n")
+async def test_ignores_comments_in_dotsyignore(grep, tmp_path):
+    (tmp_path / ".dotsyignore").write_text("# comment\npattern/\n# another comment\n")
     (tmp_path / "file.py").write_text("match\n")
 
     result = await collect_result(grep.run(GrepArgs(pattern="match")))
@@ -292,8 +292,8 @@ class TestGnuGrepBackend:
         assert "other.py" not in result.matches
 
     @pytest.mark.asyncio
-    async def test_respects_vibeignore_file(self, grep_gnu_only, tmp_path):
-        (tmp_path / ".vibeignore").write_text("custom_dir/\n*.tmp\n")
+    async def test_respects_dotsyignore_file(self, grep_gnu_only, tmp_path):
+        (tmp_path / ".dotsyignore").write_text("custom_dir/\n*.tmp\n")
         custom_dir = tmp_path / "custom_dir"
         custom_dir.mkdir()
         (custom_dir / "excluded.py").write_text("match\n")
