@@ -8,9 +8,9 @@ from dotsy.core.config import DotsyConfig
 
 
 class TestAgentProfile:
-    def test_explore_agent_is_subagent(self) -> None:
-        """Test that EXPLORE agent has SUBAGENT type."""
-        assert EXPLORE.agent_type == AgentType.SUBAGENT
+    def test_explore_agent_is_primary_agent(self) -> None:
+        """Test that EXPLORE agent has AGENT type (can be cycled with shift+tab)."""
+        assert EXPLORE.agent_type == AgentType.AGENT
 
     def test_explore_agent_has_safe_safety(self) -> None:
         """Test that EXPLORE agent has SAFE safety level."""
@@ -41,12 +41,12 @@ class TestAgentManager:
         for agent in subagents:
             assert agent.agent_type == AgentType.SUBAGENT
 
-    def test_get_subagents_includes_explore(self, manager: AgentManager) -> None:
-        """Test that EXPLORE is included in subagents."""
+    def test_get_subagents_excludes_explore(self, manager: AgentManager) -> None:
+        """Test that EXPLORE is NOT in subagents (it's a primary agent now)."""
         subagents = manager.get_subagents()
         names = [a.name for a in subagents]
 
-        assert "explore" in names
+        assert "explore" not in names
 
     def test_get_subagents_excludes_agents(self, manager: AgentManager) -> None:
         """Test that AGENT type agents are not returned."""
@@ -57,13 +57,14 @@ class TestAgentManager:
         assert "default" not in names
         assert "plan" not in names
         assert "auto-approve" not in names
+        assert "explore" not in names
 
     def test_get_builtin_agent(self, manager: AgentManager) -> None:
         """Test getting a builtin agent by name."""
         agent = manager.get_agent("explore")
 
         assert agent is EXPLORE
-        assert agent.agent_type == AgentType.SUBAGENT
+        assert agent.agent_type == AgentType.AGENT
 
     def test_get_nonexistent_agent_raises(self, manager: AgentManager) -> None:
         """Test that getting a nonexistent agent raises ValueError."""
