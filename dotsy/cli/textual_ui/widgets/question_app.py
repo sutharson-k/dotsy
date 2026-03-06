@@ -404,7 +404,7 @@ class QuestionApp(Container):
             return
         if self.other_input and self.other_input.has_focus:
             return
-        if event.key == "tab" and event.shift:
+        if event.key == "shift+tab":
             # Allow shift+tab to propagate for agent cycling
             return
         if event.key == "left":
