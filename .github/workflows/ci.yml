@@ -111,21 +111,5 @@ jobs:
       - name: Sync dependencies
         run: uv sync --all-extras
 
-      - name: Run snapshot tests
-        id: snapshot-tests
+      - name: Run snapshot tests (update mode)
         run: uv run pytest tests/snapshots --snapshot-update
-
-      - name: Upload snapshot report
-        if: steps.snapshot-tests.outcome == 'failure'
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
-        with:
-          name: snapshot-report
-          path: snapshot_report.html
-          if-no-files-found: warn
-          retention-days: 3
-
-      - name: Fail job if snapshot tests failed
-        if: steps.snapshot-tests.outcome == 'failure'
-        run: |
-          echo "Snapshot tests failed, failing job."
-          exit 1
