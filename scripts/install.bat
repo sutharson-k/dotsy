@@ -5,15 +5,12 @@ REM This script installs dotsy using pip
 setlocal enabledelayedexpansion
 
 echo.
-echo ██████████████████░░
-echo ██████████████████░░
-echo ████  ██████  ████░░
-echo ████    ██    ████░░
-echo ████          ████░░
-echo ████  ██  ██  ████░░
-echo ██      ██      ██░░
-echo ██████████████████░░
-echo ██████████████████░░
+echo ╔██████╗
+echo ║██╔══██╗
+echo ║██║  ██║
+echo ║██║  ██║
+echo ║██████╔╝
+echo ╚══════╝
 echo.
 echo Starting Dotsy installation...
 echo.
