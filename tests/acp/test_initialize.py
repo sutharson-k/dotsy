@@ -25,7 +25,7 @@ class TestACPInitialize:
             ),
         )
         assert response.agent_info == Implementation(
-            name="@mistralai/dotsy", title="Mistral Vibe", version="2.0.2"
+            name="@mistralai/Dotsy", title="Dotsy", version="17.20.119"
         )
 
         assert response.auth_methods == []
@@ -48,7 +48,7 @@ class TestACPInitialize:
             ),
         )
         assert response.agent_info == Implementation(
-            name="@mistralai/dotsy", title="Mistral Vibe", version="2.0.2"
+            name="@mistralai/Dotsy", title="Dotsy", version="17.20.119"
         )
 
         assert response.auth_methods is not None
@@ -56,7 +56,7 @@ class TestACPInitialize:
         auth_method = response.auth_methods[0]
         assert auth_method.id == "vibe-setup"
         assert auth_method.name == "Register your API Key"
-        assert auth_method.description == "Register your API Key inside Mistral Vibe"
+        assert auth_method.description == "Register your API Key inside Dotsy"
         assert auth_method.field_meta is not None
         assert "terminal-auth" in auth_method.field_meta
         terminal_auth_meta = auth_method.field_meta["terminal-auth"]
