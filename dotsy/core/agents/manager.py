@@ -149,7 +149,6 @@ class AgentManager:
             BuiltinAgentName.PLAN,
             BuiltinAgentName.ACCEPT_EDITS,
             BuiltinAgentName.AUTO_APPROVE,
-            BuiltinAgentName.EXPLORE,
         ]
         primary_agents = [
             name
