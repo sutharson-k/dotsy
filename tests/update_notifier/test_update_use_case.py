@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import pytest
 
+from tests.update_notifier.adapters.fake_update_cache_repository import (
+    FakeUpdateCacheRepository,
+)
+from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
 from dotsy.cli.update_notifier import (
     Update,
     UpdateCache,
@@ -9,10 +13,6 @@ from dotsy.cli.update_notifier import (
     UpdateGatewayError,
 )
 from dotsy.cli.update_notifier.update import UpdateError, get_update_if_available
-from tests.update_notifier.adapters.fake_update_cache_repository import (
-    FakeUpdateCacheRepository,
-)
-from tests.update_notifier.adapters.fake_update_gateway import FakeUpdateGateway
 
 
 @pytest.fixture
