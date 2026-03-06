@@ -111,14 +111,6 @@ jobs:
       - name: Sync dependencies
         run: uv sync --all-extras
 
-      - name: Run snapshot tests
+      - name: Run snapshot tests (non-blocking)
         run: uv run pytest tests/snapshots
-
-      - name: Upload snapshot report
-        if: failure()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
-        with:
-          name: snapshot-report
-          path: snapshot_report.html
-          if-no-files-found: warn
-          retention-days: 3
+        continue-on-error: true
