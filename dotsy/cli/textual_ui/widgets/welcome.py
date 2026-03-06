@@ -254,7 +254,9 @@ class WelcomeBanner(Static):
         # Version line (index 6) doesn't use gradient animation
         VERSION_LINE_INDEX = 6
         if slot_idx == VERSION_LINE_INDEX:
-            self._cached_text_lines[VERSION_LINE_INDEX] = Text.from_markup(self._build_line(slot_idx, ""))
+            self._cached_text_lines[VERSION_LINE_INDEX] = Text.from_markup(
+                self._build_line(slot_idx, "")
+            )
             return
 
         color = self._get_color(line_idx)
@@ -273,7 +275,7 @@ class WelcomeBanner(Static):
         VERSION_LINE_INDEX = 6
         if line_idx == VERSION_LINE_INDEX:
             # Version line below logo - centered with padding
-            return f"{' ' * 18}[bold]17.20.119[/]"
+            return f"{' ' * 18}[bold]17.21.129[/]"
 
         logo_lines = [
             f"[{color}]██████╗ ██████╗ ████████╗███████╗██╗   ██╗[/{color}]",
