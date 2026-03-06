@@ -252,10 +252,11 @@ class WelcomeBanner(Static):
 
     def _update_colored_line(self, slot_idx: int, line_idx: int) -> None:
         # Version line (index 6) doesn't use gradient animation
-        if slot_idx == 6:
-            self._cached_text_lines[6] = Text.from_markup(self._build_line(slot_idx, ""))
+        VERSION_LINE_INDEX = 6
+        if slot_idx == VERSION_LINE_INDEX:
+            self._cached_text_lines[VERSION_LINE_INDEX] = Text.from_markup(self._build_line(slot_idx, ""))
             return
-            
+
         color = self._get_color(line_idx)
         state = self._line_states[line_idx]
 
@@ -269,7 +270,8 @@ class WelcomeBanner(Static):
 
     def _build_line(self, line_idx: int, color: str) -> str:
         # Full ASCII art DOTSY logo with gradient
-        if line_idx == 6:
+        VERSION_LINE_INDEX = 6
+        if line_idx == VERSION_LINE_INDEX:
             # Version line below logo - centered with padding
             return f"{' ' * 18}[bold]17.20.119[/]"
 
