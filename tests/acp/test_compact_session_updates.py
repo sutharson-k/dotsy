@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 from acp.schema import TextContentBlock, ToolCallProgress, ToolCallStart
 import pytest
-from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 from dotsy.core.agent_loop import AgentLoop
 from dotsy.core.config import DotsyConfig, SessionLoggingConfig
 from tests.stubs.fake_backend import FakeBackend
@@ -25,12 +25,12 @@ def acp_agent_loop(backend: FakeBackend) -> DotsyAcpAgentLoop:
             )
             super().__init__(*args, **kwargs, backend=backend)
 
-    patch("vibe.acp.acp_agent_loop.AgentLoop", side_effect=PatchedAgent).start()
-    vibe_acp_agent = VibeAcpAgentLoop()
+    patch("dotsy.acp.acp_agent_loop.AgentLoop", side_effect=PatchedAgent).start()
+    dotsy_acp_agent = DotsyAcpAgentLoop()
     client = FakeClient()
-    vibe_acp_agent.on_connect(client)
-    client.on_connect(vibe_acp_agent)
-    return vibe_acp_agent
+    dotsy_acp_agent.on_connect(client)
+    client.on_connect(dotsy_acp_agent)
+    return dotsy_acp_agent
 
 
 class TestCompactEventHandling:

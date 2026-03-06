@@ -11,7 +11,9 @@ from tests.cli.plan_offer.adapters.fake_whoami_gateway import FakeWhoAmIGateway
 from tests.stubs.fake_backend import FakeBackend
 
 
-def _make_app(gateway: FakeWhoAmIGateway, config: DotsyConfig | None = None) -> DotsyApp:
+def _make_app(
+    gateway: FakeWhoAmIGateway, config: DotsyConfig | None = None
+) -> DotsyApp:
     config = config or DotsyConfig(
         session_logging=SessionLoggingConfig(enabled=False), enable_update_checks=False
     )

@@ -10,8 +10,8 @@ from acp.schema import (
     TextResourceContents,
 )
 import pytest
-from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 from dotsy.core.types import Role
 from tests.stubs.fake_backend import FakeBackend
 

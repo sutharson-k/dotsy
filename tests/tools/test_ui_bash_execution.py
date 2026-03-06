@@ -20,9 +20,9 @@ def vibe_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> DotsyConfig:
 
 
 @pytest.fixture
-def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
+def vibe_app(vibe_config: DotsyConfig) -> DotsyApp:
     agent_loop = AgentLoop(vibe_config)
-    return VibeApp(agent_loop=agent_loop)
+    return DotsyApp(agent_loop=agent_loop)
 
 
 async def _wait_for_bash_output_message(

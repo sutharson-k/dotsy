@@ -3,8 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
+from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 from dotsy.core.agents.models import BuiltinAgentName
 
 

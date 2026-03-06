@@ -404,15 +404,15 @@ class QuestionApp(Container):
             return
         if self.other_input and self.other_input.has_focus:
             return
+        if event.key == "tab" and event.shift:
+            # Allow shift+tab to propagate for agent cycling
+            return
         if event.key == "left":
             self.action_prev_question()
             event.stop()
         elif event.key == "right":
             self.action_next_question()
             event.stop()
-        elif event.key == "tab" and "shift" in event.modifiers:
-            # Allow shift+tab to propagate for agent cycling
-            return
 
     def _save_current_answer(self) -> None:
         if self._current_question.multi_select:

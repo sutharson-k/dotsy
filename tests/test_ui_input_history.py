@@ -19,9 +19,9 @@ def vibe_config() -> DotsyConfig:
 
 
 @pytest.fixture
-def vibe_app(vibe_config: DotsyConfig) -> VibeApp:
+def vibe_app(vibe_config: DotsyConfig) -> DotsyApp:
     agent_loop = AgentLoop(vibe_config)
-    return VibeApp(agent_loop=agent_loop)
+    return DotsyApp(agent_loop=agent_loop)
 
 
 @pytest.fixture

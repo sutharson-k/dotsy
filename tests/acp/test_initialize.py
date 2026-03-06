@@ -8,6 +8,7 @@ from acp.schema import (
     PromptCapabilities,
 )
 import pytest
+
 from dotsy.acp.acp_agent_loop import DotsyAcpAgentLoop
 
 
