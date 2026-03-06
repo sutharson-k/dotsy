@@ -114,7 +114,6 @@ jobs:
       - name: Run snapshot tests
         id: snapshot-tests
         run: uv run pytest tests/snapshots --snapshot-update
-        continue-on-error: true
 
       - name: Upload snapshot report
         if: steps.snapshot-tests.outcome == 'failure'
