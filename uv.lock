@@ -346,7 +346,7 @@ wheels = [
 
 [[package]]
 name = "dotsy"
-version = "17.20.119"
+version = "17.21.129"
 source = { editable = "." }
 dependencies = [
     { name = "agent-client-protocol" },
