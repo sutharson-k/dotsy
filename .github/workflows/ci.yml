@@ -113,3 +113,15 @@ jobs:
 
       - name: Run snapshot tests (update mode)
         run: uv run pytest tests/snapshots --snapshot-update
+
+      - name: Commit and push updated snapshots
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/snapshots/__snapshots__/
+          if ! git diff --staged --quiet; then
+            git commit -m "CI: Update snapshot tests [skip ci]"
+            git push
+          else
+            echo "No snapshot updates needed"
+          fi
