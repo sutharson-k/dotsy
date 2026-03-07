@@ -313,7 +313,7 @@ DEFAULT_PROVIDERS = [
 DEFAULT_MODELS = [
     # Mistral AI Models
     ModelConfig(
-        name="labs-devstral-small-2512",
+        name="devstral-small",
         provider="mistral",
         alias="devstral-2",
         input_price=0.4,
