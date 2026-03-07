@@ -313,7 +313,7 @@ DEFAULT_PROVIDERS = [
 DEFAULT_MODELS = [
     # Mistral AI Models
     ModelConfig(
-        name="codestral",
+        name="mistral-small-latest",
         provider="mistral",
         alias="devstral-2",
         input_price=0.4,
@@ -709,8 +709,9 @@ class DotsyConfig(BaseSettings):
                         or model_name == "devstral-2"
                         or model_name == "devstral-small"
                         or model_name == "codestral-2505"
+                        or model_name == "codestral"
                     ):
-                        model["name"] = "codestral"
+                        model["name"] = "mistral-small-latest"
                         needs_migration = True
                     if model.get("provider") == "dotsy":
                         model["provider"] = "mistral"
