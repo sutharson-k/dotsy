@@ -677,7 +677,46 @@ class DotsyConfig(BaseSettings):
 
     @classmethod
     def _migrate(cls) -> None:
-        pass
+        """Migrate old configuration values to new format."""
+        from dotsy.core.paths.config_paths import CONFIG_FILE
+
+        if not CONFIG_FILE.path.exists():
+            return
+
+        try:
+            import tomllib
+
+            with CONFIG_FILE.path.open("rb") as f:
+                config_data = tomllib.load(f)
+
+            needs_migration = False
+
+            # Migrate old provider name 'dotsy' to 'mistral'
+            if "providers" in config_data:
+                for provider in config_data["providers"]:
+                    if provider.get("name") == "dotsy":
+                        provider["name"] = "mistral"
+                        needs_migration = True
+
+            # Migrate old model names
+            if "models" in config_data:
+                for model in config_data["models"]:
+                    if model.get("name") == "dotsy-cli-latest":
+                        model["name"] = "mistral-dotsy-cli-latest"
+                        needs_migration = True
+                    if model.get("provider") == "dotsy":
+                        model["provider"] = "mistral"
+                        needs_migration = True
+
+            if needs_migration:
+                import tomli_w
+
+                with CONFIG_FILE.path.open("wb") as f:
+                    tomli_w.dump(config_data, f)
+
+        except Exception:
+            # If migration fails, continue with existing config
+            pass
 
     @classmethod
     def load(cls, **overrides: Any) -> DotsyConfig:
