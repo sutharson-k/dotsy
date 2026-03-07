@@ -698,10 +698,12 @@ class DotsyConfig(BaseSettings):
                         provider["name"] = "mistral"
                         needs_migration = True
 
-            # Migrate old model names
+            # Migrate old model names (case-insensitive)
             if "models" in config_data:
                 for model in config_data["models"]:
-                    if model.get("name") == "dotsy-cli-latest":
+                    model_name = model.get("name", "")
+                    # Handle various old name formats (case-insensitive)
+                    if "dotsy-cli-latest" in model_name.lower() or "dosty-cli-latest" in model_name.lower():
                         model["name"] = "mistral-dotsy-cli-latest"
                         needs_migration = True
                     if model.get("provider") == "dotsy":
