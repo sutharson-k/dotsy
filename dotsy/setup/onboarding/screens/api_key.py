@@ -20,7 +20,9 @@ from dotsy.setup.onboarding.base import OnboardingScreen
 PROVIDER_HELP = {
     "mistral": ("https://console.mistral.ai/codestral/cli", "Mistral AI Studio")
 }
-CONFIG_DOCS_URL = "https://github.com/sutharson-k/dotsy?tab=readme-ov-file#configuration"
+CONFIG_DOCS_URL = (
+    "https://github.com/sutharson-k/dotsy?tab=readme-ov-file#configuration"
+)
 
 
 def _save_api_key_to_env_file(env_key: str, api_key: str) -> None:
