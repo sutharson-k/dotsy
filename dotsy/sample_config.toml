@@ -91,7 +91,7 @@ backend = "generic"
 
 # Models configuration
 [[models]]
-name = "dotsy-cli-latest"
+name = "mistral-dotsy-cli-latest"
 provider = "mistral"
 alias = "devstral-2"
 input_price = 0.4
