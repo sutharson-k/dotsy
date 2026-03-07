@@ -206,3 +206,25 @@ temperature = 0.2
 # max_chars = 40000
 # max_depth = 3
 # max_files = 1000
+
+# MCP Servers configuration
+# [[mcp_servers]]
+# transport = "stdio"
+# name = "chrome-dev"
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-puppeteer"]
+# startup_timeout_sec = 30.0
+# tool_timeout_sec = 120.0
+#
+# [[mcp_servers]]
+# transport = "http"
+# name = "filesystem"
+# url = "http://localhost:8080"
+#
+# [[mcp_servers]]
+# transport = "streamable-http"
+# name = "github"
+# url = "https://api.githubcopilot.com/mcp"
+# api_key_env = "GITHUB_TOKEN"
+# api_key_header = "Authorization"
+# api_key_format = "Bearer {token}"
