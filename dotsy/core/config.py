@@ -703,8 +703,12 @@ class DotsyConfig(BaseSettings):
                 for model in config_data["models"]:
                     model_name = model.get("name", "")
                     # Handle various old name formats (case-insensitive)
-                    if "dotsy-cli-latest" in model_name.lower() or "dosty-cli-latest" in model_name.lower() or model_name == "devstral-2":
-                        model["name"] = "codestral-latest"
+                    if (
+                        "dotsy-cli-latest" in model_name.lower()
+                        or "dosty-cli-latest" in model_name.lower()
+                        or model_name == "devstral-2"
+                    ):
+                        model["name"] = "devstral-small"
                         needs_migration = True
                     if model.get("provider") == "dotsy":
                         model["provider"] = "mistral"
