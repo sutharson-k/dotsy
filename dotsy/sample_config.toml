@@ -209,6 +209,7 @@ temperature = 0.2
 
 # MCP Servers configuration
 # Browser automation with Puppeteer (can navigate, click, type, add to cart, etc.)
+# To enable: uncomment and install Node.js first, then run: npx -y @modelcontextprotocol/server-puppeteer
 # [[mcp_servers]]
 # transport = "stdio"
 # name = "browser"
@@ -216,6 +217,13 @@ temperature = 0.2
 # args = ["-y", "@modelcontextprotocol/server-puppeteer"]
 # startup_timeout_sec = 30.0
 # tool_timeout_sec = 120.0
+#
+# # Alternative: Playwright MCP for browser automation
+# [[mcp_servers]]
+# transport = "stdio"
+# name = "browser"
+# command = "npx"
+# args = ["-y", "@playwright/mcp-server"]
 #
 # # Filesystem access (read/write files)
 # [[mcp_servers]]
