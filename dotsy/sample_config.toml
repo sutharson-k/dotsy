@@ -208,19 +208,30 @@ temperature = 0.2
 # max_files = 1000
 
 # MCP Servers configuration
+# Browser automation with Puppeteer (can navigate, click, type, add to cart, etc.)
 # [[mcp_servers]]
 # transport = "stdio"
-# name = "chrome-dev"
+# name = "browser"
 # command = "npx"
 # args = ["-y", "@modelcontextprotocol/server-puppeteer"]
 # startup_timeout_sec = 30.0
 # tool_timeout_sec = 120.0
 #
+# # Filesystem access (read/write files)
 # [[mcp_servers]]
-# transport = "http"
+# transport = "stdio"
 # name = "filesystem"
-# url = "http://localhost:8080"
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/files"]
 #
+# # Git operations
+# [[mcp_servers]]
+# transport = "stdio"
+# name = "git"
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-git"]
+#
+# # GitHub API access
 # [[mcp_servers]]
 # transport = "streamable-http"
 # name = "github"
