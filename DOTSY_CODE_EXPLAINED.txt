@@ -645,18 +645,6 @@ FILES TO REFERENCE FOR SPECIFIC QUESTIONS
   └──────────────────────────────────┴────────────────────────────────────────┘
 
 
-VERSION HISTORY
-================================================================================
-
-Current Version: 17.20.119
-
-Changes in this version:
-- Rebranded from Mistral Vibe to Dotsy
-- Changed logo to blue-violet "D" shape
-- Updated all imports from vibe to dotsy
-- Fixed auto-scroll to latest user message
-- Added comprehensive documentation
-
 
 AUTHOR
 ================================================================================
