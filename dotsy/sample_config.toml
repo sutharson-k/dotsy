@@ -91,7 +91,7 @@ backend = "generic"
 
 # Models configuration
 [[models]]
-name = "devstral-2"
+name = "codestral-latest"
 provider = "mistral"
 alias = "devstral-2"
 input_price = 0.4
