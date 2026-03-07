@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Mistral Vibe Installation Script
-# This script installs uv if not present and then installs mistral-vibe using uv
+# Dotsy Installation Script
+# This script installs uv if not present and then installs dotsy using uv
 
 set -euo pipefail
 
@@ -79,25 +79,22 @@ function install_uv() {
 }
 
 function install_vibe() {
-    info "Installing mistral-vibe from GitHub repository using uv..."
-    uv tool install mistral-vibe
+    info "Installing Dotsy from GitHub repository using uv..."
+    uv tool install dotsy
 
-    success "Mistral Vibe installed successfully! (commands: vibe, vibe-acp)"
+    success "Dotsy installed successfully! (command: dotsy)"
 }
 
 function main() {
     echo
-    echo "██████████████████░░"
-    echo "██████████████████░░"
-    echo "████  ██████  ████░░"
-    echo "████    ██    ████░░"
-    echo "████          ████░░"
-    echo "████  ██  ██  ████░░"
-    echo "██      ██      ██░░"
-    echo "██████████████████░░"
-    echo "██████████████████░░"
+    echo "██████╗ ██████╗ ████████╗███████╗"
+    echo "██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝"
+    echo "██║  ██║██║   ██║   ██║   ███████╗"
+    echo "██║  ██║██║   ██║   ██║   ╚════██║"
+    echo "██████╔╝╚██████╔╝   ██║   ███████║"
+    echo "╚═════╝  ╚═════╝    ╚═╝   ╚══════╝"
     echo
-    echo "Starting Mistral Vibe installation..."
+    echo "Starting Dotsy installation..."
     echo
 
     check_platform
@@ -110,16 +107,14 @@ function main() {
 
     install_vibe
 
-    if command -v vibe &> /dev/null; then
+    if command -v dotsy &> /dev/null; then
         success "Installation completed successfully!"
         echo
-        echo "You can now run vibe with:"
-        echo "  vibe"
+        echo "You can now run dotsy with:"
+        echo "  dotsy"
         echo
-        echo "Or for ACP mode:"
-        echo "  vibe-acp"
     else
-        error "Installation completed but 'vibe' command not found"
+        error "Installation completed but 'dotsy' command not found"
         error "Please check your installation and PATH settings"
         exit 1
     fi
