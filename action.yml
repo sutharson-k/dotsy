@@ -1,7 +1,7 @@
 ---
-name: Mistral Vibe
-description: "Download, install, and run Mistral Vibe"
-author: Mistral AI
+name: Dotsy
+description: "Download, install, and run Dotsy"
+author: Sutharson
 
 inputs:
   prompt:
@@ -9,7 +9,7 @@ inputs:
     required: true
     default: |
       You are a helpful assistant
-  MISTRAL_API_KEY:
+  DOTSY_API_KEY:
     description: API Key for AI Studio
     required: true
   install_python:
@@ -40,21 +40,21 @@ runs:
     - name: Install uv
       uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
 
-    - name: Install Mistral Vibe
+    - name: Install Dotsy
       shell: bash
       working-directory: ${{ github.action_path }}
       run: |
         uv sync --locked --all-extras --dev
 
-    - name: Run Mistral Vibe
-      id: run-mistral-vibe
+    - name: Run Dotsy
+      id: run-dotsy
       shell: bash
       working-directory: ${{ github.action_path }}
       env:
-        MISTRAL_API_KEY: "${{ inputs.MISTRAL_API_KEY }}"
+        DOTSY_API_KEY: "${{ inputs.DOTSY_API_KEY }}"
         PROMPT_INPUT: "${{ inputs.prompt }}"
       run: |
         cd "${{ github.workspace }}"
-        uv run --directory "${{ github.action_path }}" vibe \
+        uv run --directory "${{ github.action_path }}" dotsy \
           --auto-approve \
           -p "$PROMPT_INPUT"
