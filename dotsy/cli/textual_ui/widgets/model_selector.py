@@ -16,14 +16,22 @@ class ModelSelectorPopup(Static):
         self._models: list[dict] = []
         self._selected_index = 0
 
-    def set_models(self, models: list[dict]) -> None:
+    def set_models(self, models: list[dict], current_model: str | None = None) -> None:
         """Set the list of available models.
         
         Args:
             models: List of dicts with 'alias', 'name', 'provider' keys
+            current_model: The currently active model alias
         """
         self._models = models
+        self._current_model = current_model
         self._selected_index = 0
+        # Start selection at current model if found
+        if current_model:
+            for idx, model in enumerate(models):
+                if model.get('alias') == current_model:
+                    self._selected_index = idx
+                    break
         self._update_display()
 
     def navigate(self, direction: int) -> None:
@@ -61,15 +69,24 @@ class ModelSelectorPopup(Static):
             alias = model.get('alias', 'unknown')
             name = model.get('name', '')
             provider = model.get('provider', '')
+            is_current = (self._current_model and alias == self._current_model)
             
             if idx == self._selected_index:
                 # Selected item with reverse video
-                text.append(f" ● {alias}", style="bold reverse")
-                text.append(f"  ({name} - {provider})", style="italic reverse")
+                if is_current:
+                    text.append(f" ● {alias} ✓", style="bold reverse green")
+                    text.append(f"  ({name} - {provider}) [CURRENT]", style="italic reverse green")
+                else:
+                    text.append(f" ● {alias}", style="bold reverse")
+                    text.append(f"  ({name} - {provider})", style="italic reverse")
             else:
                 # Normal item
-                text.append(f"   {alias}", style="bold")
-                text.append(f"  ({name} - {provider})", style="dim")
+                if is_current:
+                    text.append(f"   {alias} ✓", style="bold green")
+                    text.append(f"  ({name} - {provider}) [CURRENT]", style="dim green")
+                else:
+                    text.append(f"   {alias}", style="bold")
+                    text.append(f"  ({name} - {provider})", style="dim")
 
         self.update(text)
         self.show()

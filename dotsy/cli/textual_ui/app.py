@@ -684,6 +684,7 @@ class DotsyApp(App):  # noqa: PLR0904
             
         # Get available models from config
         models = []
+        current_model = self.agent_loop.config.get_active_model().alias
         for model in self.agent_loop._base_config.models:
             models.append({
                 'alias': model.alias,
@@ -693,7 +694,7 @@ class DotsyApp(App):  # noqa: PLR0904
         
         # Show model selector
         chat_container = self.query_one(ChatInputContainer)
-        chat_container.show_model_selector(models)
+        chat_container.show_model_selector(models, current_model)
 
     async def _reload_config(self) -> None:
         try:
