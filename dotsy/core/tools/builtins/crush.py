@@ -13,7 +13,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import Any, AsyncGenerator
 
 from dotsy.core.tools.base import (
     BaseTool,
@@ -187,8 +187,8 @@ class CrushRunTool(CrushTool):
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            title="✅ Crush Complete",
-            description="Task completed by Crush CLI",
+            success=True,
+            message="Task completed by Crush CLI",
         )
 
     async def invoke(
@@ -239,8 +239,8 @@ class CrushReadContextTool(CrushTool):
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            title="✅ Context Retrieved",
-            description="Successfully read Crush project context",
+            success=True,
+            message="Successfully read Crush project context",
         )
 
     async def invoke(
@@ -277,8 +277,8 @@ class CrushLogsTool(CrushTool):
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            title="✅ Logs Retrieved",
-            description="Successfully retrieved Crush logs",
+            success=True,
+            message="Successfully retrieved Crush logs",
         )
 
     async def invoke(
@@ -317,8 +317,8 @@ class CrushUpdateProvidersTool(CrushTool):
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            title="✅ Providers Updated",
-            description="Successfully updated Crush CLI providers",
+            success=True,
+            message="Successfully updated Crush CLI providers",
         )
 
     async def invoke(
