@@ -225,7 +225,59 @@ Edit your config to change the `active_model` alias.
 - `/reset` - Reset the conversation
 - `/tools` - List available tools
 
-## Crush CLI Integration
+## Browser Automation
+
+Dotsy supports **agent-browser** for web automation (recommended over Puppeteer):
+
+### Installation
+
+```bash
+# Install agent-browser CLI
+npm install -g agent-browser
+
+# Download Chromium
+agent-browser install
+```
+
+### Usage
+
+```bash
+dotsy
+# "Use agent_browser to open https://example.com"
+# "Navigate to github.com and take a screenshot"
+# "Click element @e5 on the current page"
+```
+
+### Features
+
+- Navigate to URLs
+- Click, fill, type interactions
+- Take screenshots (annotated with element labels)
+- Extract page content and accessibility trees
+- Ref-based element selection (more reliable than CSS/XPath)
+- Domain allowlist for security
+- Multiple providers (local, browserbase, iOS simulator)
+
+### Configuration
+
+```toml
+# ~/.dotsy/config.toml
+[tools.agent_browser]
+permission = "ask"  # Always ask before browser actions
+headless = true
+timeout_seconds = 30
+domain_allowlist = ["localhost", "127.0.0.1", "*.yourdomain.com"]
+```
+
+### Why agent-browser over Puppeteer?
+
+| Feature | agent-browser | Puppeteer MCP |
+|---------|--------------|---------------|
+| Speed | ⚡⚡⚡ (Rust CLI) | ⚡⚡ (Node.js) |
+| Element Selection | ✅ Ref-based (@e1, @e2) | ❌ CSS/XPath |
+| Annotated Screenshots | ✅ Yes | ❌ No |
+| Multi-Provider | ✅ 5+ providers | ❌ Local only |
+| iOS Support | ✅ Yes | ❌ No |
 
 Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) to provide enhanced autonomous agent capabilities. Crush CLI acts as a basic CLI assistant while Dotsy coordinates as the autonomous agent.
 
