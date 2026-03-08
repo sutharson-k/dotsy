@@ -480,32 +480,25 @@ DEFAULT_MODELS = [
     ),
     # MuleRouter Models (Qwen specialized)
     ModelConfig(
-        name="qwen-plus",
+        name="qwen/qwen-plus",
         provider="mulerouter",
         alias="mule-qwen-plus",
         input_price=0.4,
         output_price=1.2,
     ),
     ModelConfig(
-        name="qwen-max",
+        name="qwen/qwen-max",
         provider="mulerouter",
         alias="mule-qwen-max",
         input_price=2.4,
         output_price=9.6,
     ),
     ModelConfig(
-        name="qwen3.5-plus",
+        name="qwen/qwen-3-5",
         provider="mulerouter",
-        alias="mule-qwen3.5-plus",
+        alias="mule-qwen3.5",
         input_price=0.4,
         output_price=1.2,
-    ),
-    ModelConfig(
-        name="qwen3-max",
-        provider="mulerouter",
-        alias="mule-qwen3-max",
-        input_price=2.4,
-        output_price=9.6,
     ),
 ]
 

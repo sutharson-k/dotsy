@@ -108,14 +108,13 @@ Dotsy supports multiple AI providers out of the box:
 - Get API Key: https://console.groq.com/keys
 
 #### MuleRouter (Qwen Specialized):
-- Models: `mule-qwen-plus`, `mule-qwen-max`, `mule-qwen3.5-plus`, `mule-qwen3-max`
+- Models: `mule-qwen-plus`, `mule-qwen-max`, `mule-qwen3.5`
 - API Key: `MULEROUTER_API_KEY`
 - Base URL: `https://api.mulerouter.ai/v1`
 - Get API Key: https://www.mulerouter.ai/app/api-keys
 
 **MuleRouter Qwen Models:**
-- `mule-qwen3.5-plus` - Qwen 3.5 Plus (latest) ⭐
-- `mule-qwen3-max` - Qwen 3 Max (most powerful)
+- `mule-qwen3.5` - Qwen 3.5 (latest) ⭐
 - `mule-qwen-plus` - Qwen Plus (balanced)
 - `mule-qwen-max` - Qwen Max (high performance)
 
