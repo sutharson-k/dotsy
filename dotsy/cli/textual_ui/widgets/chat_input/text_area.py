@@ -179,7 +179,7 @@ class ChatTextArea(TextArea):
     async def _on_key(self, event: events.Key) -> None:  # noqa: PLR0911
         self._mark_cursor_moved_if_needed()
         
-        # Check if model selector is visible and handle arrow keys
+        # Check if model selector is visible and handle keys
         parent = self.parent
         model_selector_active = False
         while parent:
@@ -190,8 +190,13 @@ class ChatTextArea(TextArea):
                         model_selector_active = True
                 
                 if model_selector_active:
+                    # Handle Escape to close
+                    if event.key == 'escape':
+                        parent.hide_model_selector()
+                        event.stop()
+                        return
                     # Model selector navigation
-                    if event.key == 'up':
+                    elif event.key == 'up':
                         parent.navigate_model_selector(-1)
                         event.stop()
                         return
