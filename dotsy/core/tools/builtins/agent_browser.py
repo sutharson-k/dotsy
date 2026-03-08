@@ -161,18 +161,13 @@ class AgentBrowser(
 
     async def run(
         self,
-        parameters: dict[str, Any],
-        context: InvokeContext,
+        args: AgentBrowserArgs,
+        ctx: InvokeContext | None = None,
     ) -> AsyncGenerator[ToolStreamEvent | AgentBrowserResult, None]:
         if not self.is_available():
             raise ToolError(
                 "agent-browser CLI not found. Install with: npm install -g agent-browser"
             )
-
-        try:
-            args = AgentBrowserArgs.model_validate(parameters)
-        except ValidationError as e:
-            raise ToolError(f"Invalid browser arguments: {e}") from e
 
         # Validate URL against allowlist
         if args.url and self.config.domain_allowlist:
