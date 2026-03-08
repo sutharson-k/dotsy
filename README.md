@@ -22,9 +22,10 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 
 ## Features
 
-- **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google Gemini, Qwen, or any OpenAI-compatible API
+- **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google, Qwen, or any OpenAI-compatible API
 - **Interactive Chat**: Conversational AI agent that understands your requests
-- **Powerful Toolset**: File manipulation, code search, version control, and command execution
+- **Powerful Toolset**: File manipulation, code search, version control, web search, and command execution
+- **Web Search**: DuckDuckGo integration for privacy-focused, no-API-key web search
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows
 - **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent

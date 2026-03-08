@@ -227,6 +227,11 @@ temperature = 0.2
 # [tools.write_file]
 # permission = "ask"
 
+# [tools.duckduckgo_search]
+# permission = "always"
+# max_results = 10
+# timeout_seconds = 10
+
 # Crush CLI Integration
 # [crush_cli]
 # enabled = true
