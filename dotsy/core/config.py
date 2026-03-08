@@ -443,11 +443,32 @@ DEFAULT_MODELS = [
     ),
     # Groq Models
     ModelConfig(
-        name="qwen/qwen3-32b",
+        name="llama-3.1-70b-versatile",
         provider="groq",
-        alias="qwen-groq",
-        input_price=0.19,
-        output_price=0.19,
+        alias="groq-llama",
+        input_price=0.0,
+        output_price=0.0,
+    ),
+    ModelConfig(
+        name="llama-3.1-8b-instant",
+        provider="groq",
+        alias="groq-llama-8b",
+        input_price=0.0,
+        output_price=0.0,
+    ),
+    ModelConfig(
+        name="mixtral-8x7b-32768",
+        provider="groq",
+        alias="groq-mixtral",
+        input_price=0.0,
+        output_price=0.0,
+    ),
+    ModelConfig(
+        name="gemma2-9b-it",
+        provider="groq",
+        alias="groq-gemma",
+        input_price=0.0,
+        output_price=0.0,
     ),
 ]
 

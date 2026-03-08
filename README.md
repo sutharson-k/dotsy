@@ -97,10 +97,16 @@ Dotsy supports multiple AI providers out of the box:
 - Get API Key: https://openrouter.ai/keys
 
 #### Groq (Ultra-fast inference):
-- Models: `qwen-groq` (Qwen3 32B)
+- Models: `groq-llama`, `groq-llama-8b`, `groq-mixtral`, `groq-gemma`
 - API Key: `GROQ_API_KEY`
 - Base URL: `https://api.groq.com/openai/v1`
 - Get API Key: https://console.groq.com/keys
+
+**Groq Models:**
+- `groq-llama` - Llama 3.1 70B (free tier)
+- `groq-llama-8b` - Llama 3.1 8B (fastest, free tier)
+- `groq-mixtral` - Mixtral 8x7B (free tier)
+- `groq-gemma` - Gemma2 9B (free tier)
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
