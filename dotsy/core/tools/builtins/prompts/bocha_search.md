@@ -40,16 +40,25 @@ Search for "Rust programming" with max_results=5
 
 To use this tool, you need a BochaAI API key:
 
-1. Get an API key from https://api.bochaai.com
+1. Get an API key from BochaAI (check their documentation for the correct API endpoint)
 2. Set the environment variable: `BOCHAAI_API_KEY=your-api-key`
 3. Or add to your config.toml:
 
 ```toml
 [tools.bocha_search]
+permission = "always"
 api_key_env_var = "BOCHAAI_API_KEY"
-api_base_url = "https://api.bochaai.com/v1"
+api_base_url = "https://api.bochaai.com/v1"  # Verify this URL with BochaAI docs
 default_max_results = 10
 ```
+
+**Note:** The API endpoint URL may vary depending on BochaAI's API structure. Common endpoints tried:
+- `/web-search`
+- `/v1/web-search`
+- `/search`
+- `/v1/search`
+
+Check BochaAI's official documentation for the correct endpoint.
 
 ## Response Format
 

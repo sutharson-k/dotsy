@@ -146,9 +146,13 @@ class BochaSearch(
         search_type: str,
         timeout: int,
     ) -> BochaSearchResult:
-        endpoint = f"{api_base}/web-search"
-        if search_type == "news":
-            endpoint = f"{api_base}/news-search"
+        # Try different endpoint patterns
+        endpoints_to_try = [
+            f"{api_base}/web-search",
+            f"{api_base}/v1/web-search",
+            f"{api_base}/search",
+            f"{api_base}/v1/search",
+        ]
 
         headers = {
             "Authorization": f"Bearer {api_key}",
@@ -160,15 +164,40 @@ class BochaSearch(
             "count": max_results,
         }
 
+        last_error = None
         async with httpx.AsyncClient() as client:
-            response = await client.post(
-                endpoint,
-                headers=headers,
-                json=payload,
-                timeout=timeout,
-            )
-            response.raise_for_status()
-            data = response.json()
+            for endpoint in endpoints_to_try:
+                try:
+                    response = await client.post(
+                        endpoint,
+                        headers=headers,
+                        json=payload,
+                        timeout=timeout,
+                    )
+                    
+                    if response.status_code == 404:
+                        last_error = f"Endpoint not found: {endpoint}"
+                        continue
+                    
+                    response.raise_for_status()
+                    data = response.json()
+                    break
+                    
+                except httpx.HTTPStatusError as e:
+                    last_error = f"HTTP error {e.response.status_code}: {e}"
+                    if e.response.status_code == 404:
+                        continue
+                    raise
+                except Exception as e:
+                    last_error = str(e)
+                    continue
+            else:
+                # All endpoints failed with 404
+                raise ToolError(
+                    f"BochaAI API endpoints not found. Tried: {', '.join(endpoints_to_try)}. "
+                    f"Last error: {last_error}. "
+                    "Please verify your API key and base URL."
+                )
 
         # Parse BochaAI response
         results = data.get("results", [])
