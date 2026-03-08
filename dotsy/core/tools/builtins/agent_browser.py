@@ -181,16 +181,21 @@ class AgentBrowser(
                     f"Allowed: {', '.join(self.config.domain_allowlist)}"
                 )
 
+        # Generate tool_call_id if not provided
+        tool_call_id = ctx.tool_call_id if ctx else "browser-001"
+
         yield ToolStreamEvent(
-            type="tool_call",
+            tool_name=self.TOOL_NAME,
             message=f"Browser: {args.action} {args.url or args.element_ref or ''}",
+            tool_call_id=tool_call_id,
         )
 
         try:
             result = await self._execute_action(args)
             yield ToolStreamEvent(
-                type="tool_result",
-                content=result.model_dump(),
+                tool_name=self.TOOL_NAME,
+                message=result.output or f"Browser {args.action} completed",
+                tool_call_id=tool_call_id,
             )
         except subprocess.TimeoutExpired as e:
             raise ToolError(f"Browser action timed out: {e}") from e
