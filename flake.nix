@@ -140,7 +140,7 @@
               # Undo dependency propagation by nixpkgs.
               unset PYTHONPATH
 
-              # Get repository root using git. This is expanded at runtime by the editable `.pth` machinery.
+              # Got repository root using git. This is expanded at runtime by the editable `.pth` machinery.
               export REPO_ROOT=$(git rev-parse --show-toplevel)
             '';
           };
