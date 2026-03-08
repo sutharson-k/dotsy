@@ -350,6 +350,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # Bytez (AI Model Platform)
+    ProviderConfig(
+        name="bytez",
+        api_base="https://api.bytez.com/v1",
+        api_key_env_var="BYTEZ_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -499,6 +507,14 @@ DEFAULT_MODELS = [
         alias="mule-qwen3.5",
         input_price=0.4,
         output_price=1.2,
+    ),
+    # Bytez Models
+    ModelConfig(
+        name="Qwen/Qwen3-30B-A3B",
+        provider="bytez",
+        alias="bytez-qwen3",
+        input_price=0.15,
+        output_price=0.45,
     ),
 ]
 

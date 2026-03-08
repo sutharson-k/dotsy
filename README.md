@@ -118,6 +118,15 @@ Dotsy supports multiple AI providers out of the box:
 - `mule-qwen-plus` - Qwen Plus (balanced)
 - `mule-qwen-max` - Qwen Max (high performance)
 
+#### Bytez (Qwen3-30B-A3B):
+- Models: `bytez-qwen3` (Qwen3-30B-A3B)
+- API Key: `BYTEZ_API_KEY`
+- Base URL: `https://api.bytez.com/v1`
+- Get API Key: https://bytez.ai
+
+**Bytez Model:**
+- `bytez-qwen3` - Qwen3 30B A3B (efficient MoE) ⭐
+
 **Groq Models:**
 - `groq-llama` - Llama 3.1 70B (free tier)
 - `groq-llama-8b` - Llama 3.1 8B (fastest, free tier)
@@ -315,6 +324,9 @@ export GROQ_API_KEY="your-groq-key"
 
 # MuleRouter (for Qwen specialized models)
 export MULEROUTER_API_KEY="your-mulerouter-key"
+
+# Bytez (for Qwen3-30B-A3B)
+export BYTEZ_API_KEY="your-bytez-key"
 ```
 
 Or store them in `~/.dotsy/.env`:
@@ -327,6 +339,7 @@ DASHSCOPE_API_KEY=your-dashscope-key
 OPENROUTER_API_KEY=your-openrouter-key
 GROQ_API_KEY=your-groq-key
 MULEROUTER_API_KEY=your-mulerouter-key
+BYTEZ_API_KEY=your-bytez-key
 ```
 
 ## License
