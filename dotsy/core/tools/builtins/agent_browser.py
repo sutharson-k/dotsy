@@ -123,8 +123,12 @@ class AgentBrowser(
         "Requires agent-browser CLI: npm install -g agent-browser"
     )
 
-    def __init__(self, config: AgentBrowserConfig | None = None) -> None:
-        super().__init__(config=config)
+    def __init__(
+        self,
+        config: AgentBrowserConfig | None = None,
+        state: AgentBrowserState | None = None,
+    ) -> None:
+        super().__init__(config=config, state=state)
         self._agent_browser_path = self._find_agent_browser()
 
     @classmethod
