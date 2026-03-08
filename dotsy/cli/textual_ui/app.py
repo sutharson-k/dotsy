@@ -684,7 +684,7 @@ class DotsyApp(App):  # noqa: PLR0904
             
         # Get available models from config
         models = []
-        for model in self.agent_loop.base_config.models:
+        for model in self.agent_loop._base_config.models:
             models.append({
                 'alias': model.alias,
                 'name': model.name,
