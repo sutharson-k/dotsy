@@ -702,7 +702,9 @@ class DotsyApp(App):  # noqa: PLR0904
 
             await self.agent_loop.reload_with_initial_messages(base_config=base_config)
 
-            await self._mount_and_scroll(UserCommandMessage("Configuration reloaded."))
+            # Get the new active model name for notification
+            new_model = base_config.get_active_model().alias
+            await self._mount_and_scroll(UserCommandMessage(f"✓ Model changed to {new_model}"))
         except Exception as e:
             await self._mount_and_scroll(
                 ErrorMessage(
@@ -1068,7 +1070,14 @@ class DotsyApp(App):  # noqa: PLR0904
                 # Set the model in config
                 from dotsy.core.config import DotsyConfig
                 DotsyConfig.save_updates({"active_model": model})
-                self.notify(f"Model changed to {model}")
+                
+                # Reload the agent loop with new config
+                if self.agent_loop:
+                    import asyncio
+                    asyncio.create_task(self._reload_config())
+                else:
+                    self.notify(f"Model changed to {model}")
+                
                 chat.value = ""
                 chat.focus_input()
         except Exception:
