@@ -428,14 +428,14 @@ DEFAULT_MODELS = [
     ),
     # Qwen Models via OpenRouter (International)
     ModelConfig(
-        name="qwen-2.5-72b-instruct",
+        name="qwen/qwen-2.5-72b-instruct",
         provider="qwen_openrouter",
         alias="qwen-72b",
         input_price=0.18,
         output_price=0.18,
     ),
     ModelConfig(
-        name="qwen-2.5-coder-32b-instruct",
+        name="qwen/qwen-2.5-coder-32b-instruct",
         provider="qwen_openrouter",
         alias="qwen-coder",
         input_price=0.18,
