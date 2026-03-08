@@ -450,32 +450,32 @@ DEFAULT_MODELS = [
     ),
     # Qwen Models via OpenRouter (International)
     ModelConfig(
-        name="qwen/qwen-plus",
+        name="qwen-2.5-72b-instruct",
         provider="qwen_openrouter",
-        alias="qwen-plus-or",
-        input_price=0.4,
-        output_price=1.2,
+        alias="qwen-72b",
+        input_price=0.18,
+        output_price=0.18,
     ),
     ModelConfig(
-        name="qwen/qwen-max",
-        provider="qwen_openrouter",
-        alias="qwen-max-or",
-        input_price=2.4,
-        output_price=9.6,
-    ),
-    ModelConfig(
-        name="qwen/qwen-turbo",
-        provider="qwen_openrouter",
-        alias="qwen-turbo-or",
-        input_price=0.2,
-        output_price=0.6,
-    ),
-    ModelConfig(
-        name="qwen/qwen-2.5-coder-32b-instruct",
+        name="qwen-2.5-coder-32b-instruct",
         provider="qwen_openrouter",
         alias="qwen-coder",
         input_price=0.18,
         output_price=0.18,
+    ),
+    ModelConfig(
+        name="qwen-2.5-32b-instruct",
+        provider="qwen_openrouter",
+        alias="qwen-32b",
+        input_price=0.09,
+        output_price=0.18,
+    ),
+    ModelConfig(
+        name="qwen-2-vl-72b-instruct",
+        provider="qwen_openrouter",
+        alias="qwen-vl",
+        input_price=0.15,
+        output_price=0.45,
     ),
     # Local Models
     ModelConfig(
