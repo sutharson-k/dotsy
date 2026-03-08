@@ -178,6 +178,44 @@ class ChatTextArea(TextArea):
 
     async def _on_key(self, event: events.Key) -> None:  # noqa: PLR0911
         self._mark_cursor_moved_if_needed()
+        
+        # Check if model selector is visible and handle arrow keys
+        parent = self.parent
+        model_selector_active = False
+        while parent:
+            if hasattr(parent, 'navigate_model_selector'):
+                # Check if model selector popup is displayed
+                if hasattr(parent, '_model_selector') and parent._model_selector:
+                    if parent._model_selector.styles.display != "none":
+                        model_selector_active = True
+                
+                if model_selector_active:
+                    # Model selector navigation
+                    if event.key == 'up':
+                        parent.navigate_model_selector(-1)
+                        event.stop()
+                        return
+                    elif event.key == 'down':
+                        parent.navigate_model_selector(1)
+                        event.stop()
+                        return
+                    elif event.key == 'enter':
+                        # Select model
+                        model = parent.selected_model
+                        if model:
+                            parent.hide_model_selector()
+                            from dotsy.core.config import DotsyConfig
+                            DotsyConfig.save_updates({"active_model": model})
+                            # Notify through parent app
+                            app = self.app
+                            if hasattr(app, 'notify'):
+                                app.notify(f"Model changed to {model}")
+                            self.text = ""
+                            self.cursor_location = (0, 0)
+                        event.stop()
+                        return
+                break
+            parent = parent.parent
 
         manager = self._completion_manager
         if manager:
