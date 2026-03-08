@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import AsyncGenerator
 from typing import Any, ClassVar
+from uuid import uuid4
 
 import httpx
 from pydantic import BaseModel, Field
@@ -92,9 +93,12 @@ class BochaSearch(
             )
 
         max_results = args.max_results or self.config.default_max_results
+        tool_call_id = str(uuid4())
 
         yield ToolStreamEvent(
-            tool_name=self.get_name(), message=f"Searching BochaAI for: {args.query}"
+            tool_name=self.get_name(),
+            message=f"Searching BochaAI for: {args.query}",
+            tool_call_id=tool_call_id,
         )
 
         try:
@@ -208,7 +212,7 @@ class BochaSearch(
         args = event.args
         return ToolCallDisplay(
             summary=f"Searching for: {args.query}",
-            details=f"Search type: {args.search_type}",
+            content=f"Search type: {args.search_type}",
         )
 
     @classmethod
@@ -225,6 +229,5 @@ class BochaSearch(
         return ToolResultDisplay(
             success=True,
             message=f"Found {result.result_count} results",
-            summary=f"Found {result.result_count} results",
-            details=details,
+            warnings=[details] if details else [],
         )
