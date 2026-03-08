@@ -144,7 +144,7 @@ ban-relative-imports = "all"
 [tool.ruff.lint.isort]
 known-first-party = ["dotsy"]
 force-sort-within-sections = true
-split-on-trailing-comma = true
+split-on-trailing-comma = false
 combine-as-imports = true
 force-wrap-aliases = false
 order-by-type = true

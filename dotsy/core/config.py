@@ -706,10 +706,13 @@ class DotsyConfig(BaseSettings):
                     if (
                         "dotsy-cli-latest" in model_name.lower()
                         or "dosty-cli-latest" in model_name.lower()
-                        or model_name == "devstral-2"
-                        or model_name == "devstral-small"
-                        or model_name == "codestral-2505"
-                        or model_name == "codestral"
+                        or model_name
+                        in {
+                            "devstral-2",
+                            "devstral-small",
+                            "codestral-2505",
+                            "codestral",
+                        }
                     ):
                         model["name"] = "mistral-small-latest"
                         needs_migration = True
