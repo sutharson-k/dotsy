@@ -919,6 +919,15 @@ class DotsyApp(App):  # noqa: PLR0904
     def action_interrupt(self) -> None:
         current_time = time.monotonic()
 
+        # Check if model selector is open - if so, close it instead of interrupting
+        try:
+            chat_input = self.query_one(ChatInputContainer)
+            if chat_input._model_selector and chat_input._model_selector.styles.display != "none":
+                chat_input.hide_model_selector()
+                return
+        except Exception:
+            pass
+
         if self._current_bottom_app == BottomApp.Config:
             try:
                 config_app = self.query_one(ConfigApp)
