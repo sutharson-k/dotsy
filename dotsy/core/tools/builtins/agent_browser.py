@@ -106,7 +106,6 @@ class AgentBrowser(
         AgentBrowserConfig,
         AgentBrowserState,
     ],
-    ToolUIData[AgentBrowserArgs, AgentBrowserResult],
 ):
     """Browser automation using agent-browser CLI.
 
@@ -160,7 +159,7 @@ class AgentBrowser(
                 message=f"Browser {action} failed: {result.get('error', 'Unknown error')}",
             )
 
-    async def invoke(
+    async def run(
         self,
         parameters: dict[str, Any],
         context: InvokeContext,
@@ -355,3 +354,7 @@ class AgentBrowser(
                 success=False,
                 message=f"✗ Browser {event.result.action} failed: {event.result.error}",
             )
+
+    @classmethod
+    def get_status_text(cls) -> str:
+        return "Browser automation via agent-browser"
