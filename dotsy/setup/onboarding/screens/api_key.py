@@ -18,7 +18,8 @@ from dotsy.core.paths.global_paths import GLOBAL_ENV_FILE
 from dotsy.setup.onboarding.base import OnboardingScreen
 
 PROVIDER_HELP = {
-    "mistral": ("https://console.mistral.ai/codestral/cli", "Mistral AI Studio")
+    "mistral": ("https://console.mistral.ai/codestral/cli", "Mistral AI Studio"),
+    "qwen": ("https://dashscope.console.aliyun.com/apiKey", "Alibaba Cloud DashScope"),
 }
 CONFIG_DOCS_URL = (
     "https://github.com/sutharson-k/dotsy?tab=readme-ov-file#configuration"

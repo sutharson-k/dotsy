@@ -30,6 +30,24 @@ from dotsy.core.prompts import SystemPrompt
 from dotsy.core.tools.base import BaseToolConfig
 
 
+class CrushCLIConfig(BaseModel):
+    """Configuration for Crush CLI integration.
+
+    Attributes:
+        enabled: Enable Crush CLI integration
+        auto_approve_tools: Tools that don't require approval
+        disabled_tools: Tools to disable
+        config_path: Path to Crush config file
+        yolo_mode: Run Crush with --yolo flag (auto-approve all)
+    """
+
+    enabled: bool = True
+    auto_approve_tools: list[str] = Field(default_factory=list)
+    disabled_tools: list[str] = Field(default_factory=list)
+    config_path: str = ""
+    yolo_mode: bool = False
+
+
 def load_dotenv_values(
     env_path: Path = GLOBAL_ENV_FILE.path,
     environ: MutableMapping[str, str] = os.environ,
@@ -308,6 +326,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # Qwen (Alibaba Cloud DashScope)
+    ProviderConfig(
+        name="qwen",
+        api_base="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        api_key_env_var="DASHSCOPE_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -391,6 +417,28 @@ DEFAULT_MODELS = [
         alias="gemini-1.5-pro",
         input_price=1.25,
         output_price=5.0,
+    ),
+    # Qwen Models (Alibaba Cloud DashScope)
+    ModelConfig(
+        name="qwen-plus",
+        provider="qwen",
+        alias="qwen-plus",
+        input_price=0.4,
+        output_price=1.2,
+    ),
+    ModelConfig(
+        name="qwen-max",
+        provider="qwen",
+        alias="qwen-max",
+        input_price=2.4,
+        output_price=9.6,
+    ),
+    ModelConfig(
+        name="qwen-turbo",
+        provider="qwen",
+        alias="qwen-turbo",
+        input_price=0.2,
+        output_price=0.6,
     ),
     # Local Models
     ModelConfig(
@@ -500,6 +548,10 @@ class DotsyConfig(BaseSettings):
             "A list of skill names/patterns to disable. Ignored if 'enabled_skills'"
             " is set. Supports glob patterns and regex with 're:' prefix."
         ),
+    )
+    crush_cli: CrushCLIConfig = Field(
+        default_factory=CrushCLIConfig,
+        description="Configuration for Crush CLI integration.",
     )
 
     model_config = SettingsConfigDict(
