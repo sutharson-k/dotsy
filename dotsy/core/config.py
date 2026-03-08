@@ -443,7 +443,7 @@ DEFAULT_MODELS = [
     ),
     # Groq Models
     ModelConfig(
-        name="llama-3.1-70b-versatile",
+        name="llama-3.3-70b-versatile",
         provider="groq",
         alias="groq-llama",
         input_price=0.0,
