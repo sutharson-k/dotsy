@@ -91,16 +91,16 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
 
 #### International (via OpenRouter):
-- Models: `qwen-72b`, `qwen-coder`, `qwen-32b`, `qwen-vl`
+- Models: `qwen-72b`, `qwen-coder`
 - API Key: `OPENROUTER_API_KEY`
 - Base URL: `https://openrouter.ai/api/v1`
 - Get API Key: https://openrouter.ai/keys
 
-**Available Qwen Models on OpenRouter:**
-- `qwen-72b` - Qwen 2.5 72B (best overall)
-- `qwen-coder` - Qwen 2.5 Coder 32B (coding specialized)
-- `qwen-32b` - Qwen 2.5 32B (balanced)
-- `qwen-vl` - Qwen 2 VL 72B (vision + language)
+#### Groq (Ultra-fast inference):
+- Models: `qwen-groq` (Qwen3 32B)
+- API Key: `GROQ_API_KEY`
+- Base URL: `https://api.groq.com/openai/v1`
+- Get API Key: https://console.groq.com/keys
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
@@ -287,6 +287,9 @@ export DASHSCOPE_API_KEY="your-dashscope-key"
 
 # OpenRouter (for Qwen international access)
 export OPENROUTER_API_KEY="your-openrouter-key"
+
+# Groq (for ultra-fast Qwen inference)
+export GROQ_API_KEY="your-groq-key"
 ```
 
 Or store them in `~/.dotsy/.env`:
@@ -297,6 +300,7 @@ ANTHROPIC_API_KEY=your-anthropic-key
 GOOGLE_API_KEY=your-google-key
 DASHSCOPE_API_KEY=your-dashscope-key
 OPENROUTER_API_KEY=your-openrouter-key
+GROQ_API_KEY=your-groq-key
 ```
 
 ## License

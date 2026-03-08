@@ -334,6 +334,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # Groq (Fast inference)
+    ProviderConfig(
+        name="groq",
+        api_base="https://api.groq.com/openai/v1",
+        api_key_env_var="GROQ_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -432,6 +440,14 @@ DEFAULT_MODELS = [
         alias="qwen-coder",
         input_price=0.18,
         output_price=0.18,
+    ),
+    # Groq Models
+    ModelConfig(
+        name="qwen/qwen3-32b",
+        provider="groq",
+        alias="qwen-groq",
+        input_price=0.19,
+        output_price=0.19,
     ),
 ]
 
