@@ -1,7 +1,7 @@
 ---
 name: Dotsy
 description: "Download, install, and run Dotsy"
-author: Sutharson
+author: K.Sutharson
 
 inputs:
   prompt:
