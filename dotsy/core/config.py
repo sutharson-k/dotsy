@@ -326,14 +326,6 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
-    # Qwen (Alibaba Cloud DashScope)
-    ProviderConfig(
-        name="qwen",
-        api_base="https://dashscope.aliyuncs.com/compatible-mode/v1",
-        api_key_env_var="DASHSCOPE_API_KEY",
-        api_style="openai",
-        backend=Backend.GENERIC,
-    ),
     # Qwen via OpenRouter (International)
     ProviderConfig(
         name="qwen_openrouter",
@@ -426,28 +418,6 @@ DEFAULT_MODELS = [
         input_price=1.25,
         output_price=5.0,
     ),
-    # Qwen Models (Alibaba Cloud DashScope)
-    ModelConfig(
-        name="qwen-plus",
-        provider="qwen",
-        alias="qwen-plus",
-        input_price=0.4,
-        output_price=1.2,
-    ),
-    ModelConfig(
-        name="qwen-max",
-        provider="qwen",
-        alias="qwen-max",
-        input_price=2.4,
-        output_price=9.6,
-    ),
-    ModelConfig(
-        name="qwen-turbo",
-        provider="qwen",
-        alias="qwen-turbo",
-        input_price=0.2,
-        output_price=0.6,
-    ),
     # Qwen Models via OpenRouter (International)
     ModelConfig(
         name="qwen-2.5-72b-instruct",
@@ -462,28 +432,6 @@ DEFAULT_MODELS = [
         alias="qwen-coder",
         input_price=0.18,
         output_price=0.18,
-    ),
-    ModelConfig(
-        name="qwen-2.5-32b-instruct",
-        provider="qwen_openrouter",
-        alias="qwen-32b",
-        input_price=0.09,
-        output_price=0.18,
-    ),
-    ModelConfig(
-        name="qwen-2-vl-72b-instruct",
-        provider="qwen_openrouter",
-        alias="qwen-vl",
-        input_price=0.15,
-        output_price=0.45,
-    ),
-    # Local Models
-    ModelConfig(
-        name="devstral",
-        provider="llamacpp",
-        alias="local",
-        input_price=0.0,
-        output_price=0.0,
     ),
 ]
 
