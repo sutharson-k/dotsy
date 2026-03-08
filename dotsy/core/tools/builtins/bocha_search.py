@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import asyncio
 from collections.abc import AsyncGenerator
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 import httpx
 from pydantic import BaseModel, Field
@@ -19,9 +17,6 @@ from dotsy.core.tools.base import (
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
 from dotsy.core.types import ToolStreamEvent
 
-if TYPE_CHECKING:
-    from dotsy.core.types import ToolCallEvent, ToolResultEvent
-
 
 class BochaSearchConfig(BaseToolConfig):
     permission: ToolPermission = ToolPermission.ALWAYS
@@ -35,12 +30,10 @@ class BochaSearchConfig(BaseToolConfig):
         description="Base URL for the BochaAI API.",
     )
     default_max_results: int = Field(
-        default=10,
-        description="Default maximum number of search results to return.",
+        default=10, description="Default maximum number of search results to return."
     )
     default_timeout: int = Field(
-        default=30,
-        description="Default timeout for the search request in seconds.",
+        default=30, description="Default timeout for the search request in seconds."
     )
 
 
@@ -49,10 +42,7 @@ class BochaSearchState(BaseToolState):
 
 
 class BochaSearchArgs(BaseModel):
-    query: str = Field(
-        ...,
-        description="The search query string.",
-    )
+    query: str = Field(..., description="The search query string.")
     max_results: int | None = Field(
         default=None,
         description="Override the default maximum number of results (default: 10).",
@@ -79,54 +69,40 @@ class BochaSearch(
 ):
     """Search the web using BochaAI's search API. Returns relevant web pages, articles, and information."""
 
-    display_name = "Bocha Search"
+    description: ClassVar[str] = (
+        "Search the web using BochaAI's search API. Returns relevant web pages, articles, and information."
+    )
 
-    def _get_config_class(cls) -> type[BochaSearchConfig]:
-        return BochaSearchConfig
-
-    def _get_state_class(cls) -> type[BochaSearchState]:
-        return BochaSearchState
-
-    def _get_args_class(cls) -> type[BochaSearchArgs]:
-        return BochaSearchArgs
-
-    def _get_result_class(cls) -> type[BochaSearchResult]:
-        return BochaSearchResult
-
-    async def invoke(
+    async def run(
         self, args: BochaSearchArgs, ctx: InvokeContext | None = None
     ) -> AsyncGenerator[ToolStreamEvent | BochaSearchResult, None]:
         import os
 
-        config = self.get_config(ctx)
-        api_key = os.getenv(config.api_key_env_var)
+        api_key = os.getenv(self.config.api_key_env_var)
 
         if not api_key:
             raise ToolError(
-                f"BochaAI API key not found. Set the {config.api_key_env_var} environment variable."
+                f"BochaAI API key not found. Set the {self.config.api_key_env_var} environment variable."
             )
 
-        max_results = args.max_results or config.default_max_results
+        max_results = args.max_results or self.config.default_max_results
 
         yield ToolStreamEvent(
-            tool_name=self.get_name(),
-            message=f"Searching BochaAI for: {args.query}",
+            tool_name=self.get_name(), message=f"Searching BochaAI for: {args.query}"
         )
 
         try:
             results = await self._search_bocha(
                 query=args.query,
                 api_key=api_key,
-                api_base=config.api_base_url,
+                api_base=self.config.api_base_url,
                 max_results=max_results,
                 search_type=args.search_type,
-                timeout=config.default_timeout,
+                timeout=self.config.default_timeout,
             )
 
             # Update state
-            if ctx and ctx.state:
-                state = self.get_state(ctx.state)
-                state.search_history.append(args.query)
+            self.state.search_history.append(args.query)
 
             yield results
 
@@ -159,30 +135,24 @@ class BochaSearch(
             "Content-Type": "application/json",
         }
 
-        payload = {
-            "query": query,
-            "count": max_results,
-        }
+        payload = {"query": query, "count": max_results}
 
         last_error = None
         async with httpx.AsyncClient() as client:
             for endpoint in endpoints_to_try:
                 try:
                     response = await client.post(
-                        endpoint,
-                        headers=headers,
-                        json=payload,
-                        timeout=timeout,
+                        endpoint, headers=headers, json=payload, timeout=timeout
                     )
-                    
+
                     if response.status_code == 404:
                         last_error = f"Endpoint not found: {endpoint}"
                         continue
-                    
+
                     response.raise_for_status()
                     data = response.json()
                     break
-                    
+
                 except httpx.HTTPStatusError as e:
                     last_error = f"HTTP error {e.response.status_code}: {e}"
                     if e.response.status_code == 404:
@@ -207,12 +177,14 @@ class BochaSearch(
         # Format results for display
         formatted_results = []
         for result in truncated_results:
-            formatted_results.append({
-                "title": result.get("title", "No title"),
-                "url": result.get("url", ""),
-                "snippet": result.get("snippet", result.get("description", "")),
-                "date": result.get("date", result.get("publishedAt", "")),
-            })
+            formatted_results.append(
+                {
+                    "title": result.get("title", "No title"),
+                    "url": result.get("url", ""),
+                    "snippet": result.get("snippet", result.get("description", "")),
+                    "date": result.get("date", result.get("publishedAt", "")),
+                }
+            )
 
         return BochaSearchResult(
             query=query,
@@ -240,7 +212,6 @@ class BochaSearch(
             if result.was_truncated:
                 details += f"\n... and {result.result_count - 5} more results"
             return ToolResultDisplay(
-                summary=f"Found {result.result_count} results",
-                details=details,
+                summary=f"Found {result.result_count} results", details=details
             )
         return ToolResultDisplay(summary="Search completed")
