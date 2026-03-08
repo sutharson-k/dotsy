@@ -35,7 +35,7 @@ from dotsy.core.tools.base import (
     InvokeContext,
     ToolError,
 )
-from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
+from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
 from dotsy.core.types import ToolStreamEvent
 
 
