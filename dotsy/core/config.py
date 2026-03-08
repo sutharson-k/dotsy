@@ -342,6 +342,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # MuleRouter (AI Inference Platform)
+    ProviderConfig(
+        name="mulerouter",
+        api_base="https://api.mulerouter.ai/v1",
+        api_key_env_var="MULEROUTER_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -469,6 +477,35 @@ DEFAULT_MODELS = [
         alias="groq-gemma",
         input_price=0.0,
         output_price=0.0,
+    ),
+    # MuleRouter Models (Qwen specialized)
+    ModelConfig(
+        name="qwen-plus",
+        provider="mulerouter",
+        alias="mule-qwen-plus",
+        input_price=0.4,
+        output_price=1.2,
+    ),
+    ModelConfig(
+        name="qwen-max",
+        provider="mulerouter",
+        alias="mule-qwen-max",
+        input_price=2.4,
+        output_price=9.6,
+    ),
+    ModelConfig(
+        name="qwen3.5-plus",
+        provider="mulerouter",
+        alias="mule-qwen3.5-plus",
+        input_price=0.4,
+        output_price=1.2,
+    ),
+    ModelConfig(
+        name="qwen3-max",
+        provider="mulerouter",
+        alias="mule-qwen3-max",
+        input_price=2.4,
+        output_price=9.6,
     ),
 ]
 

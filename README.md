@@ -107,6 +107,18 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://api.groq.com/openai/v1`
 - Get API Key: https://console.groq.com/keys
 
+#### MuleRouter (Qwen Specialized):
+- Models: `mule-qwen-plus`, `mule-qwen-max`, `mule-qwen3.5-plus`, `mule-qwen3-max`
+- API Key: `MULEROUTER_API_KEY`
+- Base URL: `https://api.mulerouter.ai/v1`
+- Get API Key: https://www.mulerouter.ai/app/api-keys
+
+**MuleRouter Qwen Models:**
+- `mule-qwen3.5-plus` - Qwen 3.5 Plus (latest) ⭐
+- `mule-qwen3-max` - Qwen 3 Max (most powerful)
+- `mule-qwen-plus` - Qwen Plus (balanced)
+- `mule-qwen-max` - Qwen Max (high performance)
+
 **Groq Models:**
 - `groq-llama` - Llama 3.1 70B (free tier)
 - `groq-llama-8b` - Llama 3.1 8B (fastest, free tier)
@@ -299,8 +311,11 @@ export DASHSCOPE_API_KEY="your-dashscope-key"
 # OpenRouter (for Qwen international access)
 export OPENROUTER_API_KEY="your-openrouter-key"
 
-# Groq (for ultra-fast Qwen inference)
+# Groq (for ultra-fast inference)
 export GROQ_API_KEY="your-groq-key"
+
+# MuleRouter (for Qwen specialized models)
+export MULEROUTER_API_KEY="your-mulerouter-key"
 ```
 
 Or store them in `~/.dotsy/.env`:
@@ -312,6 +327,7 @@ GOOGLE_API_KEY=your-google-key
 DASHSCOPE_API_KEY=your-dashscope-key
 OPENROUTER_API_KEY=your-openrouter-key
 GROQ_API_KEY=your-groq-key
+MULEROUTER_API_KEY=your-mulerouter-key
 ```
 
 ## License
