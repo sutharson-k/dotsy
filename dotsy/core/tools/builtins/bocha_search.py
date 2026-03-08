@@ -15,7 +15,13 @@ from dotsy.core.tools.base import (
     ToolPermission,
 )
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
-from dotsy.core.types import ToolStreamEvent
+from dotsy.core.types import (
+    ToolCallEvent,
+    ToolResultEvent,
+    ToolStreamEvent,
+)
+
+HTTP_404_NOT_FOUND = 404
 
 
 class BochaSearchConfig(BaseToolConfig):
@@ -145,7 +151,7 @@ class BochaSearch(
                         endpoint, headers=headers, json=payload, timeout=timeout
                     )
 
-                    if response.status_code == 404:
+                    if response.status_code == HTTP_404_NOT_FOUND:
                         last_error = f"Endpoint not found: {endpoint}"
                         continue
 
@@ -155,7 +161,7 @@ class BochaSearch(
 
                 except httpx.HTTPStatusError as e:
                     last_error = f"HTTP error {e.response.status_code}: {e}"
-                    if e.response.status_code == 404:
+                    if e.response.status_code == HTTP_404_NOT_FOUND:
                         continue
                     raise
                 except Exception as e:
@@ -196,6 +202,9 @@ class BochaSearch(
 
     @classmethod
     def get_call_display(cls, event: ToolCallEvent) -> ToolCallDisplay:
+        if not isinstance(event.args, BochaSearchArgs):
+            return ToolCallDisplay(summary="Invalid arguments")
+
         args = event.args
         return ToolCallDisplay(
             summary=f"Searching for: {args.query}",
@@ -204,14 +213,18 @@ class BochaSearch(
 
     @classmethod
     def get_result_display(cls, event: ToolResultEvent) -> ToolResultDisplay:
+        if not isinstance(event.result, BochaSearchResult):
+            return ToolResultDisplay(success=True, message="Success")
+
         result = event.result
-        if isinstance(result, BochaSearchResult):
-            details = "\n".join(
-                f"• {r['title']}\n  {r['url']}" for r in result.results[:5]
-            )
-            if result.was_truncated:
-                details += f"\n... and {result.result_count - 5} more results"
-            return ToolResultDisplay(
-                summary=f"Found {result.result_count} results", details=details
-            )
-        return ToolResultDisplay(summary="Search completed")
+        details = "\n".join(
+            f"• {r['title']}\n  {r['url']}" for r in result.results[:5]
+        )
+        if result.was_truncated:
+            details += f"\n... and {result.result_count - 5} more results"
+        return ToolResultDisplay(
+            success=True,
+            message=f"Found {result.result_count} results",
+            summary=f"Found {result.result_count} results",
+            details=details,
+        )
