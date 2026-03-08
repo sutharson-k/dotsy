@@ -96,6 +96,10 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://openrouter.ai/api/v1`
 - Get API Key: https://openrouter.ai/keys
 
+**Available Qwen Models on OpenRouter:**
+- `qwen-72b` - Qwen 2.5 72B Instruct (best overall) ⭐
+- `qwen-coder` - Qwen 2.5 Coder 32B Instruct (coding specialized)
+
 #### Groq (Ultra-fast inference):
 - Models: `groq-llama`, `groq-llama-8b`, `groq-mixtral`, `groq-gemma`
 - API Key: `GROQ_API_KEY`
