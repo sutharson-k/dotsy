@@ -334,6 +334,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # Qwen via OpenRouter (International)
+    ProviderConfig(
+        name="qwen_openrouter",
+        api_base="https://openrouter.ai/api/v1",
+        api_key_env_var="OPENROUTER_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -439,6 +447,35 @@ DEFAULT_MODELS = [
         alias="qwen-turbo",
         input_price=0.2,
         output_price=0.6,
+    ),
+    # Qwen Models via OpenRouter (International)
+    ModelConfig(
+        name="qwen/qwen-plus",
+        provider="qwen_openrouter",
+        alias="qwen-plus-or",
+        input_price=0.4,
+        output_price=1.2,
+    ),
+    ModelConfig(
+        name="qwen/qwen-max",
+        provider="qwen_openrouter",
+        alias="qwen-max-or",
+        input_price=2.4,
+        output_price=9.6,
+    ),
+    ModelConfig(
+        name="qwen/qwen-turbo",
+        provider="qwen_openrouter",
+        alias="qwen-turbo-or",
+        input_price=0.2,
+        output_price=0.6,
+    ),
+    ModelConfig(
+        name="qwen/qwen-2.5-coder-32b-instruct",
+        provider="qwen_openrouter",
+        alias="qwen-coder",
+        input_price=0.18,
+        output_price=0.18,
     ),
     # Local Models
     ModelConfig(

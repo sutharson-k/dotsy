@@ -83,9 +83,18 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://generativelanguage.googleapis.com/v1beta`
 
 ### Qwen (Alibaba Cloud DashScope)
-- Models: `qwen-plus`, `qwen-max`, `qwen-turbo`, etc.
+**Note:** DashScope is currently only available in China. For international users, use Qwen via OpenRouter.
+
+#### China Region:
+- Models: `qwen-plus`, `qwen-max`, `qwen-turbo`
 - API Key: `DASHSCOPE_API_KEY`
 - Base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
+
+#### International (via OpenRouter):
+- Models: `qwen-plus-or`, `qwen-max-or`, `qwen-turbo-or`, `qwen-coder`
+- API Key: `OPENROUTER_API_KEY`
+- Base URL: `https://openrouter.ai/api/v1`
+- Get API Key: https://openrouter.ai/keys
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
@@ -269,6 +278,9 @@ export GOOGLE_API_KEY="your-google-key"
 
 # Qwen (Alibaba Cloud DashScope)
 export DASHSCOPE_API_KEY="your-dashscope-key"
+
+# OpenRouter (for Qwen international access)
+export OPENROUTER_API_KEY="your-openrouter-key"
 ```
 
 Or store them in `~/.dotsy/.env`:
@@ -278,6 +290,7 @@ OPENAI_API_KEY=your-openai-key
 ANTHROPIC_API_KEY=your-anthropic-key
 GOOGLE_API_KEY=your-google-key
 DASHSCOPE_API_KEY=your-dashscope-key
+OPENROUTER_API_KEY=your-openrouter-key
 ```
 
 ## License
