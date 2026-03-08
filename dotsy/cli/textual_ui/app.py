@@ -125,6 +125,9 @@ class DotsyApp(App):  # noqa: PLR0904
         Binding(
             "shift+down", "scroll_chat_down", "Scroll Down", show=False, priority=True
         ),
+        Binding("up", "model_up", "Model Up", show=False),
+        Binding("down", "model_down", "Model Down", show=False),
+        Binding("enter", "model_select", "Select Model", show=False),
     ]
 
     def __init__(
@@ -674,6 +677,24 @@ class DotsyApp(App):  # noqa: PLR0904
             return
         await self._switch_to_config_app()
 
+    async def _show_model_selector(self) -> None:
+        """Show the model selector popup."""
+        if not self.agent_loop:
+            return
+            
+        # Get available models from config
+        models = []
+        for model in self.agent_loop.base_config.models:
+            models.append({
+                'alias': model.alias,
+                'name': model.name,
+                'provider': model.provider,
+            })
+        
+        # Show model selector
+        chat_container = self.query_one("#chat-input", ChatInputContainer)
+        chat_container.show_model_selector(models)
+
     async def _reload_config(self) -> None:
         try:
             base_config = DotsyConfig.load()
@@ -1017,6 +1038,38 @@ class DotsyApp(App):  # noqa: PLR0904
             chat.scroll_relative(y=5, animate=False)
             if self._is_scrolled_to_bottom(chat):
                 self._auto_scroll = True
+        except Exception:
+            pass
+
+    def action_model_up(self) -> None:
+        """Navigate up in model selector."""
+        try:
+            chat = self.query_one("#chat-input", ChatInputContainer)
+            chat.navigate_model_selector(-1)
+        except Exception:
+            pass
+
+    def action_model_down(self) -> None:
+        """Navigate down in model selector."""
+        try:
+            chat = self.query_one("#chat-input", ChatInputContainer)
+            chat.navigate_model_selector(1)
+        except Exception:
+            pass
+
+    def action_model_select(self) -> None:
+        """Select the current model from the selector."""
+        try:
+            chat = self.query_one("#chat-input", ChatInputContainer)
+            model = chat.selected_model
+            if model:
+                chat.hide_model_selector()
+                # Set the model in config
+                from dotsy.core.config import DotsyConfig
+                DotsyConfig.save_updates({"active_model": model})
+                self.notify(f"Model changed to {model}")
+                chat.value = ""
+                chat.focus_input()
         except Exception:
             pass
 

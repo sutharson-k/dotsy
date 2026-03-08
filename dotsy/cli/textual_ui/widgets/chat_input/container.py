@@ -17,6 +17,7 @@ from dotsy.cli.textual_ui.widgets.chat_input.completion_manager import (
 )
 from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
 from dotsy.cli.textual_ui.widgets.chat_input.text_area import ChatTextArea
+from dotsy.cli.textual_ui.widgets.model_selector import ModelSelectorPopup
 from dotsy.core.agents import AgentSafety
 from dotsy.core.autocompletion.completers import CommandCompleter, PathCompleter
 
@@ -54,6 +55,7 @@ class ChatInputContainer(Vertical):
             PathCompletionController(PathCompleter(), self),
         ])
         self._completion_popup: CompletionPopup | None = None
+        self._model_selector: ModelSelectorPopup | None = None
         self._body: ChatInputBody | None = None
 
     def _get_slash_entries(self) -> list[tuple[str, str]]:
@@ -68,7 +70,9 @@ class ChatInputContainer(Vertical):
 
     def compose(self) -> ComposeResult:
         self._completion_popup = CompletionPopup()
+        self._model_selector = ModelSelectorPopup()
         yield self._completion_popup
+        yield self._model_selector
 
         border_class = SAFETY_BORDER_CLASSES.get(self._safety, "")
         with Vertical(id=self.ID_INPUT_BOX, classes=border_class):
@@ -119,6 +123,29 @@ class ChatInputContainer(Vertical):
     def clear_completion_suggestions(self) -> None:
         if self._completion_popup:
             self._completion_popup.hide()
+
+    def show_model_selector(self, models: list[dict]) -> None:
+        """Show the model selector popup."""
+        if self._model_selector:
+            self._model_selector.set_models(models)
+            self._completion_popup.hide()
+
+    def hide_model_selector(self) -> None:
+        """Hide the model selector popup."""
+        if self._model_selector:
+            self._model_selector.hide()
+
+    def navigate_model_selector(self, direction: int) -> None:
+        """Navigate model selector with arrow keys."""
+        if self._model_selector and self._model_selector.styles.display != "none":
+            self._model_selector.navigate(direction)
+
+    @property
+    def selected_model(self) -> str | None:
+        """Get the currently selected model."""
+        if self._model_selector:
+            return self._model_selector.selected_model
+        return None
 
     def _format_insertion(self, replacement: str, suffix: str) -> str:
         """Format the insertion text with appropriate spacing.
