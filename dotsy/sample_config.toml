@@ -232,6 +232,23 @@ temperature = 0.2
 # max_results = 10
 # timeout_seconds = 10
 
+# [tools.agent_browser]
+# permission = "ask"
+# headless = true
+# timeout_seconds = 30
+# domain_allowlist = ["localhost", "127.0.0.1"]
+# provider = "local"
+
+# MCP Servers configuration
+# agent-browser MCP server for browser automation
+# [[mcp_servers]]
+# transport = "stdio"
+# name = "agent-browser"
+# command = "npx"
+# args = ["-y", "agent-browser", "daemon"]
+# startup_timeout_sec = 30.0
+# tool_timeout_sec = 60.0
+
 # Crush CLI Integration
 # [crush_cli]
 # enabled = true
