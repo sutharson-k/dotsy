@@ -192,10 +192,13 @@ class AgentBrowser(
 
         try:
             result = await self._execute_action(args)
-            yield ToolStreamEvent(
-                tool_name=self.TOOL_NAME,
-                message=result.output or f"Browser {args.action} completed",
-                tool_call_id=tool_call_id,
+            # Yield result as AgentBrowserResult (not ToolStreamEvent)
+            yield AgentBrowserResult(
+                success=True,
+                action=args.action,
+                output=result.output,
+                screenshot_path=result.screenshot_path,
+                snapshot=result.snapshot,
             )
         except subprocess.TimeoutExpired as e:
             raise ToolError(f"Browser action timed out: {e}") from e
