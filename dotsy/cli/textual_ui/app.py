@@ -692,7 +692,7 @@ class DotsyApp(App):  # noqa: PLR0904
             })
         
         # Show model selector
-        chat_container = self.query_one("#chat-input", ChatInputContainer)
+        chat_container = self.query_one(ChatInputContainer)
         chat_container.show_model_selector(models)
 
     async def _reload_config(self) -> None:
@@ -1044,7 +1044,7 @@ class DotsyApp(App):  # noqa: PLR0904
     def action_model_up(self) -> None:
         """Navigate up in model selector."""
         try:
-            chat = self.query_one("#chat-input", ChatInputContainer)
+            chat = self.query_one(ChatInputContainer)
             chat.navigate_model_selector(-1)
         except Exception:
             pass
@@ -1052,7 +1052,7 @@ class DotsyApp(App):  # noqa: PLR0904
     def action_model_down(self) -> None:
         """Navigate down in model selector."""
         try:
-            chat = self.query_one("#chat-input", ChatInputContainer)
+            chat = self.query_one(ChatInputContainer)
             chat.navigate_model_selector(1)
         except Exception:
             pass
@@ -1060,7 +1060,7 @@ class DotsyApp(App):  # noqa: PLR0904
     def action_model_select(self) -> None:
         """Select the current model from the selector."""
         try:
-            chat = self.query_one("#chat-input", ChatInputContainer)
+            chat = self.query_one(ChatInputContainer)
             model = chat.selected_model
             if model:
                 chat.hide_model_selector()
