@@ -116,8 +116,11 @@ class AgentBrowser(
 
     TOOL_NAME = "agent_browser"
     TOOL_DESCRIPTION = (
-        "Automate browser actions using agent-browser. Navigate to URLs, "
-        "click/fill elements, take screenshots, and extract page content. "
+        "Automate browser actions using agent-browser. Use this tool AUTOMATICALLY when users ask to: "
+        "open/navigate/visit/go to a website URL, check a web page, take screenshots, click/fill/type on web pages, "
+        "or extract content from websites. Examples: 'open amazon.com', 'what do you see on github.com', "
+        "'take a screenshot of example.com', 'click the login button'. "
+        "Navigate to URLs, click/fill elements, take screenshots, and extract page content. "
         "Requires agent-browser CLI: npm install -g agent-browser"
     )
 
