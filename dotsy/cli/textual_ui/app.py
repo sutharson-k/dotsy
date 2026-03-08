@@ -128,6 +128,7 @@ class DotsyApp(App):  # noqa: PLR0904
         Binding("up", "model_up", "Model Up", show=False),
         Binding("down", "model_down", "Model Down", show=False),
         Binding("enter", "model_select", "Select Model", show=False),
+        Binding("escape", "close_model_selector", "Close Model Selector", show=False),
     ]
 
     def __init__(
@@ -1080,6 +1081,14 @@ class DotsyApp(App):  # noqa: PLR0904
                 
                 chat.value = ""
                 chat.focus_input()
+        except Exception:
+            pass
+
+    def action_close_model_selector(self) -> None:
+        """Close the model selector popup without selecting."""
+        try:
+            chat = self.query_one(ChatInputContainer)
+            chat.hide_model_selector()
         except Exception:
             pass
 
