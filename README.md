@@ -91,10 +91,16 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
 
 #### International (via OpenRouter):
-- Models: `qwen-plus-or`, `qwen-max-or`, `qwen-turbo-or`, `qwen-coder`
+- Models: `qwen-72b`, `qwen-coder`, `qwen-32b`, `qwen-vl`
 - API Key: `OPENROUTER_API_KEY`
 - Base URL: `https://openrouter.ai/api/v1`
 - Get API Key: https://openrouter.ai/keys
+
+**Available Qwen Models on OpenRouter:**
+- `qwen-72b` - Qwen 2.5 72B (best overall)
+- `qwen-coder` - Qwen 2.5 Coder 32B (coding specialized)
+- `qwen-32b` - Qwen 2.5 32B (balanced)
+- `qwen-vl` - Qwen 2 VL 72B (vision + language)
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
