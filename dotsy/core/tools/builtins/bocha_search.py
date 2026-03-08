@@ -16,11 +16,7 @@ from dotsy.core.tools.base import (
     ToolPermission,
 )
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
-from dotsy.core.types import (
-    ToolCallEvent,
-    ToolResultEvent,
-    ToolStreamEvent,
-)
+from dotsy.core.types import ToolCallEvent, ToolResultEvent, ToolStreamEvent
 
 HTTP_404_NOT_FOUND = 404
 
@@ -187,14 +183,12 @@ class BochaSearch(
         # Format results for display
         formatted_results = []
         for result in truncated_results:
-            formatted_results.append(
-                {
-                    "title": result.get("title", "No title"),
-                    "url": result.get("url", ""),
-                    "snippet": result.get("snippet", result.get("description", "")),
-                    "date": result.get("date", result.get("publishedAt", "")),
-                }
-            )
+            formatted_results.append({
+                "title": result.get("title", "No title"),
+                "url": result.get("url", ""),
+                "snippet": result.get("snippet", result.get("description", "")),
+                "date": result.get("date", result.get("publishedAt", "")),
+            })
 
         return BochaSearchResult(
             query=query,
@@ -221,9 +215,7 @@ class BochaSearch(
             return ToolResultDisplay(success=True, message="Success")
 
         result = event.result
-        details = "\n".join(
-            f"• {r['title']}\n  {r['url']}" for r in result.results[:5]
-        )
+        details = "\n".join(f"• {r['title']}\n  {r['url']}" for r in result.results[:5])
         if result.was_truncated:
             details += f"\n... and {result.result_count - 5} more results"
         return ToolResultDisplay(
