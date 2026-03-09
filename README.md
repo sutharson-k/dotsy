@@ -140,6 +140,26 @@ Dotsy supports multiple AI providers out of the box:
 - `groq-mixtral` - Mixtral 8x7B (free tier)
 - `groq-gemma` - Gemma2 9B (free tier)
 
+### Model.dev (Unified Model Platform)
+- **Provider**: `modeldev`
+- **API Key**: `MODELDEV_API_KEY`
+- **Base URL**: `https://api.model.dev/v1`
+- **Get API Key**: https://model.dev
+
+**Benefits:**
+- ✅ Single API key for 20+ providers
+- ✅ Automatic model failover and routing
+- ✅ Unified billing and cost tracking
+- ✅ Cost optimization through intelligent routing
+- ✅ Simplified API key management
+
+**Supported Models:**
+- `gpt-4o`, `gpt-4-turbo`, `gpt-3.5-turbo` (OpenAI)
+- `claude-sonnet-4-20250514`, `claude-3-5-sonnet` (Anthropic)
+- `gemini-pro`, `gemini-1.5-pro` (Google)
+- `mistral-large`, `mistral-medium` (Mistral)
+- And many more through model.dev!
+
 ### Vercel AI SDK (Unified Interface)
 - **Provider**: `aisdk`
 - **Install**: `pip install ai-sdk`
@@ -214,6 +234,31 @@ provider = "mistral"
 alias = "devstral-small"
 input_price = 0.1
 output_price = 0.3
+temperature = 0.2
+
+# Model.dev Models (Unified Platform)
+[[models]]
+name = "gpt-4o"
+provider = "modeldev"
+alias = "modeldev-gpt-4o"
+input_price = 5.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "claude-sonnet-4-20250514"
+provider = "modeldev"
+alias = "modeldev-claude-sonnet"
+input_price = 3.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "gemini-1.5-pro"
+provider = "modeldev"
+alias = "modeldev-gemini-pro"
+input_price = 1.25
+output_price = 5.0
 temperature = 0.2
 
 # AI SDK Models (Unified Interface)

@@ -157,6 +157,7 @@ class Backend(StrEnum):
     DOTSY = auto()
     GENERIC = auto()
     AISDK = auto()
+    MODELDEV = auto()
 
 
 class ProviderConfig(BaseModel):
@@ -358,6 +359,14 @@ DEFAULT_PROVIDERS = [
         api_key_env_var="BYTEZ_API_KEY",
         api_style="openai",
         backend=Backend.GENERIC,
+    ),
+    # Model.dev (Unified Model Platform)
+    ProviderConfig(
+        name="modeldev",
+        api_base="https://api.model.dev/v1",
+        api_key_env_var="MODELDEV_API_KEY",
+        api_style="openai",
+        backend=Backend.MODELDEV,
     ),
     # Vercel AI SDK (Unified AI Interface)
     ProviderConfig(
