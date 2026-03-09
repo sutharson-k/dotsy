@@ -16,7 +16,14 @@ class SlashCommandController:
         self._selected_index = 0
 
     def can_handle(self, text: str, cursor_index: int) -> bool:
-        return text.startswith("/")
+        if not text.startswith("/"):
+            return False
+        # Skills only show for /claude-* prefix
+        text_before_cursor = text[:cursor_index].lower()
+        if hasattr(self, '_is_skill_completer') and self._is_skill_completer:
+            return text_before_cursor.startswith("/claude")
+        # Regular commands exclude /claude-*
+        return not text_before_cursor.startswith("/claude")
 
     def reset(self) -> None:
         if self._suggestions:

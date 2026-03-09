@@ -56,8 +56,18 @@ class ChatInputContainer(Vertical):
         self._safety = safety
         self._skill_entries_getter = skill_entries_getter
 
+        # Command completer (excludes skills)
+        self._command_completer = SlashCommandController(
+            CommandCompleter(self._get_slash_entries), self
+        )
+        # Skill completer (only for /claude-* commands)
+        self._skill_completer = SlashCommandController(
+            CommandCompleter(self._get_skill_entries), self
+        )
+        self._skill_completer._is_skill_completer = True
         self._completion_manager = MultiCompletionManager([
-            SlashCommandController(CommandCompleter(self._get_slash_entries), self),
+            self._command_completer,
+            self._skill_completer,
             PathCompletionController(PathCompleter(), self),
         ])
         self._completion_popup: CompletionPopup | None = None
@@ -68,14 +78,19 @@ class ChatInputContainer(Vertical):
         self._attachments: list[FileAttachment] = []
 
     def _get_slash_entries(self) -> list[tuple[str, str]]:
+        """Get command entries (excluding skills - they have separate completer)."""
         entries = [
             (alias, command.description)
             for command in self._command_registry.commands.values()
             for alias in sorted(command.aliases)
         ]
-        if self._skill_entries_getter:
-            entries.extend(self._skill_entries_getter())
         return sorted(entries)
+
+    def _get_skill_entries(self) -> list[tuple[str, str]]:
+        """Get skill entries for separate skill completer."""
+        if not self._skill_entries_getter:
+            return []
+        return self._skill_entries_getter()
 
     def compose(self) -> ComposeResult:
         self._completion_popup = CompletionPopup()
