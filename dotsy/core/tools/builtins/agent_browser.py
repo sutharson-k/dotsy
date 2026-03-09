@@ -211,10 +211,16 @@ class AgentBrowser(
         """Check if URL is in domain allowlist."""
         from urllib.parse import urlparse
 
+        # If allowlist is ['*'] or empty, allow all
+        if not self.config.domain_allowlist or self.config.domain_allowlist == ['*']:
+            return True
+
         parsed = urlparse(url)
         domain = parsed.netloc.lower()
 
         for allowed in self.config.domain_allowlist:
+            if allowed == '*':
+                return True
             if allowed.startswith("*."):
                 # Wildcard subdomain
                 if domain.endswith(allowed[1:]):
