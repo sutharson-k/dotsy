@@ -53,7 +53,6 @@ class FileAttachmentPreview(Static):
         content-align: center middle;
         color: $error;
         text-style: bold;
-        cursor: pointer;
     }
 
     FileAttachmentPreview .remove-btn:hover {
