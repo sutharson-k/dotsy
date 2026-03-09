@@ -365,7 +365,7 @@ DEFAULT_PROVIDERS = [
         api_base="https://api.models.dev/v1",
         api_key_env_var="MODELSDEV_API_KEY",
         api_style="openai",
-        backend=Backend.MODELDEV,
+        backend=Backend.MODELSDEV,
     ),
 ]
 
