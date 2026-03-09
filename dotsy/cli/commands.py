@@ -72,6 +72,11 @@ class CommandRegistry:
                 description="List all available skills",
                 handler="_show_skills",
             ),
+            "set-api-key": Command(
+                aliases=frozenset(["/set-api-key", "/apikey", "/api-key"]),
+                description="Set API key for a provider (usage: /set-api-key <provider> <key>)",
+                handler="_set_api_key_command",
+            ),
         }
 
         for command in excluded_commands:

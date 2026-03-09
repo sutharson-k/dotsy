@@ -400,6 +400,11 @@ class DotsyApp(App):  # noqa: PLR0904
         )
 
     async def _handle_command(self, user_input: str) -> bool:
+        # Handle /set-api-key separately as it needs arguments
+        if user_input.lower().startswith("/set-api-key") or user_input.lower().startswith("/apikey") or user_input.lower().startswith("/api-key"):
+            await self._set_api_key_command(user_input)
+            return True
+        
         if command := self.commands.find_command(user_input):
             await self._mount_and_scroll(UserMessage(user_input))
             handler = getattr(self, command.handler)
@@ -408,6 +413,7 @@ class DotsyApp(App):  # noqa: PLR0904
             else:
                 handler()
             return True
+        return False
 
         return False
 
@@ -419,6 +425,73 @@ class DotsyApp(App):  # noqa: PLR0904
             for name, info in self.agent_loop.skill_manager.available_skills.items()
             if info.user_invocable
         ]
+
+    async def _set_api_key_command(self, user_input: str) -> None:
+        """Handle /set-api-key command from chat.
+        
+        Usage: /set-api-key <provider> <api_key>
+        Example: /set-api-key openai sk-abc123
+        """
+        from dotenv import set_key
+        from dotsy.core.config import DEFAULT_PROVIDERS
+        from dotsy.core.paths.global_paths import GLOBAL_ENV_FILE
+        
+        # Parse arguments
+        parts = user_input.strip().split(maxsplit=2)
+        if len(parts) < 3:
+            await self._mount_and_scroll(
+                UserCommandMessage(
+                    "### Usage: `/set-api-key <provider> <api_key>`\n\n"
+                    "**Available providers:**\n"
+                    f"{', '.join(p.name for p in DEFAULT_PROVIDERS if p.api_key_env_var)}\n\n"
+                    "**Example:** `/set-api-key openai sk-your-key-here`"
+                )
+            )
+            return
+        
+        provider_name = parts[1].lower()
+        api_key = parts[2]
+        
+        # Find provider
+        provider = None
+        for p in DEFAULT_PROVIDERS:
+            if p.name.lower() == provider_name:
+                provider = p
+                break
+        
+        if not provider:
+            await self._mount_and_scroll(
+                UserCommandMessage(
+                    f"❌ Unknown provider: `{provider_name}`\n\n"
+                    f"**Available providers:** {', '.join(p.name for p in DEFAULT_PROVIDERS if p.api_key_env_var)}"
+                )
+            )
+            return
+        
+        if not provider.api_key_env_var:
+            await self._mount_and_scroll(
+                UserCommandMessage(f"ℹ️ {provider_name} does not require an API key")
+            )
+            return
+        
+        # Save to .env file
+        try:
+            GLOBAL_ENV_FILE.path.parent.mkdir(parents=True, exist_ok=True)
+            set_key(GLOBAL_ENV_FILE.path, provider.api_key_env_var, api_key)
+            os.environ[provider.api_key_env_var] = api_key
+            
+            await self._mount_and_scroll(
+                UserCommandMessage(
+                    f"✅ API key saved for `{provider_name}`!\n\n"
+                    f"- Stored in: `{GLOBAL_ENV_FILE.path}`\n"
+                    f"- Environment variable: `{provider.api_key_env_var}`\n\n"
+                    f"**Note:** You may need to restart dotsy for the change to take effect."
+                )
+            )
+        except OSError as e:
+            await self._mount_and_scroll(
+                ErrorMessage(f"❌ Error saving API key: {e}", collapsed=self._tools_collapsed)
+            )
 
     async def _handle_skill(self, user_input: str) -> bool:
         if not user_input.startswith("/"):
