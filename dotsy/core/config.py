@@ -523,6 +523,28 @@ DEFAULT_MODELS = [
         input_price=0.15,
         output_price=0.45,
     ),
+    # Vision-capable models via OpenRouter
+    ModelConfig(
+        alias="gpt-4o-openrouter",
+        provider="qwen_openrouter",
+        name="openai/gpt-4o",
+        input_price=5.0,
+        output_price=15.0,
+    ),
+    ModelConfig(
+        alias="claude-sonnet-openrouter",
+        provider="qwen_openrouter",
+        name="anthropic/claude-3-5-sonnet",
+        input_price=3.0,
+        output_price=15.0,
+    ),
+    ModelConfig(
+        alias="gemini-flash-openrouter",
+        provider="qwen_openrouter",
+        name="google/gemini-2.0-flash",
+        input_price=0.1,
+        output_price=0.4,
+    ),
 ]
 
 

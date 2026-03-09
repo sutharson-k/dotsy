@@ -8,12 +8,13 @@ subprocess.run(['git', 'add', '-A'])
 
 # Commit
 result = subprocess.run(
-    ['git', 'commit', '-m', 'feat: Add drag-and-drop file attachment support'],
+    ['git', 'commit', '-m', 'feat: Add vision-capable models via OpenRouter'],
     capture_output=True,
     text=True
 )
 print(result.stdout)
-print(result.stderr)
+if result.stderr:
+    print(result.stderr)
 
 # Push to main
 result = subprocess.run(
@@ -22,4 +23,5 @@ result = subprocess.run(
     text=True
 )
 print(result.stdout)
-print(result.stderr)
+if result.stderr:
+    print(result.stderr)
