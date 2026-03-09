@@ -135,7 +135,7 @@ class ChatInputContainer(Vertical):
     def hide_model_selector(self) -> None:
         """Hide the model selector popup."""
         if self._model_selector:
-            self._model_selector.hide()
+            self._model_selector.hide()  # pyright: ignore[reportOptionalMemberAccess]
 
     def navigate_model_selector(self, direction: int) -> None:
         """Navigate model selector with arrow keys."""
