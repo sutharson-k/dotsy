@@ -69,6 +69,11 @@ class ChatTextArea(TextArea):
         self._cursor_moved_since_load: bool = False
         self._completion_manager: MultiCompletionManager | None = None
         self._app_has_focus: bool = True
+        self._drag_drop_handler: Any = None
+
+    def register_drag_drop_handler(self, handler: Any) -> None:
+        """Register a drag-drop handler for file attachments."""
+        self._drag_drop_handler = handler
 
     def on_blur(self, event: events.Blur) -> None:
         if self._app_has_focus:
@@ -82,6 +87,21 @@ class ChatTextArea(TextArea):
 
     def on_click(self, event: events.Click) -> None:
         self._mark_cursor_moved_if_needed()
+
+    def on_drop(self, event: events.Drop) -> None:
+        """Handle file drop events."""
+        if self._drag_drop_handler:
+            self._drag_drop_handler.on_drop(event)
+
+    def on_drag_enter(self, event: events.DragEnter) -> None:
+        """Handle drag enter events."""
+        if self._drag_drop_handler:
+            self._drag_drop_handler.on_drag_enter(event)
+
+    def on_drag_leave(self, event: events.DragLeave) -> None:
+        """Handle drag leave events."""
+        if self._drag_drop_handler:
+            self._drag_drop_handler.on_drag_leave(event)
 
     def action_insert_newline(self) -> None:
         self.insert("\n")
@@ -315,7 +335,7 @@ class ChatTextArea(TextArea):
             return
 
         if offset >= len(text):
-            lines = text.split("\n")
+            lines = self.text.split("\n")
             if not lines:
                 self.move_cursor((0, 0))
                 return
@@ -324,7 +344,7 @@ class ChatTextArea(TextArea):
             return
 
         remaining = offset
-        lines = text.split("\n")
+        lines = self.text.split("\n")
 
         for row, line in enumerate(lines):
             line_length = len(line)

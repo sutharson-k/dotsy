@@ -16,9 +16,14 @@ from dotsy.cli.textual_ui.widgets.chat_input.completion_manager import (
     MultiCompletionManager,
 )
 from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
+from dotsy.cli.textual_ui.widgets.chat_input.drag_drop import DragDropHandler
+from dotsy.cli.textual_ui.widgets.chat_input.file_preview import (
+    FileAttachmentPreview,
+)
 from dotsy.cli.textual_ui.widgets.chat_input.text_area import ChatTextArea
 from dotsy.cli.textual_ui.widgets.model_selector import ModelSelectorPopup
 from dotsy.core.agents import AgentSafety
+from dotsy.core.attachments.handler import FileAttachment
 from dotsy.core.autocompletion.completers import CommandCompleter, PathCompleter
 
 SAFETY_BORDER_CLASSES: dict[AgentSafety, str] = {
@@ -32,8 +37,9 @@ class ChatInputContainer(Vertical):
     ID_INPUT_BOX = "input-box"
 
     class Submitted(Message):
-        def __init__(self, value: str) -> None:
+        def __init__(self, value: str, attachments: list[FileAttachment] | None = None) -> None:
             self.value = value
+            self.attachments = attachments or []
             super().__init__()
 
     def __init__(
@@ -57,6 +63,9 @@ class ChatInputContainer(Vertical):
         self._completion_popup: CompletionPopup | None = None
         self._model_selector: ModelSelectorPopup | None = None
         self._body: ChatInputBody | None = None
+        self._file_preview: FileAttachmentPreview | None = None
+        self._drag_drop_handler: DragDropHandler | None = None
+        self._attachments: list[FileAttachment] = []
 
     def _get_slash_entries(self) -> list[tuple[str, str]]:
         entries = [
@@ -76,8 +85,13 @@ class ChatInputContainer(Vertical):
 
         border_class = SAFETY_BORDER_CLASSES.get(self._safety, "")
         with Vertical(id=self.ID_INPUT_BOX, classes=border_class):
-            self._body = ChatInputBody(history_file=self._history_file, id="input-body")
+            # File attachment preview area
+            self._file_preview = FileAttachmentPreview(
+                on_remove=self._on_attachment_removed
+            )
+            yield self._file_preview
 
+            self._body = ChatInputBody(history_file=self._history_file, id="input-body")
             yield self._body
 
     def on_mount(self) -> None:
@@ -87,6 +101,9 @@ class ChatInputContainer(Vertical):
         self._body.set_completion_reset_callback(self._completion_manager.reset)
         if self._body.input_widget:
             self._body.input_widget.set_completion_manager(self._completion_manager)
+            # Set up drag-drop handler on the text area
+            self._drag_drop_handler = DragDropHandler(self)
+            self._body.input_widget.register_drag_drop_handler(self._drag_drop_handler)
             self._body.focus_input()
 
     @property
@@ -135,7 +152,7 @@ class ChatInputContainer(Vertical):
     def hide_model_selector(self) -> None:
         """Hide the model selector popup."""
         if self._model_selector:
-            self._model_selector.hide()  # pyright: ignore[reportOptionalMemberAccess]
+            self._model_selector.hide()
 
     def navigate_model_selector(self, direction: int) -> None:
         """Navigate model selector with arrow keys."""
@@ -150,22 +167,11 @@ class ChatInputContainer(Vertical):
         return None
 
     def _format_insertion(self, replacement: str, suffix: str) -> str:
-        """Format the insertion text with appropriate spacing.
-
-        Args:
-            replacement: The text to insert
-            suffix: The text that follows the insertion point
-
-        Returns:
-            The formatted insertion text with spacing if needed
-        """
+        """Format the insertion text with appropriate spacing."""
         if replacement.startswith("@"):
             if replacement.endswith("/"):
                 return replacement
-            # For @-prefixed completions, add space unless suffix starts with whitespace
             return replacement + (" " if not suffix or not suffix[0].isspace() else "")
-
-        # For other completions, add space only if suffix exists and doesn't start with whitespace
         return replacement + (" " if suffix and not suffix[0].isspace() else "")
 
     def replace_completion_range(self, start: int, end: int, replacement: str) -> None:
@@ -189,7 +195,11 @@ class ChatInputContainer(Vertical):
 
     def on_chat_input_body_submitted(self, event: ChatInputBody.Submitted) -> None:
         event.stop()
-        self.post_message(self.Submitted(event.value))
+        self.post_message(self.Submitted(event.value, self._attachments.copy()))
+        # Clear attachments after submission
+        self._attachments.clear()
+        if self._file_preview:
+            self._file_preview.clear_attachments()
 
     def set_safety(self, safety: AgentSafety) -> None:
         self._safety = safety
@@ -204,3 +214,46 @@ class ChatInputContainer(Vertical):
 
         if safety in SAFETY_BORDER_CLASSES:
             input_box.add_class(SAFETY_BORDER_CLASSES[safety])
+
+    def on_drag_drop_handler_file_dropped(
+        self, event: DragDropHandler.FileDropped
+    ) -> None:
+        """Handle files dropped via drag-and-drop."""
+        valid_attachments, rejected_files = DragDropHandler.process_dropped_files(
+            event.file_paths
+        )
+
+        if rejected_files:
+            # Notify about unsupported file types
+            from dotsy.cli.textual_ui.widgets.messages import WarningMessage
+            from dotsy.cli.textual_ui.app import DotsyApp
+
+            app = self.app
+            if isinstance(app, DotsyApp):
+                unsupported = ", ".join(Path(f).name for f in rejected_files)
+                warning_msg = WarningMessage(
+                    f"Unsupported file type(s): {unsupported}\n"
+                    f"Supported: Images, PDFs, and text files"
+                )
+                app.run_worker(app._mount_and_scroll(warning_msg))
+
+        if valid_attachments:
+            self._attachments.extend(valid_attachments)
+            if self._file_preview:
+                for attachment in valid_attachments:
+                    self._file_preview.add_attachment(attachment)
+
+    def _on_attachment_removed(self, index: int) -> None:
+        """Handle attachment removal from preview."""
+        if 0 <= index < len(self._attachments):
+            self._attachments.pop(index)
+
+    def get_attachments(self) -> list[FileAttachment]:
+        """Get current attachments."""
+        return self._attachments.copy()
+
+    def clear_attachments(self) -> None:
+        """Clear all attachments."""
+        self._attachments.clear()
+        if self._file_preview:
+            self._file_preview.clear_attachments()

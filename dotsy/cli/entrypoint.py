@@ -95,6 +95,14 @@ def parse_arguments() -> argparse.Namespace:
         metavar="DIR",
         help="Change to this directory before running",
     )
+    parser.add_argument(
+        "-f", "--file",
+        action="append",
+        metavar="FILE",
+        dest="files",
+        help="Attach a file to the initial prompt (can be specified multiple times). "
+        "Supports images, PDFs, and text files.",
+    )
 
     continuation_group = parser.add_mutually_exclusive_group()
     continuation_group.add_argument(

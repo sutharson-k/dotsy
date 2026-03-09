@@ -260,11 +260,14 @@ class DotsyApp(App):  # noqa: PLR0904
         self, event: ChatInputContainer.Submitted
     ) -> None:
         value = event.value.strip()
-        if not value:
+        attachments = event.attachments if hasattr(event, 'attachments') else []
+
+        if not value and not attachments:
             return
 
         input_widget = self.query_one(ChatInputContainer)
         input_widget.value = ""
+        input_widget.clear_attachments()
 
         if self._agent_running:
             await self._interrupt_agent_loop()
@@ -279,7 +282,7 @@ class DotsyApp(App):  # noqa: PLR0904
         if await self._handle_skill(value):
             return
 
-        await self._handle_user_message(value)
+        await self._handle_user_message(value, attachments)
 
     async def on_approval_app_approval_granted(
         self, message: ApprovalApp.ApprovalGranted
@@ -478,14 +481,33 @@ class DotsyApp(App):  # noqa: PLR0904
                 ErrorMessage(f"Command failed: {e}", collapsed=self._tools_collapsed)
             )
 
-    async def _handle_user_message(self, message: str) -> None:
-        user_message = UserMessage(message)
-
+    async def _handle_user_message(self, message: str, attachments: list | None = None) -> None:
+        attachments = attachments or []
+        
+        # Build message content with attachments
+        content_parts = []
+        if message:
+            content_parts.append(message)
+        
+        # Add attachment descriptions
+        for attachment in attachments:
+            if attachment.type == "image":
+                content_parts.append(f"[Image: {attachment.file_name}]")
+            elif attachment.type == "pdf":
+                content_parts.append(f"[PDF: {attachment.file_name}]")
+            elif attachment.type == "text":
+                content_parts.append(f"[File: {attachment.file_name}]")
+            else:
+                content_parts.append(f"[Attachment: {attachment.file_name}]")
+        
+        full_message = "\n\n".join(content_parts) if content_parts else ""
+        
+        user_message = UserMessage(full_message)
         await self._mount_and_scroll(user_message)
 
-        if not self._agent_running:
+        if not self._agent_running and full_message:
             self._agent_task = asyncio.create_task(
-                self._handle_agent_loop_turn(message)
+                self._handle_agent_loop_turn(full_message, attachments)
             )
 
     async def _rebuild_history_from_messages(self) -> None:
@@ -576,7 +598,7 @@ class DotsyApp(App):  # noqa: PLR0904
         self._pending_question = None
         return result
 
-    async def _handle_agent_loop_turn(self, prompt: str) -> None:
+    async def _handle_agent_loop_turn(self, prompt: str, attachments: list | None = None) -> None:
         self._agent_running = True
 
         loading_area = self.query_one("#loading-area-content")
@@ -588,6 +610,12 @@ class DotsyApp(App):  # noqa: PLR0904
 
         try:
             rendered_prompt = render_path_prompt(prompt, base_dir=Path.cwd())
+            
+            # Prepend attachment content to prompt for LLM
+            if attachments:
+                attachment_context = self._build_attachment_context(attachments)
+                rendered_prompt = f"{attachment_context}\n\n{rendered_prompt}"
+            
             async for event in self.agent_loop.act(rendered_prompt):
                 if self.event_handler:
                     await self.event_handler.handle_event(
