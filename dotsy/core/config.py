@@ -156,6 +156,7 @@ class SessionLoggingConfig(BaseSettings):
 class Backend(StrEnum):
     DOTSY = auto()
     GENERIC = auto()
+    AISDK = auto()
 
 
 class ProviderConfig(BaseModel):
@@ -357,6 +358,14 @@ DEFAULT_PROVIDERS = [
         api_key_env_var="BYTEZ_API_KEY",
         api_style="openai",
         backend=Backend.GENERIC,
+    ),
+    # Vercel AI SDK (Unified AI Interface)
+    ProviderConfig(
+        name="aisdk",
+        api_base="",
+        api_key_env_var="",
+        api_style="aisdk",
+        backend=Backend.AISDK,
     ),
 ]
 
