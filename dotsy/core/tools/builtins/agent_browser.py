@@ -243,9 +243,11 @@ class AgentBrowser(
             provider = args.provider or self.config.provider
             cmd.extend(["-p", provider])
 
-        # Add headless flag
+        # Add headless/headed flag (explicit, not default)
         if self.config.headless:
             cmd.append("--headless")
+        else:
+            cmd.append("--headed")  # Explicitly show browser window
 
         # Add timeout
         cmd.extend(["--timeout", str(self.config.timeout_seconds * 1000)])
