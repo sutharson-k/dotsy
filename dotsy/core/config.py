@@ -156,7 +156,7 @@ class SessionLoggingConfig(BaseSettings):
 class Backend(StrEnum):
     DOTSY = auto()
     GENERIC = auto()
-    MODELDEV = auto()
+    MODELSDEV = auto()
 
 
 class ProviderConfig(BaseModel):
@@ -359,11 +359,11 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
-    # Model.dev (Unified Model Platform)
+    # Models.dev (Unified Model Platform - 200+ models)
     ProviderConfig(
-        name="modeldev",
-        api_base="https://api.model.dev/v1",
-        api_key_env_var="MODELDEV_API_KEY",
+        name="modelsdev",
+        api_base="https://api.models.dev/v1",
+        api_key_env_var="MODELSDEV_API_KEY",
         api_style="openai",
         backend=Backend.MODELDEV,
     ),

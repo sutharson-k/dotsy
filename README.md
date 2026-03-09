@@ -140,25 +140,41 @@ Dotsy supports multiple AI providers out of the box:
 - `groq-mixtral` - Mixtral 8x7B (free tier)
 - `groq-gemma` - Gemma2 9B (free tier)
 
-### Model.dev (Recommended - Unified Model Platform)
-- **Provider**: `modeldev`
-- **API Key**: `MODELDEV_API_KEY`
-- **Base URL**: `https://api.model.dev/v1`
-- **Get API Key**: https://model.dev
+### Models.dev (Recommended - 200+ Models, 11+ Providers)
+- **Provider**: `modelsdev`
+- **API Key**: `MODELSDEV_API_KEY`
+- **Base URL**: `https://api.models.dev/v1`
+- **Get API Key**: https://models.dev
 
 **Benefits:**
-- ✅ Single API key for 20+ providers
+- ✅ **200+ models** from 11+ providers with single API key
+- ✅ **FREE tier** available (Nvidia, iflowcn, modelscope, llama providers)
 - ✅ Automatic model failover and routing
 - ✅ Unified billing and cost tracking
 - ✅ Cost optimization through intelligent routing
-- ✅ Simplified API key management
+- ✅ Simplest setup - one key for everything
 
-**Supported Models:**
-- `gpt-4o`, `gpt-4-turbo`, `gpt-3.5-turbo` (OpenAI)
-- `claude-sonnet-4-20250514`, `claude-3-5-sonnet` (Anthropic)
-- `gemini-pro`, `gemini-1.5-pro` (Google)
-- `mistral-large`, `mistral-medium` (Mistral)
-- And many more through model.dev!
+**Supported Providers (11+):**
+- **evroc** - Llama, Phi, Qwen, Kimi, Devstral
+- **zai** - GLM-5, GLM-4.5 series (FREE Flash models)
+- **alibaba-coding-plan** - Qwen3, Kimi K2.5 (FREE, up to 1M context)
+- **zenmux** - Claude, Gemini, GPT-5, Grok (40+ models)
+- **io-net** - Llama, Qwen, DeepSeek, Kimi
+- **nvidia** - 52 models, ALL FREE
+- **fastrouter** - GPT-5, Claude, Gemini, Grok
+- **iflowcn** - 15 models, ALL FREE
+- **modelscope** - 7 models, ALL FREE
+- **llama** - 8 models, ALL FREE
+- **inference** - Llama, Qwen, Gemma
+
+**Popular Models:**
+- `gpt-5`, `gpt-5.1`, `gpt-5.2` (OpenAI)
+- `claude-sonnet-4`, `claude-opus-4.5` (Anthropic)
+- `gemini-2.5-pro`, `gemini-3-pro` (Google)
+- `grok-4`, `grok-4.1` (xAI)
+- `llama-3.3-70b`, `llama-4` (Meta)
+- `qwen3-max`, `qwen3-coder-plus` (Alibaba)
+- `deepseek-v3.2`, `deepseek-r1` (DeepSeek)
 
 ### Alternative: Direct Provider Access
 Configure individual providers (OpenAI, Anthropic, Google, etc.) directly with separate API keys for each.
@@ -225,29 +241,45 @@ input_price = 0.1
 output_price = 0.3
 temperature = 0.2
 
-# Model.dev Models (Unified Platform)
+# Models.dev (200+ Models, 11+ Providers, FREE Tier Available)
 [[models]]
-name = "gpt-4o"
-provider = "modeldev"
-alias = "modeldev-gpt-4o"
-input_price = 5.0
-output_price = 15.0
+name = "gpt-5"
+provider = "modelsdev"
+alias = "modelsdev-gpt-5"
+input_price = 1.25
+output_price = 10.0
 temperature = 0.2
 
 [[models]]
-name = "claude-sonnet-4-20250514"
-provider = "modeldev"
-alias = "modeldev-claude-sonnet"
+name = "claude-sonnet-4"
+provider = "modelsdev"
+alias = "modelsdev-claude-sonnet"
 input_price = 3.0
 output_price = 15.0
 temperature = 0.2
 
 [[models]]
-name = "gemini-1.5-pro"
-provider = "modeldev"
-alias = "modeldev-gemini-pro"
+name = "gemini-2.5-pro"
+provider = "modelsdev"
+alias = "modelsdev-gemini-pro"
 input_price = 1.25
-output_price = 5.0
+output_price = 10.0
+temperature = 0.2
+
+[[models]]
+name = "grok-4"
+provider = "modelsdev"
+alias = "modelsdev-grok-4"
+input_price = 3.0
+output_price = 15.0
+temperature = 0.2
+
+[[models]]
+name = "llama-3.3-70b-instruct"
+provider = "modelsdev"
+alias = "modelsdev-llama-70b"
+input_price = 0.13
+output_price = 0.38
 temperature = 0.2
 ```
 
