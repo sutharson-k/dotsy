@@ -91,16 +91,19 @@ class DuckDuckGoSearch(
 
     async def invoke(
         self,
-        parameters: dict[str, Any],
-        context: InvokeContext,
+        ctx: InvokeContext,
+        **parameters: Any,
     ) -> AsyncGenerator[ToolStreamEvent | DuckDuckGoSearchResult, None]:
         try:
             args = DuckDuckGoSearchArgs.model_validate(parameters)
         except ValidationError as e:
             raise ToolError(f"Invalid search parameters: {e}") from e
 
+        tool_call_id = ctx.tool_call_id if ctx else "duckduckgo-001"
+
         yield ToolStreamEvent(
-            type="tool_call",
+            tool_name=self.TOOL_NAME,
+            tool_call_id=tool_call_id,
             message=f"Searching DuckDuckGo for: {args.query}",
         )
 
@@ -111,6 +114,8 @@ class DuckDuckGoSearch(
             )
 
             yield ToolStreamEvent(
+                tool_name=self.TOOL_NAME,
+                tool_call_id=tool_call_id,
                 type="tool_result",
                 content=results.model_dump(),
             )
