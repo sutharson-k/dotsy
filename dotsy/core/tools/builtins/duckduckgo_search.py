@@ -117,7 +117,6 @@ class DuckDuckGoSearch(
                 tool_name=self.TOOL_NAME,
                 tool_call_id=tool_call_id,
                 message="Search results retrieved",
-                content=results.model_dump(),
             )
 
         except httpx.TimeoutException as e:
@@ -204,7 +203,7 @@ class DuckDuckGoSearch(
                 # DuckDuckGo uses redirect URLs, extract the actual URL
                 if link and str(link).startswith('/l/?kh='):
                     # Parse the actual URL from the redirect
-                    actual_url = link.split('udd=')[-1] if 'udd=' in link else link
+                    actual_url = str(link).split('udd=')[-1] if 'udd=' in link else link
                 else:
                     actual_url = link
 

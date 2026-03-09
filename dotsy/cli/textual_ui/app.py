@@ -861,9 +861,6 @@ class DotsyApp(App):  # noqa: PLR0904
             # Set as active
             provider_mgr.set_active_provider(provider_id)
             
-            # Update config
-            self.agent_loop.config = provider_mgr.config
-            
             await self._mount_and_scroll(
                 UserCommandMessage(
                     f"✓ Connected to **{conn.display_name}**!\n\n"
@@ -925,7 +922,6 @@ class DotsyApp(App):  # noqa: PLR0904
             
             # Set as active
             self.agent_loop.config.active_model = existing_model.alias
-            self.agent_loop.config.save()
             
             # Reload agent loop with new model
             await self._reload_config()

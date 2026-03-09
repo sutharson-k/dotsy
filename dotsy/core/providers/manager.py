@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 from logging import getLogger
 
-from dotsy.core.config import DotsyConfig, ProviderConfig, ModelConfig
+from dotsy.core.config import Backend, DotsyConfig, ProviderConfig, ModelConfig
 from dotsy.core.paths.config_paths import CONFIG_FILE
 
 logger = getLogger("dotsy")
@@ -411,12 +411,23 @@ class ProviderManager:
                 api_base=conn.api_base or provider_info.get("api_base", ""),
                 api_key_env_var=provider_info.get("api_key_env", ""),
                 api_style="openai",
-                backend="generic",
+                backend=Backend.GENERIC,
             )
             self.config.providers.append(new_provider)
         
         # Save config
-        self.config.save()
+        from dotsy.core.paths.config_paths import CONFIG_FILE
+        import tomli_w
+        
+        config_data = {
+            "active_model": self.config.active_model,
+            "providers": [p.model_dump() for p in self.config.providers],
+            "models": [m.model_dump() for m in self.config.models],
+        }
+        
+        CONFIG_FILE.path.parent.mkdir(parents=True, exist_ok=True)
+        with open(CONFIG_FILE.path, "wb") as f:
+            tomli_w.dump(config_data, f)
     
     def disconnect_provider(self, provider_id: str) -> None:
         """Disconnect a provider."""

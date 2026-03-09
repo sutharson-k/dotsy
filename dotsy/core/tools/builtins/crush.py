@@ -258,8 +258,7 @@ class CrushReadContextTool(CrushTool):
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
         return ToolCallDisplay(
-            title="📖 Read Crush Context",
-            description="Reading project context from AGENTS.md",
+            summary="Reading Crush context from AGENTS.md",
         )
 
     def get_result_display(
@@ -282,8 +281,7 @@ class CrushLogsTool(CrushTool):
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
         return ToolCallDisplay(
-            title="📋 Get Crush Logs",
-            description=f"Retrieving last {parameters.get('tail', 100)} log lines",
+            summary="Retrieving Crush CLI logs",
         )
 
     def get_result_display(
@@ -306,8 +304,7 @@ class CrushUpdateProvidersTool(CrushTool):
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
         return ToolCallDisplay(
-            title="🔄 Update Crush Providers",
-            description="Updating Crush CLI provider list",
+            summary="Updating Crush CLI providers",
         )
 
     def get_result_display(
