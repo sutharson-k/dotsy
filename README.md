@@ -140,7 +140,7 @@ Dotsy supports multiple AI providers out of the box:
 - `groq-mixtral` - Mixtral 8x7B (free tier)
 - `groq-gemma` - Gemma2 9B (free tier)
 
-### Model.dev (Unified Model Platform)
+### Model.dev (Recommended - Unified Model Platform)
 - **Provider**: `modeldev`
 - **API Key**: `MODELDEV_API_KEY`
 - **Base URL**: `https://api.model.dev/v1`
@@ -160,19 +160,8 @@ Dotsy supports multiple AI providers out of the box:
 - `mistral-large`, `mistral-medium` (Mistral)
 - And many more through model.dev!
 
-### Vercel AI SDK (Unified Interface)
-- **Provider**: `aisdk`
-- **Install**: `pip install ai-sdk`
-- **Models**: Access 20+ providers through one interface
-- **API Keys**: Configure per-provider in environment
-
-**Supported Providers via AI SDK:**
-- `openai:gpt-4o`, `openai:gpt-4-turbo`, `openai:gpt-3.5-turbo`
-- `anthropic:claude-sonnet-4-20250514`, `anthropic:claude-3-5-sonnet`
-- `google:gemini-pro`, `google:gemini-1.5-pro`
-- `mistral:mistral-large`, `mistral:mistral-medium`
-- `cohere:command-r-plus`, `cohere:command-r`
-- And many more!
+### Alternative: Direct Provider Access
+Configure individual providers (OpenAI, Anthropic, Google, etc.) directly with separate API keys for each.
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
@@ -257,31 +246,6 @@ temperature = 0.2
 name = "gemini-1.5-pro"
 provider = "modeldev"
 alias = "modeldev-gemini-pro"
-input_price = 1.25
-output_price = 5.0
-temperature = 0.2
-
-# AI SDK Models (Unified Interface)
-[[models]]
-name = "openai:gpt-4o"
-provider = "aisdk"
-alias = "aisdk-gpt-4o"
-input_price = 5.0
-output_price = 15.0
-temperature = 0.2
-
-[[models]]
-name = "anthropic:claude-sonnet-4-20250514"
-provider = "aisdk"
-alias = "aisdk-claude-sonnet"
-input_price = 3.0
-output_price = 15.0
-temperature = 0.2
-
-[[models]]
-name = "google:gemini-1.5-pro"
-provider = "aisdk"
-alias = "aisdk-gemini-pro"
 input_price = 1.25
 output_price = 5.0
 temperature = 0.2
