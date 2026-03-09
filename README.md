@@ -80,15 +80,9 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://api.anthropic.com/v1`
 
 ### Google Gemini
-- Models: `gemini-2.5-flash`, `gemini-1.5-pro`, `gemma-3n-e4b`, etc.
+- Models: `gemini-2.5-flash`, `gemini-1.5-pro`, etc.
 - API Key: `GOOGLE_API_KEY`
 - Base URL: `https://generativelanguage.googleapis.com/v1beta`
-
-**Google Gemma Models:**
-- `gemma-3n-e4b` - Gemma 3n E4B Instruct (efficient chat) ⭐
-
-**Gemma via Other Providers:**
-- **OpenRouter**: `openrouter-gemma-3n` - Unified API, many models
 
 ### Qwen (Alibaba Cloud DashScope)
 **Note:** DashScope is currently only available in China. For international users, use Qwen via OpenRouter.

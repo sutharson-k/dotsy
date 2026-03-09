@@ -442,13 +442,6 @@ DEFAULT_MODELS = [
         input_price=1.25,
         output_price=5.0,
     ),
-    ModelConfig(
-        name="gemma-3n-e4b-it",
-        provider="google",
-        alias="gemma-3n-e4b",
-        input_price=0.04,
-        output_price=0.12,
-    ),
     # Qwen Models via OpenRouter (International)
     ModelConfig(
         name="qwen/qwen-2.5-72b-instruct",
