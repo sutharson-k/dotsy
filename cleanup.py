@@ -8,7 +8,7 @@ subprocess.run(['git', 'add', '-A'])
 
 # Commit
 result = subprocess.run(
-    ['git', 'commit', '-m', 'feat: Add /set-api-key command for chat interface'],
+    ['git', 'commit', '-m', 'chore: Clean up temp scripts'],
     capture_output=True,
     text=True
 )
@@ -22,5 +22,5 @@ result = subprocess.run(
 )
 print(result.stdout)
 
-print("\n=== Git Log ===")
+print("\n=== Final Git Log ===")
 subprocess.run(['git', 'log', '--oneline', '-5'])
