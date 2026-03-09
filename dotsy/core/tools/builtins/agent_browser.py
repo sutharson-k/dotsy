@@ -19,14 +19,14 @@ Security:
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
 import json
 import os
 import shutil
 import subprocess
-from pathlib import Path
-from typing import Any, AsyncGenerator
+from typing import Any
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field
 
 from dotsy.core.tools.base import (
     BaseTool,
@@ -35,8 +35,8 @@ from dotsy.core.tools.base import (
     InvokeContext,
     ToolError,
 )
-from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
-from dotsy.core.types import ToolStreamEvent
+from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
+from dotsy.core.types import ToolCallEvent, ToolResultEvent, ToolStreamEvent
 
 
 class AgentBrowserConfig(BaseToolConfig):
@@ -44,7 +44,7 @@ class AgentBrowserConfig(BaseToolConfig):
 
     headless: bool = False
     timeout_seconds: int = 30
-    domain_allowlist: list[str] = []
+    domain_allowlist: list[str] = Field(default_factory=list)
     profile_path: str = ""
     provider: str = "local"  # local, browserbase, browser-use, kernel, ios
 
@@ -146,22 +146,6 @@ class AgentBrowser(
         return ToolCallDisplay(
             summary=f"Browser: {action} {url or parameters.get('element_ref', '')}",
         )
-
-    def get_result_display(
-        self, result: dict[str, Any], parameters: dict[str, Any]
-    ) -> ToolResultDisplay:
-        success = result.get("success", False)
-        action = result.get("action", "action")
-        if success:
-            return ToolResultDisplay(
-                success=True,
-                message=f"Browser {action} completed successfully",
-            )
-        else:
-            return ToolResultDisplay(
-                success=False,
-                message=f"Browser {action} failed: {result.get('error', 'Unknown error')}",
-            )
 
     async def run(
         self,

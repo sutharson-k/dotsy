@@ -28,15 +28,15 @@ if TYPE_CHECKING:
     from dotsy.core.config import DotsyConfig, MCPHttp, MCPStdio, MCPStreamableHttp
 
 
-def _try_integrate_crush_tools() -> None:
+def _try_integrate_crush_tools(manager: ToolManager) -> None:
     """Integrate Crush CLI tools if available and enabled."""
     try:
         from dotsy.core.tools.builtins.crush import get_crush_tools
 
         crush_tools = get_crush_tools()
         for tool_cls in crush_tools:
-            if tool_cls.get_name() not in ToolManager._available:
-                ToolManager._available[tool_cls.get_name()] = tool_cls
+            if tool_cls.get_name() not in manager._available:
+                manager._available[tool_cls.get_name()] = tool_cls
                 logger.debug("Integrated Crush tool: %s", tool_cls.get_name())
     except ImportError:
         logger.debug("Crush CLI tools not available")
@@ -97,10 +97,10 @@ class ToolManager:
         self._available: dict[str, type[BaseTool]] = {
             cls.get_name(): cls for cls in self._iter_tool_classes(self._search_paths)
         }
-        
+
         # Integrate Crush CLI tools if enabled
         if self._config.crush_cli.enabled:
-            _try_integrate_crush_tools()
+            _try_integrate_crush_tools(self)
         
         self._integrate_mcp()
 

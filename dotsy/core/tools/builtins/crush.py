@@ -8,19 +8,14 @@ This module provides integration between Dotsy and Crush CLI, allowing Dotsy to:
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
 import json
-import os
+from pathlib import Path
 import shutil
 import subprocess
-from pathlib import Path
-from typing import Any, AsyncGenerator
+from typing import Any
 
-from dotsy.core.tools.base import (
-    BaseTool,
-    BaseToolConfig,
-    InvokeContext,
-    ToolError,
-)
+from dotsy.core.tools.base import BaseTool, BaseToolConfig, InvokeContext, ToolError
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
 from dotsy.core.types import ToolStreamEvent
 

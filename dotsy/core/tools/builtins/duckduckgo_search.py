@@ -12,7 +12,8 @@ Features:
 
 from __future__ import annotations
 
-from typing import Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import httpx
 from pydantic import BaseModel, Field, ValidationError
@@ -24,8 +25,8 @@ from dotsy.core.tools.base import (
     InvokeContext,
     ToolError,
 )
-from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
-from dotsy.core.types import ToolStreamEvent
+from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay, ToolUIData
+from dotsy.core.types import ToolCallEvent, ToolResultEvent, ToolStreamEvent
 
 
 class DuckDuckGoSearchConfig(BaseToolConfig):
@@ -86,15 +87,6 @@ class DuckDuckGoSearch(
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
         return ToolCallDisplay(
             summary=f"Searching DuckDuckGo for: {parameters.get('query', 'N/A')}",
-        )
-
-    def get_result_display(
-        self, result: dict[str, Any], parameters: dict[str, Any]
-    ) -> ToolResultDisplay:
-        result_count = result.get('result_count', 0)
-        return ToolResultDisplay(
-            success=True,
-            message=f"Found {result_count} results from DuckDuckGo",
         )
 
     async def invoke(
@@ -205,7 +197,7 @@ class DuckDuckGoSearch(
                 # Extract URL
                 link = title_elem.get('href') if title_elem else ""
                 # DuckDuckGo uses redirect URLs, extract the actual URL
-                if link and link.startswith('/l/?kh="):
+                if link and link.startswith('/l/?kh='):
                     # Parse the actual URL from the redirect
                     actual_url = link.split('udd=')[-1] if 'udd=' in link else link
                 else:

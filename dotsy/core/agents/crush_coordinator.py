@@ -6,9 +6,9 @@ allowing them to work together on complex tasks.
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from enum import StrEnum, auto
+import json
 from pathlib import Path
 from typing import Any
 
@@ -50,9 +50,7 @@ class CrushDotsyCoordinator:
     """Coordinates tasks between Dotsy and Crush CLI."""
 
     def __init__(
-        self,
-        crush_config: CrushConfig | None = None,
-        auto_approve: bool = False,
+        self, crush_config: CrushConfig | None = None, auto_approve: bool = False
     ) -> None:
         self.crush_cli = CrushCLI(config=crush_config)
         self.auto_approve = auto_approve
@@ -74,18 +72,13 @@ class CrushDotsyCoordinator:
         task_id = f"task_{self._task_counter:04d}"
 
         task = CoordinatedTask(
-            id=task_id,
-            description=description,
-            role=role,
-            metadata=metadata or {},
+            id=task_id, description=description, role=role, metadata=metadata or {}
         )
         self.tasks[task_id] = task
         return task
 
     async def execute_task(
-        self,
-        task: CoordinatedTask,
-        context: dict[str, Any] | None = None,
+        self, task: CoordinatedTask, context: dict[str, Any] | None = None
     ) -> CoordinatedTask:
         """Execute a coordinated task."""
         task.status = TaskStatus.IN_PROGRESS
@@ -116,9 +109,7 @@ class CrushDotsyCoordinator:
         return task
 
     async def _execute_with_crush(
-        self,
-        task: CoordinatedTask,
-        context: dict[str, Any] | None = None,
+        self, task: CoordinatedTask, context: dict[str, Any] | None = None
     ) -> str:
         """Execute task using Crush CLI."""
         if not self.crush_cli.is_available():
@@ -131,8 +122,7 @@ class CrushDotsyCoordinator:
 
         # Run with Crush
         returncode, stdout, stderr = self.crush_cli.run_command(
-            ["--yolo" if self.auto_approve else "", task_description],
-            timeout=600,
+            ["--yolo" if self.auto_approve else "", task_description], timeout=600
         )
 
         if returncode != 0:
@@ -141,9 +131,7 @@ class CrushDotsyCoordinator:
         return stdout
 
     async def _orchestrate_task(
-        self,
-        task: CoordinatedTask,
-        context: dict[str, Any] | None = None,
+        self, task: CoordinatedTask, context: dict[str, Any] | None = None
     ) -> str:
         """Orchestrate task execution (Dotsy coordinates, may delegate to Crush)."""
         # Dotsy analyzes the task and decides how to proceed
@@ -151,9 +139,7 @@ class CrushDotsyCoordinator:
         return await self._execute_with_crush(task, context)
 
     async def _collaborate_on_task(
-        self,
-        task: CoordinatedTask,
-        context: dict[str, Any] | None = None,
+        self, task: CoordinatedTask, context: dict[str, Any] | None = None
     ) -> str:
         """Collaborate on task (both Dotsy and Crush contribute)."""
         # This is a more complex workflow where both agents contribute
@@ -171,8 +157,9 @@ class CrushDotsyCoordinator:
     def get_active_tasks(self) -> list[CoordinatedTask]:
         """Get all active (non-completed) tasks."""
         return [
-            t for t in self.tasks.values()
-            if t.status not in (TaskStatus.COMPLETED, TaskStatus.CANCELLED)
+            t
+            for t in self.tasks.values()
+            if t.status not in {TaskStatus.COMPLETED, TaskStatus.CANCELLED}
         ]
 
     def get_task_history(self) -> list[CoordinatedTask]:
@@ -182,7 +169,7 @@ class CrushDotsyCoordinator:
     def cancel_task(self, task_id: str) -> bool:
         """Cancel a task."""
         task = self.tasks.get(task_id)
-        if task and task.status in (TaskStatus.PENDING, TaskStatus.IN_PROGRESS):
+        if task and task.status in {TaskStatus.PENDING, TaskStatus.IN_PROGRESS}:
             task.status = TaskStatus.CANCELLED
             return True
         return False
@@ -196,12 +183,10 @@ class CrushDotsyCoordinator:
             "active_tasks": len(self.get_active_tasks()),
             "total_tasks": len(self.tasks),
             "completed_tasks": sum(
-                1 for t in self.tasks.values()
-                if t.status == TaskStatus.COMPLETED
+                1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED
             ),
             "failed_tasks": sum(
-                1 for t in self.tasks.values()
-                if t.status == TaskStatus.FAILED
+                1 for t in self.tasks.values() if t.status == TaskStatus.FAILED
             ),
         }
 
@@ -241,9 +226,7 @@ class AgentCommunicationProtocol:
 
     @staticmethod
     def create_task_request(
-        task_id: str,
-        description: str,
-        parameters: dict[str, Any] | None = None,
+        task_id: str, description: str, parameters: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Create a task request message."""
         return AgentCommunicationProtocol.create_message(
@@ -259,10 +242,7 @@ class AgentCommunicationProtocol:
 
     @staticmethod
     def create_task_response(
-        task_id: str,
-        success: bool,
-        result: Any | None = None,
-        error: str | None = None,
+        task_id: str, success: bool, result: Any | None = None, error: str | None = None
     ) -> dict[str, Any]:
         """Create a task response message."""
         return AgentCommunicationProtocol.create_message(

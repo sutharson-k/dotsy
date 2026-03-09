@@ -681,9 +681,7 @@ class DotsyApp(App):  # noqa: PLR0904
 
         skills = self.agent_loop.skill_manager.available_skills
         if not skills:
-            await self._mount_and_scroll(
-                UserCommandMessage("No skills available.")
-            )
+            await self._mount_and_scroll(UserCommandMessage("No skills available."))
             return
 
         lines = ["## Available Skills\n"]
@@ -710,17 +708,17 @@ class DotsyApp(App):  # noqa: PLR0904
         """Show the model selector popup."""
         if not self.agent_loop:
             return
-            
+
         # Get available models from config
         models = []
         current_model = self.agent_loop.config.get_active_model().alias
         for model in self.agent_loop._base_config.models:
             models.append({
-                'alias': model.alias,
-                'name': model.name,
-                'provider': model.provider,
+                "alias": model.alias,
+                "name": model.name,
+                "provider": model.provider,
             })
-        
+
         # Show model selector
         chat_container = self.query_one(ChatInputContainer)
         chat_container.show_model_selector(models, current_model)
@@ -733,7 +731,9 @@ class DotsyApp(App):  # noqa: PLR0904
 
             # Get the new active model name for notification
             new_model = base_config.get_active_model().alias
-            await self._mount_and_scroll(UserCommandMessage(f"✓ Model changed to {new_model}"))
+            await self._mount_and_scroll(
+                UserCommandMessage(f"✓ Model changed to {new_model}")
+            )
         except Exception as e:
             await self._mount_and_scroll(
                 ErrorMessage(
@@ -950,7 +950,10 @@ class DotsyApp(App):  # noqa: PLR0904
         # Check if model selector is open - if so, close it instead of interrupting
         try:
             chat_input = self.query_one(ChatInputContainer)
-            if chat_input._model_selector and chat_input._model_selector.styles.display != "none":
+            if (
+                chat_input._model_selector
+                and chat_input._model_selector.styles.display != "none"
+            ):
                 chat_input.hide_model_selector()
                 return
         except Exception:
@@ -1107,15 +1110,17 @@ class DotsyApp(App):  # noqa: PLR0904
                 chat.hide_model_selector()
                 # Set the model in config
                 from dotsy.core.config import DotsyConfig
+
                 DotsyConfig.save_updates({"active_model": model})
-                
+
                 # Reload the agent loop with new config
                 if self.agent_loop:
                     import asyncio
+
                     asyncio.create_task(self._reload_config())
                 else:
                     self.notify(f"Model changed to {model}")
-                
+
                 chat.value = ""
                 chat.focus_input()
         except Exception:
