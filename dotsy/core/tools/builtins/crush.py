@@ -173,8 +173,15 @@ class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushTo
 
     crush_cli = CrushCLI()
 
-    def __init__(self, config: BaseToolConfig | None = None) -> None:
-        super().__init__(config=config or BaseToolConfig())
+    def __init__(
+        self,
+        config: BaseToolConfig | None = None,
+        state: CrushToolState | None = None,
+    ) -> None:
+        super().__init__(
+            config=config or BaseToolConfig(),
+            state=state or CrushToolState(),
+        )
         if not self.crush_cli.is_available():
             raise ToolError(
                 "Crush CLI is not available. Please install it from "

@@ -91,7 +91,7 @@ class DuckDuckGoSearch(
 
     async def invoke(
         self,
-        ctx: InvokeContext,
+        ctx: InvokeContext | None = None,
         **parameters: Any,
     ) -> AsyncGenerator[ToolStreamEvent | DuckDuckGoSearchResult, None]:
         try:
@@ -116,7 +116,7 @@ class DuckDuckGoSearch(
             yield ToolStreamEvent(
                 tool_name=self.TOOL_NAME,
                 tool_call_id=tool_call_id,
-                type="tool_result",
+                message="Search results retrieved",
                 content=results.model_dump(),
             )
 
