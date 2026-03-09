@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from rich.text import Text
 from textual.widgets import Static
 
@@ -9,7 +11,7 @@ from textual.widgets import Static
 class ModelSelectorPopup(Static):
     """Popup widget for selecting AI models with arrow key navigation."""
 
-    def __init__(self, **kwargs: object) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__("", id="model-selector-popup", **kwargs)
         self.styles.display = "none"
         self.can_focus = False

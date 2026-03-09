@@ -17,9 +17,13 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from dotsy.core.tools.base import BaseTool, BaseToolConfig, InvokeContext, ToolError
+from dotsy.core.tools.base import BaseTool, BaseToolConfig, BaseToolState, InvokeContext, ToolError
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
 from dotsy.core.types import ToolStreamEvent
+
+
+class CrushToolState(BaseToolState):
+    """State for Crush CLI tools."""
 
 
 class CrushToolArgs(BaseModel):
@@ -164,7 +168,7 @@ class CrushCLI:
         return None
 
 
-class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, BaseToolConfig]):
+class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushToolState]):
     """Base class for Crush CLI tools."""
 
     crush_cli = CrushCLI()

@@ -128,7 +128,7 @@ class AgentBrowser(
         config: AgentBrowserConfig | None = None,
         state: AgentBrowserState | None = None,
     ) -> None:
-        super().__init__(config=config, state=state)
+        super().__init__(config=config or AgentBrowserConfig(), state=state or AgentBrowserState())
         self._agent_browser_path = self._find_agent_browser()
 
     @classmethod
@@ -218,7 +218,7 @@ class AgentBrowser(
 
         return False
 
-    async def _execute_action(self, args: AgentBrowserArgs) -> AgentBrowserResult:
+    async def _execute_action(self, args: AgentBrowserArgs) -> AgentBrowserResult:  # noqa: PLR0912, PLR0915
         """Execute agent-browser action."""
         cmd = [self._agent_browser_path]
 
@@ -293,6 +293,9 @@ class AgentBrowser(
 
             case _:
                 raise ToolError(f"Unknown action: {args.action}")
+
+        # Filter out None values from cmd list
+        cmd = [x for x in cmd if x is not None]
 
         # Execute command
         result = subprocess.run(

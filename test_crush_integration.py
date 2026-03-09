@@ -16,7 +16,7 @@ if str(dotsy_path) not in sys.path:
     sys.path.insert(0, str(dotsy_path))
 
 
-def test_crush_cli_integration() -> bool:
+def test_crush_cli_integration() -> bool:  # noqa: PLR0915
     """Test Crush CLI integration components."""
     print("=" * 60)
     print("Testing Crush CLI Integration with Dotsy")

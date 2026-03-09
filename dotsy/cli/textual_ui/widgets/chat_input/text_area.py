@@ -176,7 +176,7 @@ class ChatTextArea(TextArea):
         self.post_message(self.HistoryNext(self._history_prefix))
         return True
 
-    async def _on_key(self, event: events.Key) -> None:  # noqa: PLR0911
+    async def _on_key(self, event: events.Key) -> None:  # noqa: PLR0911, PLR0912, PLR0915
         self._mark_cursor_moved_if_needed()
         
         # Check if model selector is visible and handle keys
@@ -194,19 +194,19 @@ class ChatTextArea(TextArea):
         if chat_container and chat_container._model_selector:
             if chat_container._model_selector.styles.display != "none":
                 # Model selector is active - handle navigation
-                if event.key == 'escape':
+                if event.key == "escape":
                     chat_container.hide_model_selector()
                     event.stop()
                     return
-                elif event.key == 'up':
+                elif event.key == "up":
                     chat_container.navigate_model_selector(-1)
                     event.stop()
                     return
-                elif event.key == 'down':
+                elif event.key == "down":
                     chat_container.navigate_model_selector(1)
                     event.stop()
                     return
-                elif event.key == 'enter':
+                elif event.key == "enter":
                     # Select model
                     model = chat_container.selected_model
                     if model:

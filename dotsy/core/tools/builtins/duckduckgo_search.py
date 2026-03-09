@@ -197,7 +197,7 @@ class DuckDuckGoSearch(
                 # Extract URL
                 link = title_elem.get('href') if title_elem else ""
                 # DuckDuckGo uses redirect URLs, extract the actual URL
-                if link and link.startswith('/l/?kh='):
+                if link and str(link).startswith('/l/?kh='):
                     # Parse the actual URL from the redirect
                     actual_url = link.split('udd=')[-1] if 'udd=' in link else link
                 else:
