@@ -217,14 +217,42 @@ dotsy --prompt "Analyze the codebase" --output json
 ### Specify Model
 Edit your config to change the `active_model` alias.
 
-## Slash Commands
+## Slash Commands                                                                                         
+                                                                                                          
+Type `/` in the chat to see all available commands with autocomplete:                                     
+                                                                                                          
+| Command | Aliases | Description |
+|---------|---------|-------------|
+| `/help` | `/help` | Show help information |
+| `/config` | `/config`, `/theme` | Edit config settings |
+| `/model` | `/model` | Select AI model from popup menu |
+| `/reload` | `/reload` | Reload configuration from disk |
+| `/clear` | `/clear` | Clear conversation history |
+| `/log` | `/log` | Show path to current interaction log file |
+| `/compact` | `/compact` | Compact conversation history by summarizing |
+| `/exit` | `/exit` | Exit the application |
+| `/terminal-setup` | `/terminal-setup` | Configure Shift+Enter for newlines |
+| `/status` | `/status` | Display agent statistics |
+| `/skills` | `/skills` | List all available skills |
+| `/set-api-key` | `/set-api-key`, `/apikey`, `/api-key` | Set API key for a provider |
 
-- `/help` - Show help information
-- `/compact` - Compact the conversation history
-- `/stats` - Show session statistics
-- `/reset` - Reset the conversation
-- `/tools` - List available tools
-- `/skills` - List all available skills
+### Examples
+
+```bash
+# Set API key in chat
+/set-api-key openai sk-your-api-key-here
+/apikey anthropic sk-...
+/api-key google AIza...
+
+# View all commands
+/help
+
+# Change model
+/model
+
+# Clear history
+/clear
+```
 
 ## Claude Skills
 

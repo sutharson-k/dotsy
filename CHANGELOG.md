@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-03-09
+
+### Added
+- `/set-api-key` command for setting API keys directly in chat
+- Slash command autocomplete now shows all available commands (increased limit to 20)
+- Support for vision-capable models via OpenRouter (GPT-4o, Claude Sonnet, Gemini Flash)
+- Drag-and-drop file attachment support for images, PDFs, and text files
+- File preview widget showing attached files with remove option
+- `--file` / `-f` CLI argument for attaching files from command line
+
+### Changed
+- Updated README.md with complete slash commands documentation
+- Increased MAX_SUGGESTIONS_COUNT from 10 to 20 for command autocomplete
+
+### Fixed
+- Removed invalid `cursor: pointer` CSS property from file_preview.py
+- Fixed slash command autocomplete not showing all commands
+
+---
+
 ## [Unreleased]
 
 ### Added
