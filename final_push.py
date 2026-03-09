@@ -8,7 +8,7 @@ subprocess.run(['git', 'add', '-A'])
 
 # Commit
 result = subprocess.run(
-    ['git', 'commit', '-m', 'feat: Add vision-capable models via OpenRouter'],
+    ['git', 'commit', '-m', 'chore: Clean up temp files'],
     capture_output=True,
     text=True
 )
@@ -25,3 +25,6 @@ result = subprocess.run(
 print(result.stdout)
 if result.stderr:
     print(result.stderr)
+
+print("\n=== Final Status ===")
+subprocess.run(['git', 'log', '--oneline', '-5'])
