@@ -72,16 +72,6 @@ class CommandRegistry:
                 description="List all available skills",
                 handler="_show_skills",
             ),
-            "connect": Command(
-                aliases=frozenset(["/connect"]),
-                description="Connect to an LLM provider (OpenAI, Google, Anthropic, etc.)",
-                handler="_connect_provider",
-            ),
-            "model": Command(
-                aliases=frozenset(["/model"]),
-                description="Select active model from connected providers",
-                handler="_select_model",
-            ),
         }
 
         for command in excluded_commands:
