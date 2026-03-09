@@ -370,19 +370,21 @@ class ProviderManager:
         # OpenAI-style response
         if "data" in data:
             for item in data["data"]:
-                models.append({
-                    "id": item.get("id", ""),
-                    "name": item.get("name", item.get("id", "")),
-                    "provider": provider_id,
-                })
+                if isinstance(item, dict):
+                    models.append({
+                        "id": item.get("id", ""),
+                        "name": item.get("name", item.get("id", "")),
+                        "provider": provider_id,
+                    })
         # Direct list
         elif isinstance(data, list):
             for item in data:
-                models.append({
-                    "id": item.get("id", item.get("name", "")),
-                    "name": item.get("name", item.get("id", "")),
-                    "provider": provider_id,
-                })
+                if isinstance(item, dict):
+                    models.append({
+                        "id": item.get("id", item.get("name", "")),
+                        "name": item.get("name", item.get("id", "")),
+                        "provider": provider_id,
+                    })
         # Nested models key
         elif "models" in data:
             for model_id, model_data in data["models"].items():

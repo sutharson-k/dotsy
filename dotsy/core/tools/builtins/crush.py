@@ -233,8 +233,7 @@ class CrushRunTool(CrushTool):
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
         return ToolCallDisplay(
-            title="🔨 Crush Run",
-            description=f"Running task with Crush: {parameters.get('task', 'N/A')}",
+            summary=f"🔨 Crush Run: {parameters.get('task', 'N/A')}",
         )
 
     def get_result_display(

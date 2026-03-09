@@ -76,7 +76,7 @@ class ModelsDevBackend(GenericBackend):
             provider: Provider configuration (models.dev)
             **kwargs: Additional backend parameters
         """
-        super().__init__(model, provider, **kwargs)
+        super().__init__(model=model, provider=provider, **kwargs)
         self._api_key = None
 
     def _get_api_key(self) -> str | None:
