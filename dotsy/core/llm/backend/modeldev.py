@@ -80,7 +80,7 @@ class ModelsDevBackend(GenericBackend):
         self._model = model
         self._provider = provider
         
-        super().__init__(model=model, provider=provider, **kwargs)
+        super().__init__(provider=provider, **kwargs)
         self._api_key = None
 
     def _get_api_key(self) -> str | None:
