@@ -5,7 +5,7 @@ from textual import events
 from dotsy.cli.autocompletion.base import CompletionResult, CompletionView
 from dotsy.core.autocompletion.completers import CommandCompleter
 
-MAX_SUGGESTIONS_COUNT = 10
+MAX_SUGGESTIONS_COUNT = 20
 
 
 class SlashCommandController:

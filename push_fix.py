@@ -8,7 +8,10 @@ subprocess.run(['git', 'add', '-A'])
 
 # Commit
 result = subprocess.run(
-    ['git', 'commit', '-m', 'chore: Clean up temp scripts'],
+    ['git', 'commit', '-m', 'fix: Show all slash commands in autocomplete
+
+- Increase MAX_SUGGESTIONS_COUNT from 10 to 20
+- Clear Python cache for proper command loading'],
     capture_output=True,
     text=True
 )
@@ -22,5 +25,5 @@ result = subprocess.run(
 )
 print(result.stdout)
 
-print("\n=== Final Git Log ===")
+print("\n=== Git Log ===")
 subprocess.run(['git', 'log', '--oneline', '-5'])
