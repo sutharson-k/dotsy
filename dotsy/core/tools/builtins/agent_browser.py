@@ -42,7 +42,7 @@ from dotsy.core.types import ToolStreamEvent
 class AgentBrowserConfig(BaseToolConfig):
     """Configuration for agent-browser tool."""
 
-    headless: bool = True
+    headless: bool = False
     timeout_seconds: int = 30
     domain_allowlist: list[str] = []
     profile_path: str = ""

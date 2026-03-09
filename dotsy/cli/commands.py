@@ -67,6 +67,11 @@ class CommandRegistry:
                 description="Display agent statistics",
                 handler="_show_status",
             ),
+            "skills": Command(
+                aliases=frozenset(["/skills"]),
+                description="List all available skills",
+                handler="_show_skills",
+            ),
         }
 
         for command in excluded_commands:

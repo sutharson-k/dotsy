@@ -672,6 +672,34 @@ class DotsyApp(App):  # noqa: PLR0904
 """
         await self._mount_and_scroll(UserCommandMessage(status_text))
 
+    async def _show_skills(self) -> None:
+        if not self.agent_loop:
+            await self._mount_and_scroll(
+                ErrorMessage("Agent not initialized", collapsed=self._tools_collapsed)
+            )
+            return
+
+        skills = self.agent_loop.skill_manager.available_skills
+        if not skills:
+            await self._mount_and_scroll(
+                UserCommandMessage("No skills available.")
+            )
+            return
+
+        lines = ["## Available Skills\n"]
+        for name, info in sorted(skills.items()):
+            invocable = "✓" if info.user_invocable else " "
+            lines.append(f"- `/{name}` {invocable} {info.description}")
+
+        lines.extend([
+            "",
+            "**Legend:** ✓ = User invocable (can be called directly)",
+            "",
+            "Use `/skillname` to invoke a specific skill.",
+        ])
+
+        await self._mount_and_scroll(UserCommandMessage("\n".join(lines)))
+
     async def _show_config(self) -> None:
         """Switch to the configuration app in the bottom panel."""
         if self._current_bottom_app == BottomApp.Config:

@@ -80,9 +80,15 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://api.anthropic.com/v1`
 
 ### Google Gemini
-- Models: `gemini-2.5-flash`, `gemini-1.5-pro`, etc.
+- Models: `gemini-2.5-flash`, `gemini-1.5-pro`, `gemma-3n-e4b`, etc.
 - API Key: `GOOGLE_API_KEY`
 - Base URL: `https://generativelanguage.googleapis.com/v1beta`
+
+**Google Gemma Models:**
+- `gemma-3n-e4b` - Gemma 3n E4B Instruct (efficient chat) ⭐
+
+**Gemma via Other Providers:**
+- **OpenRouter**: `openrouter-gemma-3n` - Unified API, many models
 
 ### Qwen (Alibaba Cloud DashScope)
 **Note:** DashScope is currently only available in China. For international users, use Qwen via OpenRouter.
@@ -224,6 +230,44 @@ Edit your config to change the `active_model` alias.
 - `/stats` - Show session statistics
 - `/reset` - Reset the conversation
 - `/tools` - List available tools
+- `/skills` - List all available skills
+
+## Claude Skills
+
+Dotsy includes **Claude-inspired skills** that provide specialized capabilities:
+
+### Available Skills
+
+- **`/claude-code-review`** - Comprehensive code reviewer for quality, best practices, and improvements
+- **`/claude-architect`** - System design and architecture expert for scalable software systems
+- **`/claude-debugger`** - Expert debugging assistant for systematic bug diagnosis and fixes
+- **`/claude-teacher`** - Patient coding mentor for learning programming concepts effectively
+- **`/claude-security`** - Security expert for vulnerability assessment and secure code review
+
+### Using Skills
+
+Invoke any skill with its slash command:
+
+```bash
+dotsy
+
+/claude-code-review
+Please review this function for potential improvements...
+
+/claude-debugger
+I'm getting a null pointer exception in this code...
+
+/claude-architect
+Help me design a microservices architecture for...
+```
+
+Skills provide focused expertise in their domain while leveraging your configured AI model.
+
+### Adding Custom Skills
+
+Skills are stored in the `skills/` directory. Each skill is a folder containing a `SKILL.md` file with:
+- YAML frontmatter (name, description, settings)
+- Markdown content (skill instructions and capabilities)
 
 ## Browser Automation
 
