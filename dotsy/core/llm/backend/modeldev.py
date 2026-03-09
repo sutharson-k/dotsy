@@ -76,6 +76,10 @@ class ModelsDevBackend(GenericBackend):
             provider: Provider configuration (models.dev)
             **kwargs: Additional backend parameters
         """
+        # Store these explicitly since parent may not expose them as attributes
+        self._model = model
+        self._provider = provider
+        
         super().__init__(model=model, provider=provider, **kwargs)
         self._api_key = None
 
@@ -86,7 +90,7 @@ class ModelsDevBackend(GenericBackend):
 
         import os
 
-        env_var = self.provider.api_key_env_var
+        env_var = self._provider.api_key_env_var
         self._api_key = os.getenv(env_var)
         return self._api_key
 
@@ -95,7 +99,7 @@ class ModelsDevBackend(GenericBackend):
 
         models.dev uses standard model names without provider prefix.
         """
-        return self.model.name
+        return self._model.name
 
     def is_available(self) -> bool:
         """Check if models.dev is available and configured.
@@ -115,8 +119,8 @@ class ModelsDevBackend(GenericBackend):
         return {
             "name": "modelsdev",
             "display_name": "Models.dev",
-            "model": self.model.name,
-            "api_base": self.provider.api_base,
+            "model": self._model.name,
+            "api_base": self._provider.api_base,
             "available": self.is_available(),
             "total_models": "200+",
             "total_providers": "11+",

@@ -405,7 +405,7 @@ class DotsyApp(App):  # noqa: PLR0904
             else:
                 handler()
             return True
-        
+
         # Handle commands with arguments: /connect <provider>, /model <model_id>
         if user_input.startswith("/"):
             parts = user_input[1:].strip().split(maxsplit=1)
@@ -417,7 +417,7 @@ class DotsyApp(App):  # noqa: PLR0904
                 elif cmd_name == "model":
                     await self._select_model_with_arg(arg)
                     return True
-        
+
         return False
 
     def _get_skill_entries(self) -> list[tuple[str, str]]:
@@ -779,7 +779,9 @@ class DotsyApp(App):  # noqa: PLR0904
             
         except Exception as e:
             await self._mount_and_scroll(
-                ErrorMessage(f"Failed to list providers: {e}", collapsed=self._tools_collapsed)
+                ErrorMessage(
+                    f"Failed to list providers: {e}", collapsed=self._tools_collapsed
+                )
             )
 
     async def _select_model(self) -> None:
@@ -844,7 +846,9 @@ class DotsyApp(App):  # noqa: PLR0904
             
         except Exception as e:
             await self._mount_and_scroll(
-                ErrorMessage(f"Failed to list models: {e}", collapsed=self._tools_collapsed)
+                ErrorMessage(
+                    f"Failed to list models: {e}", collapsed=self._tools_collapsed
+                )
             )
 
     async def _connect_provider_with_arg(self, provider_id: str) -> None:

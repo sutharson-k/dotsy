@@ -214,13 +214,12 @@ class ChatTextArea(TextArea):
                         from dotsy.core.config import DotsyConfig
                         DotsyConfig.save_updates({"active_model": model})
                         # Reload the agent loop with new config
+                        from dotsy.cli.textual_ui.app import DotsyApp
                         app = self.app
-                        if hasattr(app, "agent_loop") and app.agent_loop:
+                        if isinstance(app, DotsyApp) and app.agent_loop:
                             import asyncio
 
                             asyncio.create_task(app._reload_config())
-                        elif hasattr(app, "notify"):
-                            app.notify(f"Model changed to {model}")
                         self.text = ""
                         self.cursor_location = (0, 0)
                     event.stop()
