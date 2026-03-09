@@ -244,10 +244,14 @@ class AgentBrowser(
             cmd.extend(["-p", provider])
 
         # Add headless/headed flag (explicit, not default)
+        # Also set environment variable as backup
+        env = os.environ.copy()
         if self.config.headless:
             cmd.append("--headless")
+            env["AGENT_BROWSER_HEADED"] = "false"
         else:
-            cmd.append("--headed")  # Explicitly show browser window
+            cmd.append("--headed")
+            env["AGENT_BROWSER_HEADED"] = "true"  # Force visible browser via env var
 
         # Add timeout
         cmd.extend(["--timeout", str(self.config.timeout_seconds * 1000)])
@@ -312,6 +316,7 @@ class AgentBrowser(
             capture_output=True,
             text=True,
             timeout=self.config.timeout_seconds,
+            env=env,  # Pass environment variables (includes AGENT_BROWSER_HEADED)
         )
 
         if result.returncode != 0:
