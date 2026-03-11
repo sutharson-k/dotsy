@@ -5,6 +5,7 @@ from enum import StrEnum, auto
 import os
 from os import getenv
 from pathlib import Path
+import re
 import subprocess
 import time
 from typing import Any, ClassVar, assert_never, cast
@@ -565,6 +566,13 @@ class DotsyApp(App):  # noqa: PLR0904
     ) -> None:
         attachments = attachments or []
 
+        # Check for @/path/to/image.png syntax in message
+        inline_attachments = self._parse_inline_image_attachments(message)
+        if inline_attachments:
+            attachments = attachments + inline_attachments
+            # Remove the @path from the message
+            message = re.sub(r"@\S+\s*", "", message).strip()
+
         # Build message content with attachments
         content_parts = []
         if message:
@@ -590,6 +598,32 @@ class DotsyApp(App):  # noqa: PLR0904
             self._agent_task = asyncio.create_task(
                 self._handle_agent_loop_turn(full_message, attachments)
             )
+
+    def _parse_inline_image_attachments(self, message: str) -> list:
+        """Parse @/path/to/image.png syntax from message."""
+        from dotsy.core.attachments.handler import FileAttachment
+
+        attachments = []
+        # Match @ followed by path (Windows or Unix style)
+        pattern = r"@([A-Za-z]:\\[\w\\.]+|/[\w\\./]+)"
+        matches = re.findall(pattern, message)
+
+        for match in matches:
+            try:
+                path = Path(match).expanduser().resolve()
+                if path.exists() and path.suffix.lower() in {
+                    ".png",
+                    ".jpg",
+                    ".jpeg",
+                    ".gif",
+                    ".webp",
+                    ".bmp",
+                }:
+                    attachments.append(FileAttachment.from_path(path))
+            except Exception:
+                continue
+
+        return attachments
 
     async def _rebuild_history_from_messages(self) -> None:
         if all(msg.role == Role.system for msg in self.agent_loop.messages):
@@ -684,7 +718,14 @@ class DotsyApp(App):  # noqa: PLR0904
         context_parts = []
         for attachment in attachments:
             if attachment.type == "image":
-                context_parts.append(f"[Image attachment: {attachment.file_name}]")
+                # Include base64 image data for LLM vision models
+                if attachment.base64_data:
+                    context_parts.append(
+                        f"[Image: {attachment.file_name}]\n"
+                        f"Data: data:{attachment.mime_type};base64,{attachment.base64_data}"
+                    )
+                else:
+                    context_parts.append(f"[Image attachment: {attachment.file_name}]")
             elif attachment.type == "pdf":
                 context_parts.append(f"[PDF attachment: {attachment.file_name}]")
             elif attachment.type == "text":
