@@ -116,8 +116,6 @@ class AgentBrowser(
         super().__init__(
             config=config or AgentBrowserConfig(), state=state or AgentBrowserState()
         )
-        self._browser = None
-        self._context = None
 
     def is_available(self) -> bool:
         """Check if browser-use is available."""
@@ -203,40 +201,27 @@ class AgentBrowser(
 
     async def _execute_action(self, args: AgentBrowserArgs) -> AgentBrowserResult:
         """Execute browser action using browser-use."""
-        from browser_use import Agent, Controller
         from playwright.async_api import async_playwright
 
-        # Initialize browser if not already done
-        if self._browser is None:
-            playwright = await async_playwright().start()
-            self._browser = await playwright.chromium.launch(
-                headless=self.config.headless
-            )
-            self._context = await self._browser.new_context()
+        # Initialize browser for this action only (not persistent)
+        playwright = await async_playwright().start()
+        browser = await playwright.chromium.launch(headless=self.config.headless)
+        context = await browser.new_context()
 
-        # Create controller with custom actions
-        controller = Controller()
-
-        # Build task description
-        task = self._build_task_description(args)
-
-        # Create and run agent
-        agent = Agent(
-            task=task,
-            llm=None,  # Will be set by caller if needed
-            controller=controller,
-            browser=self._browser,
-            context=self._context,
-        )
-
-        # Execute with timeout
         try:
+            # Execute with timeout
             result = await asyncio.wait_for(
-                self._run_agent_action(agent, args), timeout=self.config.timeout_seconds
+                self._run_agent_action(browser, context, args),
+                timeout=self.config.timeout_seconds,
             )
             return result
         except TimeoutError:
             raise
+        finally:
+            # Always cleanup browser after action
+            await context.close()
+            await browser.close()
+            await playwright.stop()
 
     def _build_task_description(self, args: AgentBrowserArgs) -> str:
         """Build task description for browser-use agent."""
@@ -263,130 +248,113 @@ class AgentBrowser(
                 return f"Perform browser action: {args.action}"
 
     async def _run_agent_action(
-        self, agent: Any, args: AgentBrowserArgs
+        self, browser: Any, context: Any, args: AgentBrowserArgs
     ) -> AgentBrowserResult:
-        """Run browser-use agent and return result."""
-        # For simple actions, use direct Playwright calls
-        if self._context:
-            page = await self._context.new_page()
+        """Run browser action and return result."""
+        page = await context.new_page()
 
-            match args.action:
-                case "open":
-                    if not args.url:
-                        raise ToolError("URL required for 'open' action")
-                    await page.goto(args.url, wait_until="networkidle")
-                    self.state.current_url = args.url
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Navigated to {args.url}",
-                    )
+        match args.action:
+            case "open":
+                if not args.url:
+                    raise ToolError("URL required for 'open' action")
+                await page.goto(args.url, wait_until="networkidle")
+                self.state.current_url = args.url
+                return AgentBrowserResult(
+                    success=True, action=args.action, output=f"Navigated to {args.url}"
+                )
 
-                case "snapshot":
-                    await page.goto(self.state.current_url or "about:blank")
-                    content = await page.content()
-                    title = await page.title()
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Page title: {title}\nContent length: {len(content)} chars",
-                        snapshot={"content": content, "title": title},
-                    )
+            case "snapshot":
+                await page.goto(self.state.current_url or "about:blank")
+                content = await page.content()
+                title = await page.title()
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Page title: {title}\nContent length: {len(content)} chars",
+                    snapshot={"content": content, "title": title},
+                )
 
-                case "click":
-                    if not args.element_ref:
-                        raise ToolError("Element ref required for 'click' action")
-                    await page.goto(self.state.current_url or "about:blank")
-                    await page.click(args.element_ref)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Clicked on {args.element_ref}",
-                    )
+            case "click":
+                if not args.element_ref:
+                    raise ToolError("Element ref required for 'click' action")
+                await page.goto(self.state.current_url or "about:blank")
+                await page.click(args.element_ref)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Clicked on {args.element_ref}",
+                )
 
-                case "fill":
-                    if not args.element_ref or not args.text:
-                        raise ToolError(
-                            "Element ref and text required for 'fill' action"
-                        )
-                    await page.goto(self.state.current_url or "about:blank")
-                    await page.fill(args.element_ref, args.text)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Filled {args.element_ref} with text",
-                    )
+            case "fill":
+                if not args.element_ref or not args.text:
+                    raise ToolError("Element ref and text required for 'fill' action")
+                await page.goto(self.state.current_url or "about:blank")
+                await page.fill(args.element_ref, args.text)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Filled {args.element_ref} with text",
+                )
 
-                case "type":
-                    if not args.element_ref or not args.text:
-                        raise ToolError(
-                            "Element ref and text required for 'type' action"
-                        )
-                    await page.goto(self.state.current_url or "about:blank")
-                    await page.type(args.element_ref, args.text)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Typed into {args.element_ref}",
-                    )
+            case "type":
+                if not args.element_ref or not args.text:
+                    raise ToolError("Element ref and text required for 'type' action")
+                await page.goto(self.state.current_url or "about:blank")
+                await page.type(args.element_ref, args.text)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Typed into {args.element_ref}",
+                )
 
-                case "screenshot":
-                    await page.goto(self.state.current_url or "about:blank")
-                    screenshot_path = args.screenshot_path or "screenshot.png"
-                    await page.screenshot(path=screenshot_path)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Screenshot saved to: {screenshot_path}",
-                        screenshot_path=screenshot_path,
-                    )
+            case "screenshot":
+                await page.goto(self.state.current_url or "about:blank")
+                screenshot_path = args.screenshot_path or "screenshot.png"
+                await page.screenshot(path=screenshot_path)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Screenshot saved to: {screenshot_path}",
+                    screenshot_path=screenshot_path,
+                )
 
-                case "scroll":
-                    await page.goto(self.state.current_url or "about:blank")
-                    if args.element_ref:
-                        await page.locator(
-                            args.element_ref
-                        ).scroll_into_view_if_needed()
-                    else:
-                        await page.evaluate(
-                            "window.scrollTo(0, document.body.scrollHeight)"
-                        )
-                    return AgentBrowserResult(
-                        success=True, action=args.action, output="Page scrolled"
+            case "scroll":
+                await page.goto(self.state.current_url or "about:blank")
+                if args.element_ref:
+                    await page.locator(args.element_ref).scroll_into_view_if_needed()
+                else:
+                    await page.evaluate(
+                        "window.scrollTo(0, document.body.scrollHeight)"
                     )
+                return AgentBrowserResult(
+                    success=True, action=args.action, output="Page scrolled"
+                )
 
-                case "hover":
-                    if not args.element_ref:
-                        raise ToolError("Element ref required for 'hover' action")
-                    await page.goto(self.state.current_url or "about:blank")
-                    await page.hover(args.element_ref)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Hovered over {args.element_ref}",
-                    )
+            case "hover":
+                if not args.element_ref:
+                    raise ToolError("Element ref required for 'hover' action")
+                await page.goto(self.state.current_url or "about:blank")
+                await page.hover(args.element_ref)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Hovered over {args.element_ref}",
+                )
 
-                case "wait":
-                    if not args.wait_for:
-                        raise ToolError("Wait condition required")
-                    await page.goto(self.state.current_url or "about:blank")
-                    await page.wait_for_selector(args.wait_for)
-                    return AgentBrowserResult(
-                        success=True,
-                        action=args.action,
-                        output=f"Waited for: {args.wait_for}",
-                    )
+            case "wait":
+                if not args.wait_for:
+                    raise ToolError("Wait condition required")
+                await page.goto(self.state.current_url or "about:blank")
+                await page.wait_for_selector(args.wait_for)
+                return AgentBrowserResult(
+                    success=True,
+                    action=args.action,
+                    output=f"Waited for: {args.wait_for}",
+                )
 
         raise ToolError(
             f"Browser not initialized or action not supported: {args.action}"
         )
-
-    async def cleanup(self) -> None:
-        """Clean up browser resources."""
-        if self._context:
-            await self._context.close()
-        if self._browser:
-            await self._browser.close()
 
     @classmethod
     def get_call_display(cls, event: ToolCallEvent) -> ToolCallDisplay:
