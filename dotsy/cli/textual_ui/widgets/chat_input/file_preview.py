@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from typing import Any
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Button, Static, Widget
+from textual.widgets import Button, Static
 
 from dotsy.core.attachments.handler import FileAttachment
 
@@ -87,7 +87,7 @@ class FileAttachmentPreview(Static):
             for idx, attachment in enumerate(self._attachments):
                 yield self._render_file_item(idx, attachment)
 
-    def _render_file_item(self, idx: int, attachment: FileAttachment) -> Iterator[Widget]:
+    def _render_file_item(self, idx: int, attachment: FileAttachment) -> ComposeResult:
         with Horizontal(classes="file-item"):
             icon = self._get_file_icon(attachment.type)
             yield Static(icon, classes="file-icon")
