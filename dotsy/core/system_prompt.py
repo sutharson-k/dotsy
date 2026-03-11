@@ -420,6 +420,12 @@ def get_universal_system_prompt(
 ) -> str:
     sections = [config.system_prompt]
 
+    # Add Bayesian reasoning prompt if enabled
+    if config.get("use_bayesian_reasoning", False):
+        from dotsy.core.bayesian_reasoning import BAYESIAN_SYSTEM_PROMPT
+
+        sections.append(BAYESIAN_SYSTEM_PROMPT)
+
     if config.include_commit_signature:
         sections.append(_add_commit_signature())
 
