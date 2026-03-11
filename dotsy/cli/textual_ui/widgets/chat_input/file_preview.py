@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from typing import Any
 
 from textual.app import ComposeResult
@@ -88,11 +88,13 @@ class FileAttachmentPreview(Static):
             for idx, attachment in enumerate(self._attachments):
                 yield self._render_file_item(idx, attachment)
 
-    def _render_file_item(self, idx: int, attachment: FileAttachment) -> Iterator[Widget]:
+    def _render_file_item(
+        self, idx: int, attachment: FileAttachment
+    ) -> Widget:
         icon = self._get_file_icon(attachment.type)
         info = f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
         remove_btn = Button("×", classes="remove-btn", id=f"remove-{idx}")
-        yield Horizontal(
+        return Horizontal(
             Static(icon, classes="file-icon"),
             Static(info, classes="file-name"),
             remove_btn,
