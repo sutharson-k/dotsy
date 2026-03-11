@@ -77,6 +77,11 @@ class CommandRegistry:
                 description="Set API key for a provider (usage: /set-api-key <provider> <key>)",
                 handler="_set_api_key_command",
             ),
+            "thinking": Command(
+                aliases=frozenset(["/thinking"]),
+                description="Toggle AI thinking/reasoning display",
+                handler="_toggle_thinking",
+            ),
         }
 
         for command in excluded_commands:

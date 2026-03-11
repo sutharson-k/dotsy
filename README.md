@@ -276,7 +276,8 @@ Type `/` in the chat to see all available commands with autocomplete:
 | `/terminal-setup` | `/terminal-setup` | Configure Shift+Enter for newlines |
 | `/status` | `/status` | Display agent statistics |
 | `/skills` | `/skills` | List all available skills |
-| `/set-api-key` | `/set-api-key`, `/apikey`, `/api-key` | Set API key for a provider |
+| `/set-api-key` | `/set-api-key` | Set API key for a provider |
+| `/thinking` | `/thinking` | Toggle AI thinking/reasoning display |
 
 ### Examples
 

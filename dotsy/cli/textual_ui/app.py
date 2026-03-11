@@ -873,6 +873,26 @@ class DotsyApp(App):  # noqa: PLR0904
 
         await self._mount_and_scroll(UserCommandMessage("\n".join(lines)))
 
+    async def _toggle_thinking(self) -> None:
+        """Toggle AI thinking/reasoning display."""
+        from dotsy.core.config import DotsyConfig
+
+        current = self.config.show_thinking
+        new_value = not current
+
+        # Update config
+        DotsyConfig.save_updates({"show_thinking": new_value})
+        self.config.show_thinking = new_value
+
+        status = "enabled" if new_value else "disabled"
+        await self._mount_and_scroll(
+            UserCommandMessage(
+                f"## Thinking Display {status.title()}\n\n"
+                f"AI will now {'show' if new_value else 'hide'} step-by-step reasoning before answers.\n\n"
+                f"Use `<thinking>...</thinking>` blocks to see the AI's thought process."
+            )
+        )
+
     async def _show_config(self) -> None:
         """Switch to the configuration app in the bottom panel."""
         if self._current_bottom_app == BottomApp.Config:
