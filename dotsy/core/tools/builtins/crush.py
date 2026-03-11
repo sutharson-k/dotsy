@@ -17,7 +17,13 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from dotsy.core.tools.base import BaseTool, BaseToolConfig, BaseToolState, InvokeContext, ToolError
+from dotsy.core.tools.base import (
+    BaseTool,
+    BaseToolConfig,
+    BaseToolState,
+    InvokeContext,
+    ToolError,
+)
 from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
 from dotsy.core.types import ToolStreamEvent
 
@@ -99,20 +105,14 @@ class CrushCLI:
             return None
         try:
             result = subprocess.run(
-                ["crush", "--version"],
-                capture_output=True,
-                text=True,
-                timeout=5,
+                ["crush", "--version"], capture_output=True, text=True, timeout=5
             )
             return result.stdout.strip()
         except (subprocess.SubprocessError, FileNotFoundError):
             return None
 
     def run_command(
-        self,
-        args: list[str],
-        cwd: Path | None = None,
-        timeout: int = 300,
+        self, args: list[str], cwd: Path | None = None, timeout: int = 300
     ) -> tuple[int, str, str]:
         """Run a Crush CLI command.
 
@@ -168,19 +168,18 @@ class CrushCLI:
         return None
 
 
-class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushToolState]):
+class CrushTool(
+    BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushToolState]
+):
     """Base class for Crush CLI tools."""
 
     crush_cli = CrushCLI()
 
     def __init__(
-        self,
-        config: BaseToolConfig | None = None,
-        state: CrushToolState | None = None,
+        self, config: BaseToolConfig | None = None, state: CrushToolState | None = None
     ) -> None:
         super().__init__(
-            config=config or BaseToolConfig(),
-            state=state or CrushToolState(),
+            config=config or BaseToolConfig(), state=state or CrushToolState()
         )
         if not self.crush_cli.is_available():
             raise ToolError(
@@ -189,9 +188,7 @@ class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushTo
             )
 
     async def run(
-        self,
-        args: CrushToolArgs,
-        ctx: InvokeContext | None = None,
+        self, args: CrushToolArgs, ctx: InvokeContext | None = None
     ) -> AsyncGenerator[ToolStreamEvent | CrushToolResult, None]:
         """Run the Crush CLI tool with typed arguments."""
         if not args.task:
@@ -207,17 +204,14 @@ class CrushTool(BaseTool[CrushToolArgs, CrushToolResult, BaseToolConfig, CrushTo
 
         # Run Crush with the task
         returncode, stdout, stderr = self.crush_cli.run_command(
-            ["--yolo", args.task],
-            timeout=600,
+            ["--yolo", args.task], timeout=600
         )
 
         if returncode != 0:
             raise ToolError(f"Crush CLI failed: {stderr or stdout}")
 
         yield CrushToolResult(
-            success=True,
-            output=stdout,
-            error=stderr if stderr else None,
+            success=True, output=stdout, error=stderr if stderr else None
         )
 
 
@@ -232,17 +226,12 @@ class CrushRunTool(CrushTool):
     )
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
-        return ToolCallDisplay(
-            summary=f"🔨 Crush Run: {parameters.get('task', 'N/A')}",
-        )
+        return ToolCallDisplay(summary=f"🔨 Crush Run: {parameters.get('task', 'N/A')}")
 
     def get_result_display(
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
-        return ToolResultDisplay(
-            success=True,
-            message="Task completed by Crush CLI",
-        )
+        return ToolResultDisplay(success=True, message="Task completed by Crush CLI")
 
 
 class CrushReadContextTool(CrushTool):
@@ -256,16 +245,13 @@ class CrushReadContextTool(CrushTool):
     )
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
-        return ToolCallDisplay(
-            summary="Reading Crush context from AGENTS.md",
-        )
+        return ToolCallDisplay(summary="Reading Crush context from AGENTS.md")
 
     def get_result_display(
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            success=True,
-            message="Successfully read Crush project context",
+            success=True, message="Successfully read Crush project context"
         )
 
 
@@ -279,16 +265,13 @@ class CrushLogsTool(CrushTool):
     )
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
-        return ToolCallDisplay(
-            summary="Retrieving Crush CLI logs",
-        )
+        return ToolCallDisplay(summary="Retrieving Crush CLI logs")
 
     def get_result_display(
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            success=True,
-            message="Successfully retrieved Crush logs",
+            success=True, message="Successfully retrieved Crush logs"
         )
 
 
@@ -302,16 +285,13 @@ class CrushUpdateProvidersTool(CrushTool):
     )
 
     def get_display(self, parameters: dict[str, Any]) -> ToolCallDisplay:
-        return ToolCallDisplay(
-            summary="Updating Crush CLI providers",
-        )
+        return ToolCallDisplay(summary="Updating Crush CLI providers")
 
     def get_result_display(
         self, result: dict[str, Any], parameters: dict[str, Any]
     ) -> ToolResultDisplay:
         return ToolResultDisplay(
-            success=True,
-            message="Successfully updated Crush CLI providers",
+            success=True, message="Successfully updated Crush CLI providers"
         )
 
 

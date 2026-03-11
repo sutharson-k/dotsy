@@ -11,42 +11,46 @@ from pydantic import BaseModel, Field
 class FileAttachment(BaseModel):
     """Represents an attached file (image, PDF, etc.) in a message."""
 
-    type: Literal['image', 'pdf', 'text', 'file'] = Field(..., description='File type category')
-    mime_type: str = Field(..., description='MIME type of the file')
-    file_path: str = Field(..., description='Path to the file')
-    file_name: str = Field(..., description='Original file name')
-    base64_data: str | None = Field(None, description='Base64 encoded file data (for images)')
-    size_bytes: int = Field(default=0, description='File size in bytes')
+    type: Literal["image", "pdf", "text", "file"] = Field(
+        ..., description="File type category"
+    )
+    mime_type: str = Field(..., description="MIME type of the file")
+    file_path: str = Field(..., description="Path to the file")
+    file_name: str = Field(..., description="Original file name")
+    base64_data: str | None = Field(
+        None, description="Base64 encoded file data (for images)"
+    )
+    size_bytes: int = Field(default=0, description="File size in bytes")
 
     @classmethod
     def from_path(cls, file_path: str | Path) -> FileAttachment:
         """Create a FileAttachment from a file path."""
         path = Path(file_path).resolve()
         if not path.exists():
-            raise FileNotFoundError(f'File not found: {path}')
+            raise FileNotFoundError(f"File not found: {path}")
 
         mime_type, _ = mimetypes.guess_type(str(path))
         if not mime_type:
-            mime_type = 'application/octet-stream'
+            mime_type = "application/octet-stream"
 
         file_name = path.name
         size_bytes = path.stat().st_size
 
         # Determine type category
-        if mime_type.startswith('image/'):
-            attachment_type = 'image'
-        elif mime_type == 'application/pdf':
-            attachment_type = 'pdf'
-        elif mime_type.startswith('text/'):
-            attachment_type = 'text'
+        if mime_type.startswith("image/"):
+            attachment_type = "image"
+        elif mime_type == "application/pdf":
+            attachment_type = "pdf"
+        elif mime_type.startswith("text/"):
+            attachment_type = "text"
         else:
-            attachment_type = 'file'
+            attachment_type = "file"
 
         # Encode image data as base64 for API transmission
         base64_data = None
-        if attachment_type == 'image':
-            with open(path, 'rb') as f:
-                base64_data = base64.b64encode(f.read()).decode('utf-8')
+        if attachment_type == "image":
+            with open(path, "rb") as f:
+                base64_data = base64.b64encode(f.read()).decode("utf-8")
 
         return cls(
             type=attachment_type,
@@ -59,44 +63,65 @@ class FileAttachment(BaseModel):
 
     def to_message_content(self) -> dict:
         """Convert to message content format for LLM APIs."""
-        if self.type == 'image' and self.base64_data:
+        if self.type == "image" and self.base64_data:
             return {
-                'type': 'image_url',
-                'image_url': {
-                    'url': f'data:{self.mime_type};base64,{self.base64_data}'
-                }
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:{self.mime_type};base64,{self.base64_data}"
+                },
             }
-        elif self.type == 'pdf':
-            return {
-                'type': 'text',
-                'text': f'[PDF file: {self.file_name}]'
-            }
-        elif self.type == 'text':
+        elif self.type == "pdf":
+            return {"type": "text", "text": f"[PDF file: {self.file_name}]"}
+        elif self.type == "text":
             try:
-                with open(self.file_path, 'r', encoding='utf-8') as f:
+                with open(self.file_path, encoding="utf-8") as f:
                     content = f.read()
-                return {
-                    'type': 'text',
-                    'text': f'--- {self.file_name} ---\n{content}'
-                }
+                return {"type": "text", "text": f"--- {self.file_name} ---\n{content}"}
             except Exception:
-                return {
-                    'type': 'text',
-                    'text': f'[Text file: {self.file_name}]'
-                }
+                return {"type": "text", "text": f"[Text file: {self.file_name}]"}
         else:
             return {
-                'type': 'text',
-                'text': f'[File: {self.file_name} ({self.mime_type})]'
+                "type": "text",
+                "text": f"[File: {self.file_name} ({self.mime_type})]",
             }
 
 
 class AttachmentHandler:
     """Handles drag-and-drop file attachments."""
 
-    SUPPORTED_IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp', '.svg'}
-    SUPPORTED_PDF_EXTENSIONS = {'.pdf'}
-    SUPPORTED_TEXT_EXTENSIONS = {'.txt', '.md', '.py', '.js', '.ts', '.json', '.yaml', '.yml', '.toml', '.xml', '.html', '.css', '.rs', '.go', '.java', '.cpp', '.c', '.h', '.sh', '.bash', '.zsh'}
+    SUPPORTED_IMAGE_EXTENSIONS = {
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".webp",
+        ".bmp",
+        ".svg",
+    }
+    SUPPORTED_PDF_EXTENSIONS = {".pdf"}
+    SUPPORTED_TEXT_EXTENSIONS = {
+        ".txt",
+        ".md",
+        ".py",
+        ".js",
+        ".ts",
+        ".json",
+        ".yaml",
+        ".yml",
+        ".toml",
+        ".xml",
+        ".html",
+        ".css",
+        ".rs",
+        ".go",
+        ".java",
+        ".cpp",
+        ".c",
+        ".h",
+        ".sh",
+        ".bash",
+        ".zsh",
+    }
 
     @classmethod
     def is_supported(cls, file_path: str | Path) -> bool:

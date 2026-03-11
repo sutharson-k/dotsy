@@ -166,6 +166,9 @@ class OpenAIAdapter(APIAdapter):
                 return LLMMessage.model_validate(msg_dict)
             if "delta" in choice:
                 msg_dict = self._reasoning_from_api(choice["delta"], field_name)
+                # Handle role=None in streaming deltas (e.g., Sarvam AI)
+                if msg_dict.get("role") is None:
+                    msg_dict["role"] = "assistant"
                 return LLMMessage.model_validate(msg_dict)
             raise ValueError("Invalid response data: missing message or delta")
 
@@ -174,6 +177,9 @@ class OpenAIAdapter(APIAdapter):
             return LLMMessage.model_validate(msg_dict)
         if "delta" in data:
             msg_dict = self._reasoning_from_api(data["delta"], field_name)
+            # Handle role=None in streaming deltas (e.g., Sarvam AI)
+            if msg_dict.get("role") is None:
+                msg_dict["role"] = "assistant"
             return LLMMessage.model_validate(msg_dict)
 
         return None
@@ -412,6 +418,15 @@ class GenericBackend:
             else None
         )
 
+        # Check if provider supports tools
+        supports_tools = getattr(self._provider, "supports_tools", True)
+        if not supports_tools:
+            tools = None
+            tool_choice = None
+
+        supports_streaming = getattr(self._provider, "supports_streaming", True)
+        if not supports_streaming:
+            enable_streaming = False
         api_style = getattr(self._provider, "api_style", "openai")
         adapter = BACKEND_ADAPTERS[api_style]
 
@@ -477,6 +492,15 @@ class GenericBackend:
             else None
         )
 
+        # Check if provider supports tools
+        supports_tools = getattr(self._provider, "supports_tools", True)
+        if not supports_tools:
+            tools = None
+            tool_choice = None
+
+        supports_streaming = getattr(self._provider, "supports_streaming", True)
+        if not supports_streaming:
+            enable_streaming = False
         api_style = getattr(self._provider, "api_style", "openai")
         adapter = BACKEND_ADAPTERS[api_style]
 

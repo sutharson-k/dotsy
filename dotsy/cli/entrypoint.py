@@ -96,7 +96,8 @@ def parse_arguments() -> argparse.Namespace:
         help="Change to this directory before running",
     )
     parser.add_argument(
-        "-f", "--file",
+        "-f",
+        "--file",
         action="append",
         metavar="FILE",
         dest="files",

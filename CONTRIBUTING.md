@@ -168,3 +168,13 @@ If you have questions about using Dotsy, please check the [README](README.md) fi
 Thank you for helping make Dotsy better! 🙏
 
 — Sutharson
+
+## Adding AI Providers and Models
+
+To add a new AI provider or model:
+
+1. Add the provider to `dotsy/core/config.py` in the `DEFAULT_PROVIDERS` list
+2. Add models to the `DEFAULT_MODELS` list
+3. Update documentation in `docs/models/README.md` and `docs/models/providers/README.md`
+
+See [docs/models/adding-providers.md](docs/models/adding-providers.md) for detailed instructions.

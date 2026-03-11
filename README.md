@@ -21,6 +21,12 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 > Dotsy works on Windows, but we officially support and target UNIX environments.
 
 ## Features
+## Models & Providers
+
+Dotsy supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, Groq, Sarvam AI, and more.
+
+See [docs/models/README.md](docs/models/README.md) for the complete list of supported providers and models.
+
 
 - **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, or any OpenAI-compatible API
 - **Interactive Chat**: Conversational AI agent that understands your requests
@@ -315,6 +321,12 @@ dotsy
 ```
 
 ### Features
+## Models & Providers
+
+Dotsy supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, Groq, Sarvam AI, and more.
+
+See [docs/models/README.md](docs/models/README.md) for the complete list of supported providers and models.
+
 
 - Navigate to URLs
 - Click, fill, type interactions

@@ -1,3 +1,5 @@
-from dotsy.core.attachments.handler import FileAttachment, AttachmentHandler
+from __future__ import annotations
 
-__all__ = ["FileAttachment", "AttachmentHandler"]
+from dotsy.core.attachments.handler import AttachmentHandler, FileAttachment
+
+__all__ = ["AttachmentHandler", "FileAttachment"]

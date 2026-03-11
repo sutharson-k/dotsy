@@ -21,7 +21,7 @@ class SlashCommandController:
             return False
         # Skills only show for /claude-* prefix
         text_before_cursor = text[:cursor_index].lower()
-        if hasattr(self, '_is_skill_completer') and self._is_skill_completer:
+        if hasattr(self, "_is_skill_completer") and self._is_skill_completer:
             return text_before_cursor.startswith("/claude")
         # Regular commands exclude /claude-*
         return not text_before_cursor.startswith("/claude")

@@ -165,6 +165,7 @@ class ProviderConfig(BaseModel):
     api_style: str = "openai"
     backend: Backend = Backend.GENERIC
     reasoning_field_name: str = "reasoning_content"
+    supports_tools: bool = True
 
 
 class _MCPBase(BaseModel):
@@ -358,6 +359,16 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # Sarvam AI (Indian language models) - Chat only (no tools)
+    ProviderConfig(
+        name="sarvam",
+        supports_streaming=False,
+        api_base="https://api.sarvam.ai/v1",
+        api_key_env_var="SARVAM_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+        supports_tools=False,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -522,6 +533,14 @@ DEFAULT_MODELS = [
         alias="bytez-qwen3",
         input_price=0.15,
         output_price=0.45,
+    ),
+    # Sarvam AI Models
+    ModelConfig(
+        name="sarvam-m",
+        provider="sarvam",
+        alias="sarvam-m",
+        input_price=0.0,
+        output_price=0.0,
     ),
     # Vision-capable models via OpenRouter
     ModelConfig(

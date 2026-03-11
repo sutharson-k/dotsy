@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Literal
 
-from textual import events
 from textual.binding import Binding
+from textual.events import Blur, Click, Key
 from textual.message import Message
 from textual.widgets import TextArea
 
@@ -74,7 +74,7 @@ class ChatTextArea(TextArea):
     def register_drag_drop_handler(self, handler: Any) -> None:
         self._drag_drop_handler = handler
 
-    def on_blur(self, event: TextArea.Blur) -> None:
+    def on_blur(self, event: Blur) -> None:
         if self._app_has_focus:
             self.call_after_refresh(self.focus)
 
@@ -84,7 +84,7 @@ class ChatTextArea(TextArea):
         if has_focus and not self.has_focus:
             self.call_after_refresh(self.focus)
 
-    def on_click(self, event: TextArea.Click) -> None:
+    def on_click(self, event: Click) -> None:
         self._mark_cursor_moved_if_needed()
 
     def action_insert_newline(self) -> None:
@@ -180,13 +180,13 @@ class ChatTextArea(TextArea):
         self.post_message(self.HistoryNext(self._history_prefix))
         return True
 
-    async def _on_key(self, event: events.Key) -> None:  # noqa: PLR0911, PLR0912, PLR0915
+    async def _on_key(self, event: Key) -> None:  # noqa: PLR0911, PLR0912, PLR0915
         self._mark_cursor_moved_if_needed()
-        
+
         # Check if model selector is visible and handle keys
         # Look for the ChatInputContainer parent which has the model selector
         from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
-        
+
         chat_container = None
         parent = self.parent
         while parent:
@@ -194,7 +194,7 @@ class ChatTextArea(TextArea):
                 chat_container = parent
                 break
             parent = parent.parent
-        
+
         if chat_container and chat_container._model_selector:
             if chat_container._model_selector.styles.display != "none":
                 # Model selector is active - handle navigation
@@ -216,9 +216,11 @@ class ChatTextArea(TextArea):
                     if model:
                         chat_container.hide_model_selector()
                         from dotsy.core.config import DotsyConfig
+
                         DotsyConfig.save_updates({"active_model": model})
                         # Reload the agent loop with new config
                         from dotsy.cli.textual_ui.app import DotsyApp
+
                         app = self.app
                         if isinstance(app, DotsyApp) and app.agent_loop:
                             import asyncio

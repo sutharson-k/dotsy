@@ -63,24 +63,20 @@ class AgentBrowserArgs(BaseModel):
         description="Action to perform: open, snapshot, click, fill, type, screenshot, scroll, etc."
     )
     url: str | None = Field(
-        default=None,
-        description="URL to navigate to (for 'open' action)",
+        default=None, description="URL to navigate to (for 'open' action)"
     )
     element_ref: str | None = Field(
         default=None,
         description="Element reference (e.g., '@e1', '@e2') for click/fill/type",
     )
     text: str | None = Field(
-        default=None,
-        description="Text to fill or type (for 'fill' or 'type' actions)",
+        default=None, description="Text to fill or type (for 'fill' or 'type' actions)"
     )
     screenshot_path: str | None = Field(
-        default=None,
-        description="Path to save screenshot (for 'screenshot' action)",
+        default=None, description="Path to save screenshot (for 'screenshot' action)"
     )
     wait_for: str | None = Field(
-        default=None,
-        description="Wait for element/text/URL before proceeding",
+        default=None, description="Wait for element/text/URL before proceeding"
     )
     provider: str | None = Field(
         default=None,
@@ -101,11 +97,8 @@ class AgentBrowserResult(BaseModel):
 
 class AgentBrowser(
     BaseTool[
-        AgentBrowserArgs,
-        AgentBrowserResult,
-        AgentBrowserConfig,
-        AgentBrowserState,
-    ],
+        AgentBrowserArgs, AgentBrowserResult, AgentBrowserConfig, AgentBrowserState
+    ]
 ):
     """Browser automation using agent-browser CLI.
 
@@ -128,7 +121,9 @@ class AgentBrowser(
         config: AgentBrowserConfig | None = None,
         state: AgentBrowserState | None = None,
     ) -> None:
-        super().__init__(config=config or AgentBrowserConfig(), state=state or AgentBrowserState())
+        super().__init__(
+            config=config or AgentBrowserConfig(), state=state or AgentBrowserState()
+        )
         self._agent_browser_path = self._find_agent_browser()
 
     @classmethod
@@ -144,13 +139,11 @@ class AgentBrowser(
         action = parameters.get("action", "unknown")
         url = parameters.get("url", "")
         return ToolCallDisplay(
-            summary=f"Browser: {action} {url or parameters.get('element_ref', '')}",
+            summary=f"Browser: {action} {url or parameters.get('element_ref', '')}"
         )
 
     async def run(
-        self,
-        args: AgentBrowserArgs,
-        ctx: InvokeContext | None = None,
+        self, args: AgentBrowserArgs, ctx: InvokeContext | None = None
     ) -> AsyncGenerator[ToolStreamEvent | AgentBrowserResult, None]:
         if not self.is_available():
             raise ToolError(
@@ -196,14 +189,14 @@ class AgentBrowser(
         from urllib.parse import urlparse
 
         # If allowlist is ['*'] or empty, allow all
-        if not self.config.domain_allowlist or self.config.domain_allowlist == ['*']:
+        if not self.config.domain_allowlist or self.config.domain_allowlist == ["*"]:
             return True
 
         parsed = urlparse(url)
         domain = parsed.netloc.lower()
 
         for allowed in self.config.domain_allowlist:
-            if allowed == '*':
+            if allowed == "*":
                 return True
             if allowed.startswith("*."):
                 # Wildcard subdomain
@@ -308,9 +301,7 @@ class AgentBrowser(
 
         if result.returncode != 0:
             return AgentBrowserResult(
-                success=False,
-                action=args.action,
-                error=result.stderr or result.stdout,
+                success=False, action=args.action, error=result.stderr or result.stdout
             )
 
         # Parse result based on action
@@ -343,9 +334,7 @@ class AgentBrowser(
             return ToolCallDisplay(summary="Browser action...")
         action = event.args.action
         target = event.args.url or event.args.element_ref or ""
-        return ToolCallDisplay(
-            summary=f"Browser: {action} {target}",
-        )
+        return ToolCallDisplay(summary=f"Browser: {action} {target}")
 
     @classmethod
     def get_result_display(cls, event: ToolResultEvent) -> ToolResultDisplay:
@@ -353,8 +342,7 @@ class AgentBrowser(
             return ToolResultDisplay(success=True, message="Browser action complete")
         if event.result.success:
             return ToolResultDisplay(
-                success=True,
-                message=f"✓ Browser {event.result.action} completed",
+                success=True, message=f"✓ Browser {event.result.action} completed"
             )
         else:
             return ToolResultDisplay(

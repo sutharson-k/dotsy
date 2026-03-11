@@ -101,7 +101,7 @@ class ToolManager:
         # Integrate Crush CLI tools if enabled
         if self._config.crush_cli.enabled:
             _try_integrate_crush_tools(self)
-        
+
         self._integrate_mcp()
 
     @property

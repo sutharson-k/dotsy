@@ -87,19 +87,16 @@ class FileAttachmentPreview(Static):
         with Horizontal(classes="file-item"):
             icon = self._get_file_icon(attachment.type)
             yield Static(icon, classes="file-icon")
-            info = f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
+            info = (
+                f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
+            )
             yield Static(info, classes="file-name")
             remove_btn = Static("×", classes="remove-btn")
             remove_btn.id = f"remove-{idx}"
             yield remove_btn
 
     def _get_file_icon(self, file_type: str) -> str:
-        icons = {
-            "image": "🖼️",
-            "pdf": "📄",
-            "text": "📝",
-            "file": "📎",
-        }
+        icons = {"image": "🖼️", "pdf": "📄", "text": "📝", "file": "📎"}
         return icons.get(file_type, "📎")
 
     def _format_size(self, size_bytes: int) -> str:
@@ -145,7 +142,7 @@ class FileAttachmentPreview(Static):
         self.display = False
         self.refresh()
 
-    def on_static_pressed(self, event: Static.Click) -> None:
+    def on_static_clicked(self, event: Static.Clicked) -> None:
         """Handle remove button clicks."""
         if event.sender.has_class("remove-btn"):
             idx = int(event.sender.id.split("-")[1])

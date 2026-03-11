@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass
+import time
 from typing import Any
 
 from textual.reactive import reactive
@@ -61,5 +61,7 @@ class ContextProgress(NoMarkupStatic):
                     last_tokens=new_state.current_tokens,
                 )
 
-        text = f"{ratio:.0%} of {new_state.max_tokens // 1000}k tokens{tokens_per_second}"
+        text = (
+            f"{ratio:.0%} of {new_state.max_tokens // 1000}k tokens{tokens_per_second}"
+        )
         self.update(text)

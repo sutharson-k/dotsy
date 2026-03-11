@@ -17,9 +17,7 @@ from dotsy.cli.textual_ui.widgets.chat_input.completion_manager import (
 )
 from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionPopup
 from dotsy.cli.textual_ui.widgets.chat_input.drag_drop import DragDropHandler
-from dotsy.cli.textual_ui.widgets.chat_input.file_preview import (
-    FileAttachmentPreview,
-)
+from dotsy.cli.textual_ui.widgets.chat_input.file_preview import FileAttachmentPreview
 from dotsy.cli.textual_ui.widgets.chat_input.text_area import ChatTextArea
 from dotsy.cli.textual_ui.widgets.model_selector import ModelSelectorPopup
 from dotsy.core.agents import AgentSafety
@@ -37,7 +35,9 @@ class ChatInputContainer(Vertical):
     ID_INPUT_BOX = "input-box"
 
     class Submitted(Message):
-        def __init__(self, value: str, attachments: list[FileAttachment] | None = None) -> None:
+        def __init__(
+            self, value: str, attachments: list[FileAttachment] | None = None
+        ) -> None:
             self.value = value
             self.attachments = attachments or []
             super().__init__()
@@ -241,8 +241,8 @@ class ChatInputContainer(Vertical):
 
         if rejected_files:
             # Notify about unsupported file types
-            from dotsy.cli.textual_ui.widgets.messages import WarningMessage
             from dotsy.cli.textual_ui.app import DotsyApp
+            from dotsy.cli.textual_ui.widgets.messages import WarningMessage
 
             app = self.app
             if isinstance(app, DotsyApp):

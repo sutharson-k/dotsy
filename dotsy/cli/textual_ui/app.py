@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import asyncio
-import os
 from enum import StrEnum, auto
+import os
 from os import getenv
 from pathlib import Path
 import subprocess
@@ -261,7 +261,7 @@ class DotsyApp(App):  # noqa: PLR0904
         self, event: ChatInputContainer.Submitted
     ) -> None:
         value = event.value.strip()
-        attachments = event.attachments if hasattr(event, 'attachments') else []
+        attachments = event.attachments if hasattr(event, "attachments") else []
 
         if not value and not attachments:
             return
@@ -402,10 +402,14 @@ class DotsyApp(App):  # noqa: PLR0904
 
     async def _handle_command(self, user_input: str) -> bool:
         # Handle /set-api-key separately as it needs arguments
-        if user_input.lower().startswith("/set-api-key") or user_input.lower().startswith("/apikey") or user_input.lower().startswith("/api-key"):
+        if (
+            user_input.lower().startswith("/set-api-key")
+            or user_input.lower().startswith("/apikey")
+            or user_input.lower().startswith("/api-key")
+        ):
             await self._set_api_key_command(user_input)
             return True
-        
+
         if command := self.commands.find_command(user_input):
             await self._mount_and_scroll(UserMessage(user_input))
             handler = getattr(self, command.handler)
@@ -429,14 +433,15 @@ class DotsyApp(App):  # noqa: PLR0904
 
     async def _set_api_key_command(self, user_input: str) -> None:
         """Handle /set-api-key command from chat.
-        
+
         Usage: /set-api-key <provider> <api_key>
         Example: /set-api-key openai sk-abc123
         """
         from dotenv import set_key
+
         from dotsy.core.config import DEFAULT_PROVIDERS
         from dotsy.core.paths.global_paths import GLOBAL_ENV_FILE
-        
+
         # Parse arguments
         parts = user_input.strip().split(maxsplit=2)
         if len(parts) < 3:
@@ -449,17 +454,17 @@ class DotsyApp(App):  # noqa: PLR0904
                 )
             )
             return
-        
+
         provider_name = parts[1].lower()
         api_key = parts[2]
-        
+
         # Find provider
         provider = None
         for p in DEFAULT_PROVIDERS:
             if p.name.lower() == provider_name:
                 provider = p
                 break
-        
+
         if not provider:
             await self._mount_and_scroll(
                 UserCommandMessage(
@@ -468,19 +473,19 @@ class DotsyApp(App):  # noqa: PLR0904
                 )
             )
             return
-        
+
         if not provider.api_key_env_var:
             await self._mount_and_scroll(
                 UserCommandMessage(f"ℹ️ {provider_name} does not require an API key")
             )
             return
-        
+
         # Save to .env file
         try:
             GLOBAL_ENV_FILE.path.parent.mkdir(parents=True, exist_ok=True)
             set_key(GLOBAL_ENV_FILE.path, provider.api_key_env_var, api_key)
             os.environ[provider.api_key_env_var] = api_key
-            
+
             await self._mount_and_scroll(
                 UserCommandMessage(
                     f"✅ API key saved for `{provider_name}`!\n\n"
@@ -491,7 +496,9 @@ class DotsyApp(App):  # noqa: PLR0904
             )
         except OSError as e:
             await self._mount_and_scroll(
-                ErrorMessage(f"❌ Error saving API key: {e}", collapsed=self._tools_collapsed)
+                ErrorMessage(
+                    f"❌ Error saving API key: {e}", collapsed=self._tools_collapsed
+                )
             )
 
     async def _handle_skill(self, user_input: str) -> bool:
@@ -555,14 +562,16 @@ class DotsyApp(App):  # noqa: PLR0904
                 ErrorMessage(f"Command failed: {e}", collapsed=self._tools_collapsed)
             )
 
-    async def _handle_user_message(self, message: str, attachments: list | None = None) -> None:
+    async def _handle_user_message(
+        self, message: str, attachments: list | None = None
+    ) -> None:
         attachments = attachments or []
-        
+
         # Build message content with attachments
         content_parts = []
         if message:
             content_parts.append(message)
-        
+
         # Add attachment descriptions
         for attachment in attachments:
             if attachment.type == "image":
@@ -573,9 +582,9 @@ class DotsyApp(App):  # noqa: PLR0904
                 content_parts.append(f"[File: {attachment.file_name}]")
             else:
                 content_parts.append(f"[Attachment: {attachment.file_name}]")
-        
+
         full_message = "\n\n".join(content_parts) if content_parts else ""
-        
+
         user_message = UserMessage(full_message)
         await self._mount_and_scroll(user_message)
 
@@ -687,12 +696,16 @@ class DotsyApp(App):  # noqa: PLR0904
                         f"[File: {attachment.file_name}]\nContent:\n{content}"
                     )
                 except OSError:
-                    context_parts.append(f"[File: {attachment.file_name} - unable to read]")
+                    context_parts.append(
+                        f"[File: {attachment.file_name} - unable to read]"
+                    )
             else:
                 context_parts.append(f"[Attachment: {attachment.file_name}]")
         return "\n\n".join(context_parts)
 
-    async def _handle_agent_loop_turn(self, prompt: str, attachments: list | None = None) -> None:
+    async def _handle_agent_loop_turn(
+        self, prompt: str, attachments: list | None = None
+    ) -> None:
         self._agent_running = True
 
         loading_area = self.query_one("#loading-area-content")
@@ -704,12 +717,12 @@ class DotsyApp(App):  # noqa: PLR0904
 
         try:
             rendered_prompt = render_path_prompt(prompt, base_dir=Path.cwd())
-            
+
             # Prepend attachment content to prompt for LLM
             if attachments:
                 attachment_context = self._build_attachment_context(attachments)
                 rendered_prompt = f"{attachment_context}\n\n{rendered_prompt}"
-            
+
             async for event in self.agent_loop.act(rendered_prompt):
                 if self.event_handler:
                     await self.event_handler.handle_event(
