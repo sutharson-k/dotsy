@@ -362,7 +362,6 @@ DEFAULT_PROVIDERS = [
     # Sarvam AI (Indian language models) - Chat only (no tools)
     ProviderConfig(
         name="sarvam",
-        supports_streaming=False,
         api_base="https://api.sarvam.ai/v1",
         api_key_env_var="SARVAM_API_KEY",
         api_style="openai",

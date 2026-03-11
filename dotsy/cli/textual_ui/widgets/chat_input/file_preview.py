@@ -5,9 +5,13 @@ from typing import Any
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Static
+from textual.widgets import Button, Static
 
 from dotsy.core.attachments.handler import FileAttachment
+
+# Constants for magic numbers
+KB: int = 1024
+MB: int = 1024 * 1024
 
 
 class FileAttachmentPreview(Static):
@@ -91,8 +95,7 @@ class FileAttachmentPreview(Static):
                 f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
             )
             yield Static(info, classes="file-name")
-            remove_btn = Static("×", classes="remove-btn")
-            remove_btn.id = f"remove-{idx}"
+            remove_btn = Button("×", classes="remove-btn", id=f"remove-{idx}")
             yield remove_btn
 
     def _get_file_icon(self, file_type: str) -> str:
@@ -100,12 +103,12 @@ class FileAttachmentPreview(Static):
         return icons.get(file_type, "📎")
 
     def _format_size(self, size_bytes: int) -> str:
-        if size_bytes < 1024:
+        if size_bytes < KB:
             return f"{size_bytes}B"
-        elif size_bytes < 1024 * 1024:
-            return f"{size_bytes / 1024:.1f}KB"
+        elif size_bytes < MB:
+            return f"{size_bytes / KB:.1f}KB"
         else:
-            return f"{size_bytes / (1024 * 1024):.1f}MB"
+            return f"{size_bytes / MB:.1f}MB"
 
     def set_attachments(self, attachments: list[FileAttachment]) -> None:
         """Update the displayed attachments."""
@@ -142,8 +145,8 @@ class FileAttachmentPreview(Static):
         self.display = False
         self.refresh()
 
-    def on_static_clicked(self, event: Static.Clicked) -> None:
+    def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle remove button clicks."""
-        if event.sender.has_class("remove-btn"):
-            idx = int(event.sender.id.split("-")[1])
+        if event.button.has_class("remove-btn"):
+            idx = int(event.button.id.split("-")[1])
             self.remove_attachment(idx)

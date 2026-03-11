@@ -442,9 +442,11 @@ class DotsyApp(App):  # noqa: PLR0904
         from dotsy.core.config import DEFAULT_PROVIDERS
         from dotsy.core.paths.global_paths import GLOBAL_ENV_FILE
 
+        MIN_ARGS = 3
+
         # Parse arguments
         parts = user_input.strip().split(maxsplit=2)
-        if len(parts) < 3:
+        if len(parts) < MIN_ARGS:
             await self._mount_and_scroll(
                 UserCommandMessage(
                     "### Usage: `/set-api-key <provider> <api_key>`\n\n"

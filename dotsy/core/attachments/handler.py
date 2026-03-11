@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import mimetypes
 from pathlib import Path
-from typing import Literal
+from typing import ClassVar, Literal
 
 from pydantic import BaseModel, Field
 
@@ -89,7 +89,7 @@ class FileAttachment(BaseModel):
 class AttachmentHandler:
     """Handles drag-and-drop file attachments."""
 
-    SUPPORTED_IMAGE_EXTENSIONS = {
+    SUPPORTED_IMAGE_EXTENSIONS: ClassVar[set[str]] = {
         ".png",
         ".jpg",
         ".jpeg",
@@ -98,8 +98,8 @@ class AttachmentHandler:
         ".bmp",
         ".svg",
     }
-    SUPPORTED_PDF_EXTENSIONS = {".pdf"}
-    SUPPORTED_TEXT_EXTENSIONS = {
+    SUPPORTED_PDF_EXTENSIONS: ClassVar[set[str]] = {".pdf"}
+    SUPPORTED_TEXT_EXTENSIONS: ClassVar[set[str]] = {
         ".txt",
         ".md",
         ".py",

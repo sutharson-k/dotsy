@@ -180,11 +180,8 @@ class ChatTextArea(TextArea):
         self.post_message(self.HistoryNext(self._history_prefix))
         return True
 
-    async def _on_key(self, event: Key) -> None:  # noqa: PLR0911, PLR0912, PLR0915
-        self._mark_cursor_moved_if_needed()
-
-        # Check if model selector is visible and handle keys
-        # Look for the ChatInputContainer parent which has the model selector
+    def _handle_model_selector_key(self, event: Key) -> bool:
+        """Handle key events for model selector. Returns True if handled."""
         from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 
         chat_container = None
@@ -195,41 +192,50 @@ class ChatTextArea(TextArea):
                 break
             parent = parent.parent
 
-        if chat_container and chat_container._model_selector:
-            if chat_container._model_selector.styles.display != "none":
-                # Model selector is active - handle navigation
-                if event.key == "escape":
+        if not chat_container or not chat_container._model_selector:
+            return False
+
+        if chat_container._model_selector.styles.display == "none":
+            return False
+
+        match event.key:
+            case "escape":
+                chat_container.hide_model_selector()
+                event.stop()
+                return True
+            case "up":
+                chat_container.navigate_model_selector(-1)
+                event.stop()
+                return True
+            case "down":
+                chat_container.navigate_model_selector(1)
+                event.stop()
+                return True
+            case "enter":
+                model = chat_container.selected_model
+                if model:
                     chat_container.hide_model_selector()
-                    event.stop()
-                    return
-                elif event.key == "up":
-                    chat_container.navigate_model_selector(-1)
-                    event.stop()
-                    return
-                elif event.key == "down":
-                    chat_container.navigate_model_selector(1)
-                    event.stop()
-                    return
-                elif event.key == "enter":
-                    # Select model
-                    model = chat_container.selected_model
-                    if model:
-                        chat_container.hide_model_selector()
-                        from dotsy.core.config import DotsyConfig
+                    from dotsy.core.config import DotsyConfig
 
-                        DotsyConfig.save_updates({"active_model": model})
-                        # Reload the agent loop with new config
-                        from dotsy.cli.textual_ui.app import DotsyApp
+                    DotsyConfig.save_updates({"active_model": model})
+                    from dotsy.cli.textual_ui.app import DotsyApp
 
-                        app = self.app
-                        if isinstance(app, DotsyApp) and app.agent_loop:
-                            import asyncio
+                    app = self.app
+                    if isinstance(app, DotsyApp) and app.agent_loop:
+                        import asyncio
 
-                            asyncio.create_task(app._reload_config())
-                        self.text = ""
-                        self.cursor_location = (0, 0)
-                    event.stop()
-                    return
+                        asyncio.create_task(app._reload_config())
+                    self.text = ""
+                    self.cursor_location = (0, 0)
+                event.stop()
+                return True
+        return False
+
+    async def _on_key(self, event: Key) -> None:  # noqa: PLR0911
+        self._mark_cursor_moved_if_needed()
+
+        if self._handle_model_selector_key(event):
+            return
 
         manager = self._completion_manager
         if manager:
