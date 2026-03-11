@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from typing import Any
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Button, Static
+from textual.widgets import Button, Static, Widget
 
 from dotsy.core.attachments.handler import FileAttachment
 
@@ -87,16 +87,16 @@ class FileAttachmentPreview(Static):
             for idx, attachment in enumerate(self._attachments):
                 yield self._render_file_item(idx, attachment)
 
-    def _render_file_item(self, idx: int, attachment: FileAttachment) -> ComposeResult:
-        with Horizontal(classes="file-item"):
-            icon = self._get_file_icon(attachment.type)
-            yield Static(icon, classes="file-icon")
-            info = (
-                f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
-            )
-            yield Static(info, classes="file-name")
-            remove_btn = Button("×", classes="remove-btn", id=f"remove-{idx}")
-            yield remove_btn
+    def _render_file_item(self, idx: int, attachment: FileAttachment) -> Iterator[Widget]:
+        icon = self._get_file_icon(attachment.type)
+        info = f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
+        remove_btn = Button("×", classes="remove-btn", id=f"remove-{idx}")
+        yield Horizontal(
+            Static(icon, classes="file-icon"),
+            Static(info, classes="file-name"),
+            remove_btn,
+            classes="file-item",
+        )
 
     def _get_file_icon(self, file_type: str) -> str:
         icons = {"image": "🖼️", "pdf": "📄", "text": "📝", "file": "📎"}
