@@ -41,7 +41,7 @@ class AgentBrowserConfig(BaseToolConfig):
 
     headless: bool = True
     timeout_seconds: int = 60
-    domain_allowlist: list[str] = Field(default_factory=list)
+    domain_allowlist: list[str] = Field(default_factory=lambda: ["*"])
     provider: str = "local"  # local, browserbase
 
 
