@@ -21,23 +21,18 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 > Dotsy works on Windows, but we officially support and target UNIX environments.
 
 ## Features
-## Models & Providers
 
-Dotsy supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, Groq, Sarvam AI, and more.
-
-See [docs/models/README.md](docs/models/README.md) for the complete list of supported providers and models.
-
-
-- **Multi-Provider Support**: Choose from Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, or any OpenAI-compatible API
+- **Multi-Provider Support**: Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, Groq, Hugging Face, or any OpenAI-compatible API
 - **Interactive Chat**: Conversational AI agent that understands your requests
+- **Bayesian Reasoning**: AI maintains uncertainty, updates beliefs gradually, and shows confidence levels (based on Google Research)
 - **Powerful Toolset**: File manipulation, code search, version control, web search, and command execution
 - **Web Search**: DuckDuckGo integration for privacy-focused, no-API-key web search
 - **Browser Automation**: browser-use integration for web testing and interaction
+- **Image Support**: Send images with `@/path/to/image.png` syntax for vision analysis
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows
 - **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent
 - **Highly Configurable**: Customize models, providers, and tool permissions
-- **Upcoming Ai Models**:I try to add new ai models such as Ollama for locally runnable models and Groq or Openrouter to access multiple ai models
 ## Quick Start
 
 ### Installation
@@ -134,11 +129,14 @@ Dotsy supports multiple AI providers out of the box:
 **Bytez Model:**
 - `bytez-qwen3` - Qwen3 30B A3B (efficient MoE) ⭐
 
-**Groq Models:**
-- `groq-llama` - Llama 3.1 70B (free tier)
-- `groq-llama-8b` - Llama 3.1 8B (fastest, free tier)
-- `groq-mixtral` - Mixtral 8x7B (free tier)
-- `groq-gemma` - Gemma2 9B (free tier)
+#### Hugging Face (Uncensored Models):
+- Models: `qwen3.5-27b-uncensored` (HauhauCS/Qwen3.5-27B-Uncensored-HauhauCS-Aggressive)
+- API Key: `HUGGINGFACE_API_KEY`
+- Base URL: `https://api-inference.huggingface.co/v1`
+- Get API Key: https://huggingface.co/settings/tokens
+
+**Hugging Face Model:**
+- `qwen3.5-27b-uncensored` - Uncensored Qwen 3.5 27B ⭐
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
@@ -222,6 +220,23 @@ dotsy --prompt "Analyze the codebase" --output json
 
 ### Specify Model
 Edit your config to change the `active_model` alias.
+
+### Send Images
+Use `@` syntax to attach images for vision analysis:
+```bash
+@screenshot.png what is in this image?
+@C:\Users\You\pic.jpg explain this code
+@./diagram.png describe this architecture
+```
+
+### Bayesian Reasoning (Default)
+DOTSY uses Bayesian reasoning by default - the AI:
+- Shows confidence levels (e.g., "I'm 70% confident...")
+- Updates beliefs with new evidence
+- Accumulates knowledge across conversation
+- Explains reasoning process
+
+To disable: add `use_bayesian_reasoning = false` to `~/.dotsy/config.toml`
 
 ## Slash Commands
 
