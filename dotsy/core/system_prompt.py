@@ -421,13 +421,13 @@ def get_universal_system_prompt(
     sections = [config.system_prompt]
 
     # Add Bayesian reasoning prompt if enabled
-    if config.get("use_bayesian_reasoning", False):
+    if getattr(config, "use_bayesian_reasoning", False):
         from dotsy.core.bayesian_reasoning import BAYESIAN_SYSTEM_PROMPT
 
         sections.append(BAYESIAN_SYSTEM_PROMPT)
 
     # Add thinking display prompt if enabled
-    if config.get("show_thinking", False):
+    if getattr(config, "show_thinking", False):
         THINKING_PROMPT = """
 ## Show Your Thinking
 
