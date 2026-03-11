@@ -104,7 +104,7 @@ class DuckDuckGoSearch(
         )
 
         try:
-            results = await self._search_duckduckgo(
+            await self._search_duckduckgo(
                 query=args.query, max_results=args.max_results
             )
 

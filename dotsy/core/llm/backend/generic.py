@@ -426,7 +426,7 @@ class GenericBackend:
 
         supports_streaming = getattr(self._provider, "supports_streaming", True)
         if not supports_streaming:
-            enable_streaming = False
+            pass
         api_style = getattr(self._provider, "api_style", "openai")
         adapter = BACKEND_ADAPTERS[api_style]
 
@@ -500,7 +500,7 @@ class GenericBackend:
 
         supports_streaming = getattr(self._provider, "supports_streaming", True)
         if not supports_streaming:
-            enable_streaming = False
+            pass
         api_style = getattr(self._provider, "api_style", "openai")
         adapter = BACKEND_ADAPTERS[api_style]
 

@@ -88,9 +88,7 @@ class FileAttachmentPreview(Static):
             for idx, attachment in enumerate(self._attachments):
                 yield self._render_file_item(idx, attachment)
 
-    def _render_file_item(
-        self, idx: int, attachment: FileAttachment
-    ) -> Widget:
+    def _render_file_item(self, idx: int, attachment: FileAttachment) -> Widget:
         icon = self._get_file_icon(attachment.type)
         info = f"{attachment.file_name} ({self._format_size(attachment.size_bytes)})"
         remove_btn = Button("×", classes="remove-btn", id=f"remove-{idx}")
