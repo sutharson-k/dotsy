@@ -592,7 +592,7 @@ class DotsyConfig(BaseSettings):
     context_warnings: bool = False
     auto_approve: bool = False
     system_prompt_id: str = "cli"
-    use_bayesian_reasoning: bool = False  # Enable Bayesian reasoning mode
+    use_bayesian_reasoning: bool = True  # Enable Bayesian reasoning mode by default
     include_commit_signature: bool = True
     include_model_info: bool = True
     include_project_context: bool = True
