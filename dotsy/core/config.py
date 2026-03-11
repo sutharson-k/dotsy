@@ -368,6 +368,14 @@ DEFAULT_PROVIDERS = [
         backend=Backend.GENERIC,
         supports_tools=False,
     ),
+    # Hugging Face Inference API
+    ProviderConfig(
+        name="huggingface",
+        api_base="https://api-inference.huggingface.co/v1",
+        api_key_env_var="HUGGINGFACE_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
 ]
 
 DEFAULT_MODELS = [
@@ -538,6 +546,14 @@ DEFAULT_MODELS = [
         name="sarvam-m",
         provider="sarvam",
         alias="sarvam-m",
+        input_price=0.0,
+        output_price=0.0,
+    ),
+    # Hugging Face Models
+    ModelConfig(
+        name="HauhauCS/Qwen3.5-27B-Uncensored-HauhauCS-Aggressive",
+        provider="huggingface",
+        alias="qwen3.5-27b-uncensored",
         input_price=0.0,
         output_price=0.0,
     ),
