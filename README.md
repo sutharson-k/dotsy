@@ -223,10 +223,10 @@ dotsy --prompt "Analyze the codebase" --output json
 ### Specify Model
 Edit your config to change the `active_model` alias.
 
-## Slash Commands                                                                                         
-                                                                                                          
-Type `/` in the chat to see all available commands with autocomplete:                                     
-                                                                                                          
+## Slash Commands
+
+Type `/` in the chat to see all available commands with autocomplete:
+
 | Command | Aliases | Description |
 |---------|---------|-------------|
 | `/help` | `/help` | Show help information |
