@@ -238,6 +238,27 @@ DOTSY uses Bayesian reasoning by default - the AI:
 
 To disable: add `use_bayesian_reasoning = false` to `~/.dotsy/config.toml`
 
+### Show Thinking (Optional)
+Enable to see AI's step-by-step reasoning before answers:
+
+```toml
+# ~/.dotsy/config.toml
+show_thinking = true
+```
+
+Output format:
+```
+<thinking>
+1. Analyzing the problem...
+2. Considering approach A vs B...
+3. Trade-off: A is faster, B is safer...
+4. Potential issue: edge case X...
+5. Conclusion: use approach A with safeguards
+</thinking>
+
+**Final Answer:** [answer here]
+```
+
 ## Slash Commands
 
 Type `/` in the chat to see all available commands with autocomplete:

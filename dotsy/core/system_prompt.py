@@ -426,6 +426,25 @@ def get_universal_system_prompt(
 
         sections.append(BAYESIAN_SYSTEM_PROMPT)
 
+    # Add thinking display prompt if enabled
+    if config.get("show_thinking", False):
+        THINKING_PROMPT = """
+## Show Your Thinking
+
+Before providing your final answer, explicitly show your reasoning process:
+
+<thinking>
+1. Analyze the problem step-by-step
+2. Consider multiple approaches
+3. Evaluate trade-offs
+4. Identify potential issues
+5. Arrive at conclusion
+</thinking>
+
+Then provide your final answer after the thinking block.
+"""
+        sections.append(THINKING_PROMPT)
+
     if config.include_commit_signature:
         sections.append(_add_commit_signature())
 

@@ -593,6 +593,7 @@ class DotsyConfig(BaseSettings):
     auto_approve: bool = False
     system_prompt_id: str = "cli"
     use_bayesian_reasoning: bool = True  # Enable Bayesian reasoning mode by default
+    show_thinking: bool = False  # Show AI thinking/reasoning process
     include_commit_signature: bool = True
     include_model_info: bool = True
     include_project_context: bool = True
