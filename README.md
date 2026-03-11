@@ -241,6 +241,12 @@ To disable: add `use_bayesian_reasoning = false` to `~/.dotsy/config.toml`
 ### Show Thinking (Optional)
 Enable to see AI's step-by-step reasoning before answers:
 
+**Toggle in chat:**
+```
+/thinking
+```
+
+**Or in config:**
 ```toml
 # ~/.dotsy/config.toml
 show_thinking = true
