@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar, Literal
+from typing import TYPE_CHECKING, Any, ClassVar, Literal
 
 from textual.binding import Binding
 from textual.events import Blur, Click, Key
@@ -12,7 +12,9 @@ from dotsy.cli.textual_ui.external_editor import ExternalEditor
 from dotsy.cli.textual_ui.widgets.chat_input.completion_manager import (
     MultiCompletionManager,
 )
-from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
+
+if TYPE_CHECKING:
+    from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 
 InputMode = Literal["!", "/", ">"]
 
@@ -207,6 +209,8 @@ class ChatTextArea(TextArea):
 
     def _find_chat_container(self) -> ChatInputContainer | None:
         """Find the parent ChatInputContainer widget."""
+        from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
+
         parent = self.parent
         while parent:
             if isinstance(parent, ChatInputContainer):
