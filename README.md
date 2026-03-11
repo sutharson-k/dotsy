@@ -1,4 +1,4 @@
-# Dotsy 
+# Dotsy
 
 [![PyPI Version](https://img.shields.io/pypi/v/dotsy)](https://pypi.org/project/dotsy)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/release/python-3120/)
@@ -415,7 +415,7 @@ dotsy
 # Ask Dotsy to use Crush for a task
 "Use Crush to refactor the authentication module"
 
-# Dotsy will coordinate with Crush CLI to complete the task
+# Dotsywill coordinate with Crush CLI to complete the task
 ```
 
 ### Agent Coordination

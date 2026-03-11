@@ -12,6 +12,7 @@ from dotsy.cli.textual_ui.external_editor import ExternalEditor
 from dotsy.cli.textual_ui.widgets.chat_input.completion_manager import (
     MultiCompletionManager,
 )
+from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
 
 InputMode = Literal["!", "/", ">"]
 
@@ -182,16 +183,7 @@ class ChatTextArea(TextArea):
 
     def _handle_model_selector_key(self, event: Key) -> bool:
         """Handle key events for model selector. Returns True if handled."""
-        from dotsy.cli.textual_ui.widgets.chat_input.container import ChatInputContainer
-
-        chat_container = None
-        parent = self.parent
-        while parent:
-            if isinstance(parent, ChatInputContainer):
-                chat_container = parent
-                break
-            parent = parent.parent
-
+        chat_container = self._find_chat_container()
         if not chat_container or not chat_container._model_selector:
             return False
 
@@ -201,35 +193,44 @@ class ChatTextArea(TextArea):
         match event.key:
             case "escape":
                 chat_container.hide_model_selector()
-                event.stop()
-                return True
             case "up":
                 chat_container.navigate_model_selector(-1)
-                event.stop()
-                return True
             case "down":
                 chat_container.navigate_model_selector(1)
-                event.stop()
-                return True
             case "enter":
-                model = chat_container.selected_model
-                if model:
-                    chat_container.hide_model_selector()
-                    from dotsy.core.config import DotsyConfig
+                self._select_model(chat_container)
+            case _:
+                return False
 
-                    DotsyConfig.save_updates({"active_model": model})
-                    from dotsy.cli.textual_ui.app import DotsyApp
+        event.stop()
+        return True
 
-                    app = self.app
-                    if isinstance(app, DotsyApp) and app.agent_loop:
-                        import asyncio
+    def _find_chat_container(self) -> ChatInputContainer | None:
+        """Find the parent ChatInputContainer widget."""
+        parent = self.parent
+        while parent:
+            if isinstance(parent, ChatInputContainer):
+                return parent
+            parent = parent.parent
+        return None
 
-                        asyncio.create_task(app._reload_config())
-                    self.text = ""
-                    self.cursor_location = (0, 0)
-                event.stop()
-                return True
-        return False
+    def _select_model(self, chat_container: ChatInputContainer) -> None:
+        """Handle model selection and config reload."""
+        model = chat_container.selected_model
+        if model:
+            chat_container.hide_model_selector()
+            from dotsy.core.config import DotsyConfig
+
+            DotsyConfig.save_updates({"active_model": model})
+            from dotsy.cli.textual_ui.app import DotsyApp
+
+            app = self.app
+            if isinstance(app, DotsyApp) and app.agent_loop:
+                import asyncio
+
+                asyncio.create_task(app._reload_config())
+            self.text = ""
+            self.cursor_location = (0, 0)
 
     async def _on_key(self, event: Key) -> None:  # noqa: PLR0911
         self._mark_cursor_moved_if_needed()

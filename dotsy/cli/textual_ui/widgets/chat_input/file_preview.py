@@ -147,6 +147,6 @@ class FileAttachmentPreview(Static):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle remove button clicks."""
-        if event.button.has_class("remove-btn"):
+        if event.button.has_class("remove-btn") and event.button.id:
             idx = int(event.button.id.split("-")[1])
             self.remove_attachment(idx)
