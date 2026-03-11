@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from enum import StrEnum, auto
 from os import getenv
 from pathlib import Path
@@ -670,6 +671,26 @@ class DotsyApp(App):  # noqa: PLR0904
 
         self._pending_question = None
         return result
+
+    def _build_attachment_context(self, attachments: list) -> str:
+        """Build context string from attachments for the LLM prompt."""
+        context_parts = []
+        for attachment in attachments:
+            if attachment.type == "image":
+                context_parts.append(f"[Image attachment: {attachment.file_name}]")
+            elif attachment.type == "pdf":
+                context_parts.append(f"[PDF attachment: {attachment.file_name}]")
+            elif attachment.type == "text":
+                try:
+                    content = attachment.file_path.read_text(encoding="utf-8")
+                    context_parts.append(
+                        f"[File: {attachment.file_name}]\nContent:\n{content}"
+                    )
+                except OSError:
+                    context_parts.append(f"[File: {attachment.file_name} - unable to read]")
+            else:
+                context_parts.append(f"[Attachment: {attachment.file_name}]")
+        return "\n\n".join(context_parts)
 
     async def _handle_agent_loop_turn(self, prompt: str, attachments: list | None = None) -> None:
         self._agent_running = True

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Static
@@ -64,8 +67,8 @@ class FileAttachmentPreview(Static):
     def __init__(
         self,
         attachments: list[FileAttachment] | None = None,
-        on_remove: callable | None = None,
-        **kwargs,
+        on_remove: Callable[..., Any] | None = None,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self._attachments = attachments or []
@@ -80,7 +83,7 @@ class FileAttachmentPreview(Static):
             for idx, attachment in enumerate(self._attachments):
                 yield self._render_file_item(idx, attachment)
 
-    def _render_file_item(self, idx: int, attachment: FileAttachment) -> Horizontal:
+    def _render_file_item(self, idx: int, attachment: FileAttachment) -> None:
         with Horizontal(classes="file-item"):
             icon = self._get_file_icon(attachment.type)
             yield Static(icon, classes="file-icon")
@@ -142,7 +145,7 @@ class FileAttachmentPreview(Static):
         self.display = False
         self.refresh()
 
-    def on_static_pressed(self, event: Static.Pressed) -> None:
+    def on_static_pressed(self, event: Static.Click) -> None:
         """Handle remove button clicks."""
         if event.sender.has_class("remove-btn"):
             idx = int(event.sender.id.split("-")[1])

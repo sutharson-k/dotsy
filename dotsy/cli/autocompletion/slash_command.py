@@ -14,6 +14,7 @@ class SlashCommandController:
         self._view = view
         self._suggestions: list[tuple[str, str]] = []
         self._selected_index = 0
+        self._is_skill_completer = False
 
     def can_handle(self, text: str, cursor_index: int) -> bool:
         if not text.startswith("/"):

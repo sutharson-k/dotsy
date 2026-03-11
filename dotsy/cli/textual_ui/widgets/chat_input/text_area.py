@@ -69,13 +69,8 @@ class ChatTextArea(TextArea):
         self._cursor_moved_since_load: bool = False
         self._completion_manager: MultiCompletionManager | None = None
         self._app_has_focus: bool = True
-        self._drag_drop_handler: Any = None
 
-    def register_drag_drop_handler(self, handler: Any) -> None:
-        """Register a drag-drop handler for file attachments."""
-        self._drag_drop_handler = handler
-
-    def on_blur(self, event: events.Blur) -> None:
+    def on_blur(self, event: TextArea.Blur) -> None:
         if self._app_has_focus:
             self.call_after_refresh(self.focus)
 
@@ -85,23 +80,8 @@ class ChatTextArea(TextArea):
         if has_focus and not self.has_focus:
             self.call_after_refresh(self.focus)
 
-    def on_click(self, event: events.Click) -> None:
+    def on_click(self, event: TextArea.Click) -> None:
         self._mark_cursor_moved_if_needed()
-
-    def on_drop(self, event: events.Drop) -> None:
-        """Handle file drop events."""
-        if self._drag_drop_handler:
-            self._drag_drop_handler.on_drop(event)
-
-    def on_drag_enter(self, event: events.DragEnter) -> None:
-        """Handle drag enter events."""
-        if self._drag_drop_handler:
-            self._drag_drop_handler.on_drag_enter(event)
-
-    def on_drag_leave(self, event: events.DragLeave) -> None:
-        """Handle drag leave events."""
-        if self._drag_drop_handler:
-            self._drag_drop_handler.on_drag_leave(event)
 
     def action_insert_newline(self) -> None:
         self.insert("\n")

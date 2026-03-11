@@ -162,6 +162,7 @@ class ChatInputContainer(Vertical):
         """Show the model selector popup."""
         if self._model_selector:
             self._model_selector.set_models(models, current_model)
+        if self._completion_popup:
             self._completion_popup.hide()
 
     def hide_model_selector(self) -> None:

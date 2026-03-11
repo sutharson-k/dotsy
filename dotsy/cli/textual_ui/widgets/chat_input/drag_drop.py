@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-import asyncio
-from pathlib import Path
 from typing import TYPE_CHECKING
 
-from textual import events
 from textual.message import Message
 
 from dotsy.core.attachments.handler import AttachmentHandler, FileAttachment
@@ -16,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class DragDropHandler:
-    """Handles drag-and-drop events for file attachments."""
+    """Handles drag-and-drop file processing."""
 
     def __init__(self, chat_container: ChatInputContainer) -> None:
         self.chat_container = chat_container
@@ -28,37 +25,6 @@ class DragDropHandler:
         def __init__(self, file_paths: list[str]) -> None:
             self.file_paths = file_paths
             super().__init__()
-
-    async def on_drop(self, event: events.Drop) -> None:
-        """Handle drop event."""
-        event.prevent_default()
-        event.stop()
-
-        file_paths = []
-        for item in event.paths:
-            file_paths.append(str(item))
-
-        if file_paths:
-            self.chat_container.post_message(self.FileDropped(file_paths))
-
-    def on_drag_enter(self, event: events.DragEnter) -> None:
-        """Handle drag enter event - show drop zone highlight."""
-        event.prevent_default()
-        # Add visual feedback for drag enter
-        input_box = self.chat_container.get_widget_by_id(
-            self.chat_container.ID_INPUT_BOX
-        )
-        if input_box:
-            input_box.add_class("drag-over")
-
-    def on_drag_leave(self, event: events.DragLeave) -> None:
-        """Handle drag leave event - remove drop zone highlight."""
-        event.prevent_default()
-        input_box = self.chat_container.get_widget_by_id(
-            self.chat_container.ID_INPUT_BOX
-        )
-        if input_box:
-            input_box.remove_class("drag-over")
 
     @staticmethod
     def process_dropped_files(
