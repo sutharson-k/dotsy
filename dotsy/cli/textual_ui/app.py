@@ -402,11 +402,7 @@ class DotsyApp(App):  # noqa: PLR0904
 
     async def _handle_command(self, user_input: str) -> bool:
         # Handle /set-api-key separately as it needs arguments
-        if (
-            user_input.lower().startswith("/set-api-key")
-            or user_input.lower().startswith("/apikey")
-            or user_input.lower().startswith("/api-key")
-        ):
+        if user_input.lower().startswith("/set-api-key"):
             await self._set_api_key_command(user_input)
             return True
 
