@@ -69,6 +69,10 @@ class ChatTextArea(TextArea):
         self._cursor_moved_since_load: bool = False
         self._completion_manager: MultiCompletionManager | None = None
         self._app_has_focus: bool = True
+        self._drag_drop_handler: Any | None = None
+
+    def register_drag_drop_handler(self, handler: Any) -> None:
+        self._drag_drop_handler = handler
 
     def on_blur(self, event: TextArea.Blur) -> None:
         if self._app_has_focus:
