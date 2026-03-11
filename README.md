@@ -32,7 +32,7 @@ See [docs/models/README.md](docs/models/README.md) for the complete list of supp
 - **Interactive Chat**: Conversational AI agent that understands your requests
 - **Powerful Toolset**: File manipulation, code search, version control, web search, and command execution
 - **Web Search**: DuckDuckGo integration for privacy-focused, no-API-key web search
-- **Browser Automation**: agent-browser integration for web testing and interaction
+- **Browser Automation**: browser-use integration for web testing and interaction
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows
 - **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent
@@ -299,42 +299,33 @@ Skills are stored in the `skills/` directory. Each skill is a folder containing 
 
 ## Browser Automation
 
-Dotsy supports **agent-browser** for web automation (recommended over Puppeteer):
+Dotsy supports **browser-use** for web automation:
 
 ### Installation
 
 ```bash
-# Install agent-browser CLI
-npm install -g agent-browser
-
-# Download Chromium
-agent-browser install
+pip install browser-use
 ```
+
+browser-use will automatically download Chromium on first run.
 
 ### Usage
 
 ```bash
 dotsy
-# "Use agent_browser to open https://example.com"
+# "Use browser to open https://example.com"
 # "Navigate to github.com and take a screenshot"
-# "Click element @e5 on the current page"
+# "Click the login button"
 ```
 
 ### Features
-## Models & Providers
-
-Dotsy supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, Groq, Sarvam AI, and more.
-
-See [docs/models/README.md](docs/models/README.md) for the complete list of supported providers and models.
-
 
 - Navigate to URLs
 - Click, fill, type interactions
-- Take screenshots (annotated with element labels)
-- Extract page content and accessibility trees
-- Ref-based element selection (more reliable than CSS/XPath)
+- Take screenshots
+- Extract page content
+- CSS selector and XPath support
 - Domain allowlist for security
-- Multiple providers (local, browserbase, iOS simulator)
 
 ### Configuration
 
@@ -343,19 +334,19 @@ See [docs/models/README.md](docs/models/README.md) for the complete list of supp
 [tools.agent_browser]
 permission = "ask"  # Always ask before browser actions
 headless = true
-timeout_seconds = 30
+timeout_seconds = 60
 domain_allowlist = ["localhost", "127.0.0.1", "*.yourdomain.com"]
 ```
 
-### Why agent-browser over Puppeteer?
+### Why browser-use?
 
-| Feature | agent-browser | Puppeteer MCP |
-|---------|--------------|---------------|
-| Speed | ⚡⚡⚡ (Rust CLI) | ⚡⚡ (Node.js) |
-| Element Selection | ✅ Ref-based (@e1, @e2) | ❌ CSS/XPath |
-| Annotated Screenshots | ✅ Yes | ❌ No |
-| Multi-Provider | ✅ 5+ providers | ❌ Local only |
-| iOS Support | ✅ Yes | ❌ No |
+| Feature | browser-use | Puppeteer MCP |
+|---------|-------------|---------------|
+| Language | Python | Node.js |
+| LLM Integration | ✅ Built-in | ⚠️ Manual |
+| Auto-wait | ✅ Yes | ✅ Yes |
+| Multi-provider | ✅ Yes | ❌ Local only |
+| Ease of use | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
 
 Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) to provide enhanced autonomous agent capabilities. Crush CLI acts as a basic CLI assistant while Dotsy coordinates as the autonomous agent.
 

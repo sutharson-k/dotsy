@@ -30,6 +30,7 @@ dependencies = [
     "agent-client-protocol==0.7.1",
     "anyio>=4.12.0",
     "beautifulsoup4>=4.12.0",
+    "browser-use>=0.1.0",
     "bytez>=0.1.0",
     "httpx>=0.28.1",
     "mcp>=1.14.0",
