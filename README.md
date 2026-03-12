@@ -22,15 +22,16 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 
 ## Features
 
-- **Multi-Provider Support**: Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, Groq, Hugging Face, or any OpenAI-compatible API
+- **Multi-Provider Support**: Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, Groq, Hugging Face, OpenRouter, or any OpenAI-compatible API
 - **Interactive Chat**: Conversational AI agent that understands your requests
 - **Bayesian Reasoning**: AI maintains uncertainty, updates beliefs gradually, and shows confidence levels (based on Google Research)
+- **Show Thinking**: Toggle AI step-by-step reasoning display with `/thinking` command
 - **Powerful Toolset**: File manipulation, code search, version control, web search, and command execution
 - **Web Search**: DuckDuckGo integration for privacy-focused, no-API-key web search
 - **Browser Automation**: browser-use integration for web testing and interaction
 - **Image Support**: Send images with `@/path/to/image.png` syntax for vision analysis
 - **Project-Aware Context**: Automatically scans your project structure
-- **Multiple Agents**: Different agent profiles for different workflows
+- **Multiple Agents**: Different agent profiles for different workflows (Default, Plan, Accept Edits)
 - **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent
 - **Highly Configurable**: Customize models, providers, and tool permissions
 ## Quick Start
@@ -56,9 +57,18 @@ dotsy --setup
 
 2. Configure your preferred provider and API key
 
-3. Start using Dotsy:
+3. Start using Dotsy (default model: hunter-alpha):
 ```bash
 dotsy
+```
+
+### Default Model
+
+DOTSY uses **hunter-alpha** (OpenRouter) by default - a specialized reasoning model optimized for complex tasks.
+
+To change the default, edit `~/.dotsy/config.toml`:
+```toml
+active_model = "gpt-4o"  # or any configured model
 ```
 
 ## Supported Providers
@@ -292,8 +302,8 @@ Type `/` in the chat to see all available commands with autocomplete:
 | `/terminal-setup` | `/terminal-setup` | Configure Shift+Enter for newlines |
 | `/status` | `/status` | Display agent statistics |
 | `/skills` | `/skills` | List all available skills |
-| `/set-api-key` | `/set-api-key` | Set API key for a provider |
 | `/thinking` | `/thinking` | Toggle AI thinking/reasoning display |
+| `/set-api-key` | `/set-api-key` | Set API key for a provider |
 
 ### Examples
 
