@@ -97,7 +97,8 @@ class ModelSelectorPopup(Static):
 
     def _update_display(self) -> None:
         """Update the popup display with current selection."""
-        if not self._filtered_models:
+        # Don't hide if searching - show "no results" message instead
+        if not self._filtered_models and not self._search_term:
             self.hide()
             return
 
@@ -113,6 +114,13 @@ class ModelSelectorPopup(Static):
                 f'Search: "{self._search_term}" ({len(self._filtered_models)}/{len(self._models)} models)\n\n',
                 style="italic cyan",
             )
+
+        if not self._filtered_models:
+            text.append("  No models match your search.\n", style="dim yellow")
+            text.append("  Press Escape to clear search.\n", style="dim yellow")
+            self.update(text)
+            self.show()
+            return
 
         for idx, model in enumerate(self._filtered_models):
             if idx:

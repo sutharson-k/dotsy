@@ -205,6 +205,8 @@ class ChatTextArea(TextArea):
             case "backspace":
                 # Support backspace in search
                 chat_container.clear_model_search()
+                event.stop()
+                return True
             case _:
                 # Support typing for search (single printable chars)
                 if (
@@ -213,6 +215,7 @@ class ChatTextArea(TextArea):
                     and event.character.isprintable()
                 ):
                     chat_container.add_model_search(event.character)
+                    event.stop()
                     return True
                 return False
 

@@ -587,13 +587,14 @@ DEFAULT_MODELS = [
         input_price=0.1,
         output_price=0.4,
     ),
-    # OpenRouter Specialized Models
+    # OpenRouter Specialized Models (Free - Unlimited Tokens)
     ModelConfig(
         alias="hunter-alpha",
         provider="openrouter",
         name="openrouter/hunter-alpha",
         input_price=0.0,
         output_price=0.0,
+        max_tokens=999_999_999,  # Effectively unlimited for free model
     ),
     ModelConfig(
         alias="healer-alpha",
@@ -601,6 +602,7 @@ DEFAULT_MODELS = [
         name="openrouter/healer-alpha",
         input_price=0.0,
         output_price=0.0,
+        max_tokens=999_999_999,  # Effectively unlimited for free model
     ),
 ]
 
