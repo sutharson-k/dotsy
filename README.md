@@ -104,7 +104,7 @@ Dotsy supports multiple AI providers out of the box:
 - Base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
 
 #### International (via OpenRouter):
-- Models: `qwen-72b`, `qwen-coder`
+- Models: `qwen-72b`, `qwen-coder`, `hunter-alpha`, `healer-alpha`
 - API Key: `OPENROUTER_API_KEY`
 - Base URL: `https://openrouter.ai/api/v1`
 - Get API Key: https://openrouter.ai/keys
@@ -112,6 +112,10 @@ Dotsy supports multiple AI providers out of the box:
 **Available Qwen Models on OpenRouter:**
 - `qwen-72b` - Qwen 2.5 72B Instruct (best overall) ⭐
 - `qwen-coder` - Qwen 2.5 Coder 32B Instruct (coding specialized)
+
+**OpenRouter Specialized Models:**
+- `hunter-alpha` - Specialized reasoning model (free, unlimited) ⭐
+- `healer-alpha` - Specialized assistance model (free, unlimited) ⭐
 
 #### Groq (Ultra-fast inference):
 - Models: `groq-llama`, `groq-llama-8b`, `groq-mixtral`, `groq-gemma`
@@ -147,16 +151,6 @@ Dotsy supports multiple AI providers out of the box:
 
 **Hugging Face Model:**
 - `qwen3.5-27b-uncensored` - Uncensored Qwen 3.5 27B ⭐
-
-#### OpenRouter (Specialized Models):
-- Models: `hunter-alpha`, `healer-alpha`
-- API Key: `OPENROUTER_API_KEY`
-- Base URL: `https://openrouter.ai/api/v1`
-- Get API Key: https://openrouter.ai/keys
-
-**OpenRouter Models:**
-- `hunter-alpha` - Specialized reasoning model ⭐
-- `healer-alpha` - Specialized assistance model ⭐
 
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
@@ -316,8 +310,10 @@ Type `/` in the chat to see all available commands with autocomplete:
 # View all commands
 /help
 
-# Change model
+# Change model (type to search)
 /model
+# Then type "hunter" or "claude" to filter models
+# Use ↑↓ to navigate, Enter to select
 
 # Clear history
 /clear
