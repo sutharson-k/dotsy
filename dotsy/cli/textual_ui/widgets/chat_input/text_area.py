@@ -195,17 +195,35 @@ class ChatTextArea(TextArea):
         match event.key:
             case "escape":
                 chat_container.hide_model_selector()
+                self._clear_model_search(chat_container)
             case "up":
                 chat_container.navigate_model_selector(-1)
             case "down":
                 chat_container.navigate_model_selector(1)
             case "enter":
                 self._select_model(chat_container)
+            case "backspace":
+                # Support backspace in search
+                chat_container.clear_model_search()
             case _:
+                # Support typing for search (single printable chars)
+                if (
+                    event.character
+                    and len(event.character) == 1
+                    and event.character.isprintable()
+                ):
+                    chat_container.add_model_search(event.character)
+                    return True
                 return False
 
         event.stop()
         return True
+
+    def _clear_model_search(self, chat_container: ChatInputContainer) -> None:
+        """Clear model selector search."""
+        if chat_container._model_selector:
+            chat_container._model_selector.clear_search()
+            chat_container._model_selector.navigate(0)
 
     def _find_chat_container(self) -> ChatInputContainer | None:
         """Find the parent ChatInputContainer widget."""

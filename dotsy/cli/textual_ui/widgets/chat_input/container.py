@@ -175,6 +175,16 @@ class ChatInputContainer(Vertical):
         if self._model_selector and self._model_selector.styles.display != "none":
             self._model_selector.navigate(direction)
 
+    def add_model_search(self, char: str) -> None:
+        """Add character to model search."""
+        if self._model_selector:
+            self._model_selector.add_search_char(char)
+
+    def clear_model_search(self) -> None:
+        """Clear model search."""
+        if self._model_selector:
+            self._model_selector.clear_search()
+
     @property
     def selected_model(self) -> str | None:
         """Get the currently selected model."""
