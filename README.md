@@ -356,6 +356,76 @@ Skills are stored in the `skills/` directory. Each skill is a folder containing 
 - YAML frontmatter (name, description, settings)
 - Markdown content (skill instructions and capabilities)
 
+## Crush CLI Integration
+
+Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) for enhanced autonomous agent capabilities.
+
+### Installation
+
+First, install Crush CLI:
+
+```bash
+# Homebrew (macOS/Linux)
+brew install charmbracelet/tap/crush
+
+# npm
+npm install -g @charmland/crush
+
+# Go
+go install github.com/charmbracelet/crush@latest
+
+# Windows (Winget)
+winget install charmbracelet.crush
+```
+
+### Enable Integration
+
+Add to `~/.dotsy/config.toml`:
+
+```toml
+[crush_cli]
+enabled = true
+yolo_mode = false  # Set to true to auto-approve all Crush operations
+auto_approve_tools = []  # List of tools that don't require approval
+disabled_tools = []  # List of tools to disable
+```
+
+### Available Crush Tools
+
+Once enabled, Dotsy provides these Crush CLI tools:
+
+| Tool | Description |
+|------|-------------|
+| `crush_run` | Execute tasks using Crush CLI |
+| `crush_read_context` | Read project context from AGENTS.md |
+| `crush_logs` | Retrieve Crush CLI session logs |
+| `crush_update_providers` | Update Crush CLI provider list |
+
+### How It Works
+
+1. **Dotsy as Orchestrator**: Dotsy coordinates complex tasks and can delegate to Crush CLI
+2. **Crush as Worker**: Crush CLI executes specific coding tasks with its LLM integration
+3. **Shared Context**: Both agents share project context via AGENTS.md
+4. **Collaborative Workflow**: Dotsy can analyze Crush's output and provide enhanced responses
+
+### Example Usage
+
+```bash
+# Start Dotsy with Crush integration enabled
+dotsy
+
+# Ask Dotsy to use Crush for a task
+"Use Crush to refactor the authentication module"
+
+# Dotsy will coordinate with Crush CLI to complete the task
+```
+
+### Agent Coordination
+
+- **Dotsy**: High-level planning, tool orchestration, user communication
+- **Crush**: Code execution, file modifications, terminal commands
+- **Together**: Collaborative problem-solving with shared context
+
 ## Browser Automation
 
 Dotsy supports **browser-use** for web automation:
