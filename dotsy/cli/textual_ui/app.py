@@ -343,21 +343,47 @@ class DotsyApp(App):  # noqa: PLR0904
             pass
 
     def on_config_app_setting_changed(self, message: ConfigApp.SettingChanged) -> None:
+        # Only handle theme changes immediately (for live preview)
         if message.key == "textual_theme":
             if message.value == TERMINAL_THEME_NAME:
                 if self._terminal_theme:
                     self.theme = TERMINAL_THEME_NAME
             else:
                 self.theme = message.value
-        elif message.key == "crush_cli.enabled":
-            # Handle Crush CLI toggle
-            self.config.crush_cli.enabled = message.value.lower() == "true"
+        # For other settings (like crush_cli), wait until config closes to save
 
     async def on_config_app_config_closed(
         self, message: ConfigApp.ConfigClosed
     ) -> None:
         if message.changes:
-            DotsyConfig.save_updates(message.changes)
+            # Handle nested settings (e.g., crush_cli.enabled)
+            nested_changes: dict[str, Any] = {}
+            simple_changes: dict[str, Any] = {}
+
+            for key, value in message.changes.items():
+                if "." in key:
+                    # Nested setting like crush_cli.enabled
+                    parts = key.split(".")
+                    if parts[0] not in nested_changes:
+                        nested_changes[parts[0]] = {}
+                    # Convert string values to proper types
+                    converted_value = value
+                    if value.lower() == "true":
+                        converted_value = True
+                    elif value.lower() == "false":
+                        converted_value = False
+                    nested_changes[parts[0]][parts[1]] = converted_value
+                else:
+                    simple_changes[key] = value
+
+            # Save simple changes
+            if simple_changes:
+                DotsyConfig.save_updates(simple_changes)
+
+            # Save nested changes
+            for section, values in nested_changes.items():
+                DotsyConfig.save_updates({section: values})
+
             await self._reload_config()
         else:
             await self._mount_and_scroll(
