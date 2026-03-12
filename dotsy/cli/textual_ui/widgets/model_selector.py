@@ -112,7 +112,9 @@ class ModelSelectorPopup(Static):
             return
 
         text = Text()
-        search_hint = " (type to search)" if not self._search_term else ""
+        search_hint = (
+            " (type to search, Ctrl+C to clear)" if not self._search_term else ""
+        )
         text.append(
             f"### Select Model (↑↓ navigate, Enter select{search_hint})\n\n",
             style="bold",
@@ -126,7 +128,7 @@ class ModelSelectorPopup(Static):
 
         if not self._filtered_models:
             text.append("  No models match your search.\n", style="dim yellow")
-            text.append("  Press Escape to clear search.\n", style="dim yellow")
+            text.append("  Press Ctrl+C to clear search.\n", style="dim yellow")
             self.update(text)
             self.refresh()  # Force immediate re-render
             self.show()

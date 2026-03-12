@@ -202,8 +202,8 @@ class ChatTextArea(TextArea):
                 chat_container.navigate_model_selector(1)
             case "enter":
                 self._select_model(chat_container)
-            case "backspace" | "delete":
-                # Support backspace in search
+            case "ctrl+c":
+                # Clear search and reset model list
                 chat_container.clear_model_search()
                 event.prevent_default()
                 event.stop()
