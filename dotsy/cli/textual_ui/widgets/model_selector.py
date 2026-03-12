@@ -81,6 +81,7 @@ class ModelSelectorPopup(Static):
                     self._selected_index = idx
                     break
         self._update_display()
+        self.refresh()  # Force re-render
 
     def navigate(self, direction: int) -> None:
         """Navigate through models using arrow keys.

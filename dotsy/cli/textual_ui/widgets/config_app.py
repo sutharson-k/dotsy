@@ -77,6 +77,12 @@ class ConfigApp(Container):
                 "type": "cycle",
                 "options": themes,
             },
+            {
+                "key": "crush_cli.enabled",
+                "label": "Crush CLI Integration",
+                "type": "toggle",
+                "options": ["false", "true"],
+            },
         ]
 
         self.title_widget: Static | None = None
@@ -114,9 +120,18 @@ class ConfigApp(Container):
             cursor = "› " if is_selected else "  "
 
             label: str = setting["label"]
-            value: str = self.changes.get(
-                setting["key"], getattr(self.config, setting["key"], "")
-            )
+
+            # Handle nested config values (e.g., crush_cli.enabled)
+            if "." in setting["key"]:
+                parts = setting["key"].split(".")
+                parent = getattr(self.config, parts[0])
+                value: str = self.changes.get(
+                    setting["key"], str(getattr(parent, parts[1], ""))
+                )
+            else:
+                value: str = self.changes.get(
+                    setting["key"], getattr(self.config, setting["key"], "")
+                )
 
             text = f"{cursor}{label}: {value}"
 
@@ -142,7 +157,14 @@ class ConfigApp(Container):
     def action_toggle_setting(self) -> None:
         setting = self.settings[self.selected_index]
         key: str = setting["key"]
-        current: str = self.changes.get(key, getattr(self.config, key)) or ""
+
+        # Handle nested config values
+        if "." in key:
+            parts = key.split(".")
+            parent = getattr(self.config, parts[0])
+            current: str = self.changes.get(key, str(getattr(parent, parts[1]))) or ""
+        else:
+            current: str = self.changes.get(key, getattr(self.config, key)) or ""
 
         options: list[str] = setting["options"]
         new_value = ""

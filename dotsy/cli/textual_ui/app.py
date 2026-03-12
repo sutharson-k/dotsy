@@ -349,6 +349,9 @@ class DotsyApp(App):  # noqa: PLR0904
                     self.theme = TERMINAL_THEME_NAME
             else:
                 self.theme = message.value
+        elif message.key == "crush_cli.enabled":
+            # Handle Crush CLI toggle
+            self.config.crush_cli.enabled = message.value.lower() == "true"
 
     async def on_config_app_config_closed(
         self, message: ConfigApp.ConfigClosed
