@@ -138,6 +138,16 @@ Dotsy supports multiple AI providers out of the box:
 **Hugging Face Model:**
 - `qwen3.5-27b-uncensored` - Uncensored Qwen 3.5 27B ⭐
 
+#### OpenRouter (Specialized Models):
+- Models: `hunter-alpha`, `healer-alpha`
+- API Key: `OPENROUTER_API_KEY`
+- Base URL: `https://openrouter.ai/api/v1`
+- Get API Key: https://openrouter.ai/keys
+
+**OpenRouter Models:**
+- `hunter-alpha` - Specialized reasoning model ⭐
+- `healer-alpha` - Specialized assistance model ⭐
+
 ### Custom OpenAI-Compatible APIs
 - Any OpenAI-compatible endpoint (LocalAI, Ollama, vLLM, etc.)
 - Configurable base URL and API key

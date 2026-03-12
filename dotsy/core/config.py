@@ -335,6 +335,14 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
+    # OpenRouter (All models)
+    ProviderConfig(
+        name="openrouter",
+        api_base="https://openrouter.ai/api/v1",
+        api_key_env_var="OPENROUTER_API_KEY",
+        api_style="openai",
+        backend=Backend.GENERIC,
+    ),
     # Groq (Fast inference)
     ProviderConfig(
         name="groq",
@@ -578,6 +586,21 @@ DEFAULT_MODELS = [
         name="google/gemini-2.0-flash",
         input_price=0.1,
         output_price=0.4,
+    ),
+    # OpenRouter Specialized Models
+    ModelConfig(
+        alias="hunter-alpha",
+        provider="openrouter",
+        name="openrouter/hunter-alpha",
+        input_price=0.0,
+        output_price=0.0,
+    ),
+    ModelConfig(
+        alias="healer-alpha",
+        provider="openrouter",
+        name="openrouter/healer-alpha",
+        input_price=0.0,
+        output_price=0.0,
     ),
 ]
 
