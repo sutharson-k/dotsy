@@ -72,7 +72,15 @@ class ModelSelectorPopup(Static):
     def clear_search(self) -> None:
         """Clear search term."""
         self._search_term = ""
-        self._apply_filter()
+        self._selected_index = 0
+        self._filtered_models = self._models.copy()
+        # Find current model in the list
+        if self._current_model:
+            for idx, model in enumerate(self._filtered_models):
+                if model.get("alias") == self._current_model:
+                    self._selected_index = idx
+                    break
+        self._update_display()
 
     def navigate(self, direction: int) -> None:
         """Navigate through models using arrow keys.
