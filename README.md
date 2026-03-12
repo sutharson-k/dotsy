@@ -38,6 +38,11 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 
 ### Installation
 
+**Using npm (Recommended):**
+```bash
+npm install -g dotsy
+```
+
 **Using pip:**
 ```bash
 pip install -e .
