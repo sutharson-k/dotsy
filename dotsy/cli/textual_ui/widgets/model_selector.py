@@ -127,6 +127,7 @@ class ModelSelectorPopup(Static):
             text.append("  No models match your search.\n", style="dim yellow")
             text.append("  Press Escape to clear search.\n", style="dim yellow")
             self.update(text)
+            self.refresh()  # Force immediate re-render
             self.show()
             return
 
@@ -159,6 +160,7 @@ class ModelSelectorPopup(Static):
                 text.append(f"  ({name} - {provider})", style="dim")
 
         self.update(text)
+        self.refresh()  # Force immediate re-render
         self.show()
 
     def hide(self) -> None:
