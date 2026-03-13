@@ -92,12 +92,36 @@ class WelcomeBanner(Static):
         self._initialize_static_line_suffixes()
 
     def _initialize_static_line_suffixes(self) -> None:
-        # Minimal - no extra text, just logo
+        # Flavor text for welcome banner
+        self._flavor_texts = [
+            "Boot sequence complete. The machine hums with quiet determination.",
+            "Four quiet cores thinking in parallel...",
+            "Memory check: enough to build something dangerous.",
+            "The terminal waits. It always does.",
+            "A modest processor, an immodest ambition.",
+            "8GB of thoughts, none of them idle.",
+            "Fans whisper: \"compile again.\"",
+            "Silicon and stubbornness detected.",
+            "Somewhere, a new tool is being forged.",
+            "This terminal has seen too many experiments.",
+            "Commands typed here tend to become projects.",
+            "The cursor blinks like it knows something.",
+            "Curiosity level: unusually high.",
+            "Someone here refuses to leave bugs alive.",
+            "Patience: low. Determination: very high.",
+            "Sleep mode? Rarely used.",
+            "echo \"You weren't supposed to see this.\"",
+            "// TODO: conquer something today",
+            "Developer presence detected. Proceed carefully.",
+            "Somewhere in this machine, an idea is waking up.",
+        ]
+        import random
+        self._selected_flavor = random.choice(self._flavor_texts)
         self._static_line1_suffix = ""
         self._static_line2_suffix = ""
         self._static_line3_suffix = ""
         self._static_line5_suffix = ""
-        self._static_line7 = ""
+        self._static_line7 = f"  [dim]{self._selected_flavor}[/]"
 
     @property
     def skeleton_color(self) -> str:
