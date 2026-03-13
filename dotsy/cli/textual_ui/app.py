@@ -120,6 +120,8 @@ class DotsyApp(App):  # noqa: PLR0904
         Binding("up", "model_up", "Model Up", show=False),
         Binding("down", "model_down", "Model Down", show=False),
         Binding("enter", "model_select", "Select Model", show=False),
+        Binding("escape", "model_cancel", "Cancel", show=False),
+        Binding("backspace", "model_back", "Back", show=False),
         Binding("escape", "close_model_selector", "Close Model Selector", show=False),
     ]
 
@@ -1315,24 +1317,25 @@ class DotsyApp(App):  # noqa: PLR0904
         """Select the current model from the selector."""
         try:
             chat = self.query_one(ChatInputContainer)
-            model = chat.selected_model
-            if model:
-                chat.hide_model_selector()
-                # Set the model in config
-                from dotsy.core.config import DotsyConfig
+            if chat._model_selector:
+                model = chat._model_selector.select()
+                if model:
+                    chat.hide_model_selector()
+                    # Set the model in config
+                    from dotsy.core.config import DotsyConfig
 
-                DotsyConfig.save_updates({"active_model": model})
+                    DotsyConfig.save_updates({"active_model": model})
 
-                # Reload the agent loop with new config
-                if self.agent_loop:
-                    import asyncio
+                    # Reload the agent loop with new config
+                    if self.agent_loop:
+                        import asyncio
 
-                    asyncio.create_task(self._reload_config())
-                else:
-                    self.notify(f"Model changed to {model}")
+                        asyncio.create_task(self._reload_config())
+                    else:
+                        self.notify(f"Model changed to {model}")
 
-                chat.value = ""
-                chat.focus_input()
+                    chat.value = ""
+                    chat.focus_input()
         except Exception:
             pass
 
@@ -1341,6 +1344,24 @@ class DotsyApp(App):  # noqa: PLR0904
         try:
             chat = self.query_one(ChatInputContainer)
             chat.hide_model_selector()
+        except Exception:
+            pass
+
+    def action_model_back(self) -> None:
+        """Go back to providers list in model selector."""
+        try:
+            chat = self.query_one(ChatInputContainer)
+            if hasattr(chat._model_selector, 'back'):
+                chat._model_selector.back()
+        except Exception:
+            pass
+
+    def action_model_cancel(self) -> None:
+        """Cancel model selection and close selector."""
+        try:
+            chat = self.query_one(ChatInputContainer)
+            chat.hide_model_selector()
+            chat.focus_input()
         except Exception:
             pass
 

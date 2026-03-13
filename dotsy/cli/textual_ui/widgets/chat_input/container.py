@@ -19,7 +19,7 @@ from dotsy.cli.textual_ui.widgets.chat_input.completion_popup import CompletionP
 from dotsy.cli.textual_ui.widgets.chat_input.drag_drop import DragDropHandler
 from dotsy.cli.textual_ui.widgets.chat_input.file_preview import FileAttachmentPreview
 from dotsy.cli.textual_ui.widgets.chat_input.text_area import ChatTextArea
-from dotsy.cli.textual_ui.widgets.model_selector import ModelSelectorPopup
+from dotsy.cli.textual_ui.widgets.model_selector import ModelSelectorWidget
 from dotsy.core.agents import AgentSafety
 from dotsy.core.attachments.handler import FileAttachment
 from dotsy.core.autocompletion.completers import CommandCompleter, PathCompleter
@@ -71,7 +71,7 @@ class ChatInputContainer(Vertical):
             PathCompletionController(PathCompleter(), self),
         ])
         self._completion_popup: CompletionPopup | None = None
-        self._model_selector: ModelSelectorPopup | None = None
+        self._model_selector: ModelSelectorWidget | None = None
         self._body: ChatInputBody | None = None
         self._file_preview: FileAttachmentPreview | None = None
         self._drag_drop_handler: DragDropHandler | None = None
@@ -94,7 +94,7 @@ class ChatInputContainer(Vertical):
 
     def compose(self) -> ComposeResult:
         self._completion_popup = CompletionPopup()
-        self._model_selector = ModelSelectorPopup()
+        self._model_selector = ModelSelectorWidget()
         yield self._completion_popup
         yield self._model_selector
 
@@ -162,6 +162,7 @@ class ChatInputContainer(Vertical):
         """Show the model selector popup."""
         if self._model_selector:
             self._model_selector.set_models(models, current_model)
+            self._model_selector.focus()
         if self._completion_popup:
             self._completion_popup.hide()
 
@@ -172,18 +173,9 @@ class ChatInputContainer(Vertical):
 
     def navigate_model_selector(self, direction: int) -> None:
         """Navigate model selector with arrow keys."""
-        if self._model_selector and self._model_selector.styles.display != "none":
+        if self._model_selector:
             self._model_selector.navigate(direction)
 
-    def add_model_search(self, char: str) -> None:
-        """Add character to model search."""
-        if self._model_selector:
-            self._model_selector.add_search_char(char)
-
-    def clear_model_search(self) -> None:
-        """Clear model search."""
-        if self._model_selector:
-            self._model_selector.clear_search()
 
     @property
     def selected_model(self) -> str | None:

@@ -1,4 +1,4 @@
-"""Model selector popup widget for dotsy."""
+"""Model selector widget for dotsy with providers and models view."""
 
 from __future__ import annotations
 
@@ -8,169 +8,205 @@ from rich.text import Text
 from textual.widgets import Static
 
 
-class ModelSelectorPopup(Static):
-    """Popup widget for selecting AI models with arrow key navigation and search."""
-
+class ModelSelectorWidget(Static):
+    """Model selector with CURRENT MODEL and PROVIDERS sections."""
+    
     def __init__(self, **kwargs: Any) -> None:
-        super().__init__("", id="model-selector-popup", **kwargs)
-        self.styles.display = "none"
-        self.can_focus = False
+        super().__init__("", id="model-selector", **kwargs)
+        self.can_focus = True
         self._models: list[dict] = []
-        self._filtered_models: list[dict] = []
-        self._selected_index = 0
-        self._search_term = ""
-
+        self._providers: dict[str, list[dict]] = {}
+        self._current_model: str | None = None
+        self._selected_provider: str | None = None
+        self._selected_model_index = 0
+        self._mode = "providers"  # "providers" or "models"
+        
     def set_models(self, models: list[dict], current_model: str | None = None) -> None:
-        """Set the list of available models.
-
+        """Set the list of available models and group by provider.
+        
         Args:
             models: List of dicts with 'alias', 'name', 'provider' keys
             current_model: The currently active model alias
         """
         self._models = models
         self._current_model = current_model
-        self._search_term = ""
-        self._selected_index = 0
-        # Start selection at current model if found
-        if current_model:
-            for idx, model in enumerate(models):
-                if model.get("alias") == current_model:
-                    self._selected_index = idx
-                    break
-        self._apply_filter()
-
-    def _apply_filter(self) -> None:
-        """Apply search filter to models list."""
-        if not self._search_term:
-            self._filtered_models = self._models
-        else:
-            search_lower = self._search_term.lower()
-            self._filtered_models = [
-                m
-                for m in self._models
-                if (
-                    search_lower in m.get("alias", "").lower()
-                    or search_lower in m.get("name", "").lower()
-                    or search_lower in m.get("provider", "").lower()
-                )
-            ]
-        # Reset selection to first match or current model
-        self._selected_index = 0
-        if self._current_model and self._filtered_models:
-            for idx, model in enumerate(self._filtered_models):
-                if model.get("alias") == self._current_model:
-                    self._selected_index = idx
-                    break
+        self._group_by_provider()
+        self._selected_provider = None
+        self._selected_model_index = 0
+        self._mode = "providers"
         self._update_display()
-
-    def add_search_char(self, char: str) -> None:
-        """Add character to search term."""
-        self._search_term += char
-        self._selected_index = 0
-        self._apply_filter()
-
-    def clear_search(self) -> None:
-        """Clear search term."""
-        self._search_term = ""
-        self._selected_index = 0
-        self._filtered_models = self._models.copy()
-        # Find current model in the list
-        if self._current_model:
-            for idx, model in enumerate(self._filtered_models):
-                if model.get("alias") == self._current_model:
-                    self._selected_index = idx
-                    break
-        self._update_display()
-        self.refresh()  # Force re-render
-
+        
+    def _group_by_provider(self) -> None:
+        """Group models by provider."""
+        self._providers = {}
+        for model in self._models:
+            provider = model.get("provider", "unknown")
+            if provider not in self._providers:
+                self._providers[provider] = []
+            self._providers[provider].append(model)
+            
     def navigate(self, direction: int) -> None:
-        """Navigate through models using arrow keys.
-
+        """Navigate using arrow keys.
+        
         Args:
             direction: 1 for down, -1 for up
         """
-        if not self._filtered_models:
+        if self._mode == "providers":
+            self._navigate_providers(direction)
+        else:
+            self._navigate_models(direction)
+            
+    def _navigate_providers(self, direction: int) -> None:
+        """Navigate through providers list."""
+        provider_list = list(self._providers.keys())
+        if not provider_list:
             return
-
-        self._selected_index = (self._selected_index + direction) % len(
-            self._filtered_models
-        )
+            
+        if self._selected_provider is None:
+            self._selected_provider = provider_list[0]
+        else:
+            idx = provider_list.index(self._selected_provider)
+            idx = (idx + direction) % len(provider_list)
+            self._selected_provider = provider_list[idx]
         self._update_display()
-
+        
+    def _navigate_models(self, direction: int) -> None:
+        """Navigate through models list."""
+        if not self._selected_provider:
+            return
+        models = self._providers.get(self._selected_provider, [])
+        if not models:
+            return
+        self._selected_model_index = (self._selected_model_index + direction) % len(models)
+        self._update_display()
+        
+    def select(self) -> str | None:
+        """Select current item (Enter key).
+        
+        Returns:
+            Selected model alias or None
+        """
+        if self._mode == "providers":
+            if self._selected_provider:
+                self._mode = "models"
+                self._selected_model_index = 0
+                self._update_display()
+        else:
+            if self._selected_provider:
+                models = self._providers.get(self._selected_provider, [])
+                if models and 0 <= self._selected_model_index < len(models):
+                    return models[self._selected_model_index].get("alias")
+        return None
+        
+    def back(self) -> None:
+        """Go back to providers list."""
+        self._mode = "providers"
+        self._selected_model_index = 0
+        self._update_display()
+        
     @property
     def selected_model(self) -> str | None:
         """Get the currently selected model alias."""
-        if not self._models:
-            return None
-        return self._models[self._selected_index].get("alias")
-
+        if self._selected_provider and self._mode == "models":
+            models = self._providers.get(self._selected_provider, [])
+            if models and 0 <= self._selected_model_index < len(models):
+                return models[self._selected_model_index].get("alias")
+        return None
+        
     def _update_display(self) -> None:
-        """Update the popup display with current selection."""
-        # Don't hide if searching - show "no results" message instead
-        if not self._filtered_models and not self._search_term:
-            self.hide()
-            return
-
+        """Update the display with current selection."""
         text = Text()
-        search_hint = (
-            " (type to search, Ctrl+C to clear)" if not self._search_term else ""
-        )
-        text.append(
-            f"### Select Model (↑↓ navigate, Enter select{search_hint})\n\n",
-            style="bold",
-        )
-
-        if self._search_term:
-            text.append(
-                f'Search: "{self._search_term}" ({len(self._filtered_models)}/{len(self._models)} models)\n\n',
-                style="italic cyan",
-            )
-
-        if not self._filtered_models:
-            text.append("  No models match your search.\n", style="dim yellow")
-            text.append("  Press Ctrl+C to clear search.\n", style="dim yellow")
-            self.update(text)
-            self.refresh()  # Force immediate re-render
-            self.show()
-            return
-
-        for idx, model in enumerate(self._filtered_models):
-            if idx:
-                text.append("\n")
-
-            alias = model.get("alias", "unknown")
-            name = model.get("name", "")
-            provider = model.get("provider", "")
-            is_current = self._current_model and alias == self._current_model
-
-            if idx == self._selected_index:
-                # Selected item with reverse video
-                if is_current:
-                    text.append(f" ● {alias} ✓", style="bold reverse green")
-                    text.append(
-                        f"  ({name} - {provider}) [CURRENT]",
-                        style="italic reverse green",
-                    )
+        
+        # Header
+        text.append("╔══════════════════════════════════════════════════════════╗\n", style="bold cyan")
+        text.append("║              MODEL SELECTOR (↑↓ navigate, Enter select)  ║\n", style="bold cyan")
+        text.append("╚══════════════════════════════════════════════════════════╝\n\n", style="bold cyan")
+        
+        # Current Model Section
+        text.append("┌──────────────────────────────────────────────────────────┐\n", style="bold green")
+        text.append("│ ", style="bold green")
+        text.append("CURRENT MODEL", style="bold reverse green")
+        text.append(" " * 46, style="bold green")
+        text.append("│\n", style="bold green")
+        text.append("│ ", style="green")
+        if self._current_model:
+            text.append(f"● {self._current_model}", style="bold yellow")
+            text.append(" " * (53 - len(self._current_model)), style="green")
+        else:
+            text.append("No model selected", style="dim yellow")
+            text.append(" " * 34, style="green")
+        text.append("│\n", style="green")
+        text.append("└──────────────────────────────────────────────────────────┘\n\n", style="bold green")
+        
+        # Providers Section
+        text.append("┌──────────────────────────────────────────────────────────┐\n", style="bold cyan")
+        text.append("│ ", style="bold cyan")
+        if self._mode == "providers":
+            text.append("PROVIDERS (select to view models)", style="bold reverse cyan")
+        else:
+            text.append(f"PROVIDERS → {self._selected_provider}", style="bold reverse cyan")
+        text.append(" " * (14 if self._mode == "providers" else max(0, 14 - len(str(self._selected_provider)))), style="bold cyan")
+        text.append("│\n", style="bold cyan")
+        text.append("│                                                          │\n", style="cyan")
+        
+        if self._mode == "providers":
+            # Show all providers
+            provider_list = list(self._providers.keys())
+            for idx, provider in enumerate(provider_list):
+                model_count = len(self._providers[provider])
+                is_selected = provider == self._selected_provider
+                is_current_provider = self._current_model and any(
+                    m.get("alias") == self._current_model for m in self._providers[provider]
+                )
+                
+                if is_selected:
+                    text.append("│  ", style="cyan")
+                    text.append(f"▶ {provider}", style="bold reverse")
+                    text.append(" " * (35 - len(provider)), style="reverse")
+                    text.append(f" {model_count} models", style="reverse dim")
+                    text.append("  │\n", style="reverse")
                 else:
-                    text.append(f" ● {alias}", style="bold reverse")
-                    text.append(f"  ({name} - {provider})", style="italic reverse")
-            # Normal item
-            elif is_current:
-                text.append(f"   {alias} ✓", style="bold green")
-                text.append(f"  ({name} - {provider}) [CURRENT]", style="dim green")
-            else:
-                text.append(f"   {alias}", style="bold")
-                text.append(f"  ({name} - {provider})", style="dim")
-
+                    marker = "✓" if is_current_provider else " "
+                    text.append(f"│  {marker} {provider}", style="cyan")
+                    text.append(" " * (35 - len(provider)), style="dim")
+                    text.append(f" {model_count} models  │\n", style="dim")
+        else:
+            # Show models for selected provider
+            models = self._providers.get(self._selected_provider, [])
+            for idx, model in enumerate(models):
+                alias = model.get("alias", "unknown")
+                name = model.get("name", "")
+                is_selected = idx == self._selected_model_index
+                is_current = alias == self._current_model
+                
+                if is_selected:
+                    text.append("│  ", style="cyan")
+                    if is_current:
+                        text.append(f"▶ {alias} ✓", style="bold reverse yellow")
+                        text.append(" " * (35 - len(alias)), style="reverse yellow")
+                    else:
+                        text.append(f"▶ {alias}", style="bold reverse")
+                        text.append(" " * (37 - len(alias)), style="reverse")
+                    text.append("  │\n", style="reverse")
+                else:
+                    marker = "●" if is_current else " "
+                    text.append(f"│  {marker} {alias}", style="cyan")
+                    text.append(" " * (37 - len(alias)), style="dim")
+                    text.append("  │\n", style="dim")
+                    
+            # Back option
+            text.append("│                                                          │\n", style="cyan")
+            text.append("│  ", style="cyan")
+            text.append("← Back to Providers", style="italic yellow")
+            text.append(" " * 30, style="dim")
+            text.append("│\n", style="cyan")
+            
+        text.append("│                                                          │\n", style="cyan")
+        text.append("└──────────────────────────────────────────────────────────┘\n", style="bold cyan")
+        
+        # Help footer
+        text.append("\n", style="dim")
+        text.append("  ↑↓: Navigate  Enter: Select  Backspace: Back  Esc: Cancel", style="dim italic")
+        
         self.update(text)
-        self.refresh()  # Force immediate re-render
-        self.show()
-
-    def hide(self) -> None:
-        """Hide the popup."""
-        self.update("")
-        self.styles.display = "none"
-
-    def show(self) -> None:
-        """Show the popup."""
-        self.styles.display = "block"
+        self.refresh()
