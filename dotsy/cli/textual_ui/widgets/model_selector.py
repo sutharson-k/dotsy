@@ -13,7 +13,8 @@ class ModelSelectorWidget(Static):
     
     def __init__(self, **kwargs: Any) -> None:
         super().__init__("", id="model-selector", **kwargs)
-        self.can_focus = True
+        self.styles.display = "none"
+        self.can_focus = False
         self._models: list[dict] = []
         self._providers: dict[str, list[dict]] = {}
         self._current_model: str | None = None
