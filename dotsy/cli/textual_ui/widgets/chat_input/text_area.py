@@ -195,13 +195,24 @@ class ChatTextArea(TextArea):
         match event.key:
             case "escape":
                 chat_container.hide_model_selector()
-                pass  # Removed clear_model_search
+                event.prevent_default()
+                event.stop()
+                return True
             case "up":
                 chat_container.navigate_model_selector(-1)
+                event.prevent_default()
+                event.stop()
+                return True
             case "down":
                 chat_container.navigate_model_selector(1)
+                event.prevent_default()
+                event.stop()
+                return True
             case "enter":
                 self._select_model(chat_container)
+                event.prevent_default()
+                event.stop()
+                return True
             case "ctrl+c":
                 # Clear search and reset model list
                 pass  # Removed clear_model_search
@@ -214,10 +225,7 @@ class ChatTextArea(TextArea):
         event.stop()
         return True
 
-                pass  # Removed clear_model_search
-        """Clear model selector search."""
-        if chat_container._model_selector:
-            chat_container._model_selector.clear_search()
+
             chat_container._model_selector.navigate(0)
 
     def _find_chat_container(self) -> ChatInputContainer | None:

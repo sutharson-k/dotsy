@@ -210,3 +210,14 @@ class ModelSelectorWidget(Static):
         
         self.update(text)
         self.refresh()
+
+    def hide(self) -> None:
+        """Hide the model selector."""
+        self.styles.display = "none"
+        self.can_focus = False
+        
+    def show(self) -> None:
+        """Show the model selector."""
+        self.styles.display = "block"
+        self.can_focus = True
+
