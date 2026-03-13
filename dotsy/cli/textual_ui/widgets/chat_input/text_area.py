@@ -209,15 +209,6 @@ class ChatTextArea(TextArea):
                 event.stop()
                 return True
             case _:
-                # Support typing for search (single printable chars)
-                if (
-                    event.character
-                    and len(event.character) == 1
-                    and event.character.isprintable()
-                ):
-                    chat_container.add_model_search(event.character)
-                    event.stop()
-                    return True
                 return False
 
         event.stop()
