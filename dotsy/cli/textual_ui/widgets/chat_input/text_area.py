@@ -229,8 +229,10 @@ class ChatTextArea(TextArea):
         """Select the current model and reload config."""
         try:
             if chat_container._model_selector:
+                # select() returns model name when selecting a model, None when entering provider view
                 model = chat_container._model_selector.select()
-                if model:
+                # Only hide selector and reload if we actually selected a model (not just entering provider)
+                if model and chat_container._model_selector._mode == "models":
                     chat_container.hide_model_selector()
                     # Set the model in config
                     from dotsy.core.config import DotsyConfig
