@@ -565,6 +565,13 @@ DEFAULT_MODELS = [
         input_price=0.0,
         output_price=0.0,
     ),
+        ModelConfig(
+        name="nvidia/nemotron-3-super-120b-a12b:free",
+        provider="qwen_openrouter",
+        alias="nemotron-3-super",
+        input_price=0.0,
+        output_price=0.0,
+    ),
     # Vision-capable models via OpenRouter
     ModelConfig(
         alias="gpt-4o-openrouter",

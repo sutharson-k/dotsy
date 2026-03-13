@@ -144,6 +144,7 @@ OpenRouter provides access to 100+ models from various providers.
 - **API Key Env:** `OPENROUTER_API_KEY`
 - **Backend:** GENERIC (OpenAI-compatible)
 - **Models:**
+  - `nvidia/nemotron-3-super-120b-a12b:free` (alias: `nemotron-3-super`) - FREE ⭐ NEW
   - `qwen/qwen-2.5-72b-instruct` (alias: `qwen-72b`) - $0.18/$0.18 per 1M tokens
   - `qwen/qwen-2.5-coder-32b-instruct` (alias: `qwen-coder`) - $0.18/$0.18 per 1M tokens
   - `google/gemma-3n-e4b-it` (alias: `openrouter-gemma-3n`) - $0.04/$0.12 per 1M tokens
