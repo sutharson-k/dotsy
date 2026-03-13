@@ -225,7 +225,22 @@ class ChatTextArea(TextArea):
         event.stop()
         return True
 
-
+    def _select_model(self, chat_container) -> None:
+        """Select the current model and reload config."""
+        try:
+            if chat_container._model_selector:
+                model = chat_container._model_selector.select()
+                if model:
+                    chat_container.hide_model_selector()
+                    # Set the model in config
+                    from dotsy.core.config import DotsyConfig
+                    DotsyConfig.save_updates({"active_model": model})
+                    self.notify(f"Model changed to {model}")
+                    # Clear input and refocus
+                    self.value = ""
+                    self.focus()
+        except Exception:
+            pass
 
     def _find_chat_container(self) -> ChatInputContainer | None:
         """Find the parent ChatInputContainer widget."""
