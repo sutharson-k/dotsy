@@ -11,10 +11,16 @@ from textual.widgets import Static
 class ModelSelectorWidget(Static):
     """Model selector with CURRENT MODEL and PROVIDERS sections."""
     
+    BINDINGS = [
+        ("enter", "select", "Select"),
+        ("escape", "cancel", "Cancel"),
+        ("backspace", "back", "Back"),
+    ]
+    
     def __init__(self, **kwargs: Any) -> None:
         super().__init__("", id="model-selector", **kwargs)
         self.styles.display = "none"
-        self.can_focus = False
+        self.can_focus = True
         self._models: list[dict] = []
         self._providers: dict[str, list[dict]] = {}
         self._current_model: str | None = None
@@ -217,6 +223,18 @@ class ModelSelectorWidget(Static):
         self.update(text)
         self.refresh()
 
+    def action_select(self) -> None:
+        """Handle Enter key."""
+        self.select()
+        
+    def action_cancel(self) -> None:
+        """Handle Escape key."""
+        self.hide()
+        
+    def action_back(self) -> None:
+        """Handle Backspace key."""
+        self.back()
+        
     def hide(self) -> None:
         """Hide the model selector."""
         self.styles.display = "none"
