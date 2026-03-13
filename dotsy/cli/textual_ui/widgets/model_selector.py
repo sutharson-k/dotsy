@@ -32,8 +32,10 @@ class ModelSelectorWidget(Static):
         self._models = models
         self._current_model = current_model
         self._group_by_provider()
-        self._selected_provider = None
         self._selected_model_index = 0
+        # Auto-select first provider
+        provider_list = list(self._providers.keys())
+        self._selected_provider = provider_list[0] if provider_list else None
         self._mode = "providers"
         self._update_display()
         
