@@ -122,7 +122,10 @@ class ModelSelectorWidget(Static):
         
         # Header
         text.append("╔══════════════════════════════════════════════════════════╗\n", style="bold cyan")
-        text.append("║              MODEL SELECTOR (↑↓ navigate, Enter select)  ║\n", style="bold cyan")
+        if self._mode == "providers":
+            text.append("║         MODEL SELECTOR - Select a Provider            ║\n", style="bold cyan")
+        else:
+            text.append("║         MODEL SELECTOR - Select a Model               ║\n", style="bold cyan")
         text.append("╚══════════════════════════════════════════════════════════╝\n\n", style="bold cyan")
         
         # Current Model Section
