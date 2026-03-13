@@ -226,7 +226,6 @@ class ChatTextArea(TextArea):
         return True
 
 
-            chat_container._model_selector.navigate(0)
 
     def _find_chat_container(self) -> ChatInputContainer | None:
         """Find the parent ChatInputContainer widget."""
