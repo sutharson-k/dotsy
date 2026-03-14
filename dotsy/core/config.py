@@ -787,7 +787,17 @@ class DotsyConfig(BaseSettings):
             provider = self.get_provider_for_model(active_model)
             api_key_env = provider.api_key_env_var
             if api_key_env and not os.getenv(api_key_env):
+                for model in self.models:
+                    try:
+                        p = self.get_provider_for_model(model)
+                        if not p.api_key_env_var or os.getenv(p.api_key_env_var):
+                            self.active_model = model.alias
+                            return self
+                    except Exception:
+                        continue
                 raise MissingAPIKeyError(api_key_env, provider.name)
+        except MissingAPIKeyError:
+            raise
         except ValueError:
             pass
         return self
