@@ -112,6 +112,7 @@ class ModelSelectorWidget(Static):
         """Go back to providers list."""
         self._mode = "providers"
         self._selected_model_index = 0
+        self._selected_provider = sorted(self._providers.keys())[0] if self._providers else None
         self._update_display()
         
     @property
@@ -268,6 +269,7 @@ class ModelSelectorWidget(Static):
 
         y = event.offset.y
         provider_list = sorted(self._providers.keys())
+        self.notify(f"y={y} providers={provider_list}")
         idx = y - 14
 
         if self._mode == "providers":
