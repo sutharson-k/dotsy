@@ -266,7 +266,10 @@ class ModelSelectorWidget(Static):
         """Handle click events for selecting providers/models."""
         event.stop()
         event.prevent_default()
-
+        
+        # Debug: show click coordinates
+        self.notify(f"click y={event.y} offset_y={event.offset.y} region_y={self.region.y}")
+        
         if self._mode == "providers":
             provider_list = list(self._providers.keys())
             # Header=3, blank=1, current model box=4, blank=1, providers header=3 = offset 12
