@@ -226,7 +226,13 @@ class ModelSelectorWidget(Static):
 
     def action_select(self) -> None:
         """Handle Enter key."""
-        self.select()
+        alias = self.select()
+        if alias:
+            self.hide()
+            from dotsy.core.config import DotsyConfig
+            DotsyConfig.save_updates({"active_model": alias})
+            import asyncio
+            asyncio.create_task(self.app._reload_config())
         
     def action_cancel(self) -> None:
         """Handle Escape key."""
@@ -253,8 +259,8 @@ class ModelSelectorWidget(Static):
         
         if self._mode == "providers":
             provider_list = list(self._providers.keys())
-            # Header=3 lines, current model section=4 lines, providers header=2 lines = offset 9
-            provider_start = 9
+            # Header=3, blank=1, current model box=4, blank=1, providers header=3 = offset 12
+            provider_start = 12
             idx = event.y - provider_start
             if 0 <= idx < len(provider_list):
                 self._selected_provider = provider_list[idx]
@@ -263,7 +269,7 @@ class ModelSelectorWidget(Static):
                 self._update_display()
         else:
             models = self._providers.get(self._selected_provider, [])
-            model_start = 9
+            model_start = 12
             idx = event.y - model_start
             if 0 <= idx < len(models):
                 self._selected_model_index = idx
