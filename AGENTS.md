@@ -124,7 +124,7 @@ guidelines:
 
   - title: "Use uv for All Commands"
     description: >
-      We use uv to manage our python environment. You should nevery try to run a bare python commands.
+      We use uv to manage our python environment. You should never try to run bare python commands.
       Always run commands using `uv` instead of invoking `python` or `pip` directly.
       For example, use `uv add package` and `uv run script.py` rather than `pip install package` or `python script.py`.
       This practice helps avoid environment drift and leverages modern Python packaging best practices.
@@ -133,3 +133,21 @@ guidelines:
       - uv sync to install dependencies declared in pyproject.toml and uv.lock
       - uv run script.py to run a script within the uv environment
       - uv run pytest (or any other python tool) to run the tool within the uv environment
+
+  - title: "Model Selector Widget"
+    description: >
+      The model selector uses a hover-to-highlight + click-to-confirm pattern:
+      - MouseMove events update the highlighted provider/model via on_mouse_move()
+      - Click events confirm the currently highlighted selection via on_click()
+      - Providers and models are sorted alphabetically for consistent ordering
+      - capture_mouse() and release_mouse() are called in show()/hide() to enable hover events
+      - The widget uses sorted() consistently across _update_display, on_click, _navigate_providers,
+        _navigate_models, select(), and selected_model to ensure visual and click indices match.
+
+  - title: "API Key Fallback"
+    description: >
+      The config's _check_api_key validator automatically falls back to any available model with
+      a valid API key when the configured active_model's provider key is missing. This allows dotsy
+      to work out-of-the-box when users have at least one provider configured, even if their config
+      references a different provider. The fallback iterates through all models and switches to the
+      first one with a valid API key.
