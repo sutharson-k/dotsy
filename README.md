@@ -33,7 +33,6 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 - **Image Support**: Send images with `@/path/to/image.png` syntax for vision analysis
 - **Project-Aware Context**: Automatically scans your project structure
 - **Multiple Agents**: Different agent profiles for different workflows (Default, Plan, Accept Edits)
-- **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent
 - **Highly Configurable**: Customize models, providers, and tool permissions
 - **Model Selector UI**: Interactive popup to browse and select models by provider with hover-to-select navigation
 
