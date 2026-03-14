@@ -13,7 +13,6 @@ class ModelSelectorWidget(Static):
     """Model selector with CURRENT MODEL and PROVIDERS sections."""
     
     BINDINGS = [
-        ("enter", "select", "Select"),
         ("escape", "cancel", "Cancel"),
         ("backspace", "back", "Back"),
     ]
