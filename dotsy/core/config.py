@@ -327,14 +327,6 @@ DEFAULT_PROVIDERS = [
         api_style="openai",
         backend=Backend.GENERIC,
     ),
-    # Qwen via OpenRouter (International)
-    ProviderConfig(
-        name="qwen_openrouter",
-        api_base="https://openrouter.ai/api/v1",
-        api_key_env_var="OPENROUTER_API_KEY",
-        api_style="openai",
-        backend=Backend.GENERIC,
-    ),
     # OpenRouter (All models)
     ProviderConfig(
         name="openrouter",
@@ -471,21 +463,21 @@ DEFAULT_MODELS = [
     # Qwen Models via OpenRouter (International)
     ModelConfig(
         name="qwen/qwen-2.5-72b-instruct",
-        provider="qwen_openrouter",
+        provider="openrouter",
         alias="qwen-72b",
         input_price=0.18,
         output_price=0.18,
     ),
     ModelConfig(
         name="qwen/qwen-2.5-coder-32b-instruct",
-        provider="qwen_openrouter",
+        provider="openrouter",
         alias="qwen-coder",
         input_price=0.18,
         output_price=0.18,
     ),
     ModelConfig(
         name="google/gemma-3n-e4b-it",
-        provider="qwen_openrouter",
+        provider="openrouter",
         alias="openrouter-gemma-3n",
         input_price=0.04,
         output_price=0.12,
@@ -567,7 +559,7 @@ DEFAULT_MODELS = [
     ),
         ModelConfig(
         name="nvidia/nemotron-3-super-120b-a12b:free",
-        provider="qwen_openrouter",
+        provider="openrouter",
         alias="nemotron-3-super",
         input_price=0.0,
         output_price=0.0,
@@ -575,21 +567,21 @@ DEFAULT_MODELS = [
     # Vision-capable models via OpenRouter
     ModelConfig(
         alias="gpt-4o-openrouter",
-        provider="qwen_openrouter",
+        provider="openrouter",
         name="openai/gpt-4o",
         input_price=5.0,
         output_price=15.0,
     ),
     ModelConfig(
         alias="claude-sonnet-openrouter",
-        provider="qwen_openrouter",
+        provider="openrouter",
         name="anthropic/claude-3-5-sonnet",
         input_price=3.0,
         output_price=15.0,
     ),
     ModelConfig(
         alias="gemini-flash-openrouter",
-        provider="qwen_openrouter",
+        provider="openrouter",
         name="google/gemini-2.0-flash",
         input_price=0.1,
         output_price=0.4,
