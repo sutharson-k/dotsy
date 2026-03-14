@@ -26,6 +26,7 @@ class TokenTracking:
 class ContextProgress(NoMarkupStatic):
     tokens = reactive(TokenState())
     tracking = reactive(TokenTracking())
+    current_model = reactive("")
 
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
@@ -68,6 +69,6 @@ class ContextProgress(NoMarkupStatic):
             )
 
         text = (
-            f"{ratio:.0%} of {new_state.max_tokens // 1000}k tokens{tokens_per_second}"
+            f"{self.current_model} | {ratio:.0%} of {new_state.max_tokens // 1000}k tokens{tokens_per_second}"
         )
         self.update(text)

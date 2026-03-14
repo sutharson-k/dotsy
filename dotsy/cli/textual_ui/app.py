@@ -220,6 +220,7 @@ class DotsyApp(App):  # noqa: PLR0904
                 max_tokens=self.config.auto_compact_threshold,
                 current_tokens=stats.context_tokens,
             )
+            context_progress.current_model = self.config.active_model
 
         AgentStats.add_listener("context_tokens", update_context_progress)
         self.agent_loop.stats.trigger_listeners()
