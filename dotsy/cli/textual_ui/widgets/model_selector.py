@@ -264,15 +264,14 @@ class ModelSelectorWidget(Static):
         
     def on_click(self, event: Click) -> None:
         """Handle click events for selecting providers/models."""
-        event.stop()
-        event.prevent_default()
-
+        # Removed event.stop() and event.prevent_default() - they may block click processing
+        
         y = event.offset.y
-
+        provider_list = list(self._providers.keys())
+        idx = y - 14
+        self.notify(f"y={y} idx={idx} providers={len(provider_list)} mode={self._mode}")
+        
         if self._mode == "providers":
-            provider_list = list(self._providers.keys())
-            provider_start = 14
-            idx = y - provider_start
             if 0 <= idx < len(provider_list):
                 self._selected_provider = provider_list[idx]
                 self._mode = "models"
@@ -280,8 +279,7 @@ class ModelSelectorWidget(Static):
                 self._update_display()
         else:
             models = self._providers.get(self._selected_provider, [])
-            model_start = 14
-            idx = y - model_start
+            idx = y - 14
             if 0 <= idx < len(models):
                 self._selected_model_index = idx
                 alias = models[idx].get("alias")
