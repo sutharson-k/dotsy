@@ -289,13 +289,13 @@ class ModelSelectorWidget(Static):
         y = event.offset.y
         if self._mode == "providers":
             provider_list = sorted(self._providers.keys())
-            idx = y - 14
+            idx = y - 12
             if 0 <= idx < len(provider_list):
                 self._selected_provider = provider_list[idx]
                 self._update_display()
         else:
             models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
-            idx = y - 14
+            idx = y - 12
             if 0 <= idx < len(models):
                 self._selected_model_index = idx
                 self._update_display()
