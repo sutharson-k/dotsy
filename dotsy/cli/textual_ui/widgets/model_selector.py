@@ -41,7 +41,7 @@ class ModelSelectorWidget(Static):
         self._group_by_provider()
         self._selected_model_index = 0
         # Auto-select first provider
-        provider_list = list(self._providers.keys())
+        provider_list = sorted(self._providers.keys())
         self._selected_provider = provider_list[0] if provider_list else None
         self._mode = "providers"
         self._update_display()
@@ -68,10 +68,10 @@ class ModelSelectorWidget(Static):
             
     def _navigate_providers(self, direction: int) -> None:
         """Navigate through providers list."""
-        provider_list = list(self._providers.keys())
+        provider_list = sorted(self._providers.keys())
         if not provider_list:
             return
-            
+
         if self._selected_provider is None:
             self._selected_provider = provider_list[0]
         else:
@@ -164,7 +164,7 @@ class ModelSelectorWidget(Static):
         
         if self._mode == "providers":
             # Show all providers
-            provider_list = list(self._providers.keys())
+            provider_list = sorted(self._providers.keys())
             for idx, provider in enumerate(provider_list):
                 model_count = len(self._providers[provider])
                 is_selected = provider == self._selected_provider
@@ -265,12 +265,12 @@ class ModelSelectorWidget(Static):
     def on_click(self, event: Click) -> None:
         """Handle click events for selecting providers/models."""
         # Removed event.stop() and event.prevent_default() - they may block click processing
-        
+
         y = event.offset.y
-        provider_list = list(self._providers.keys())
+        provider_list = sorted(self._providers.keys())
         idx = y - 14
         self.notify(f"y={y} idx={idx} providers={len(provider_list)} mode={self._mode}")
-        
+
         if self._mode == "providers":
             if 0 <= idx < len(provider_list):
                 self._selected_provider = provider_list[idx]
