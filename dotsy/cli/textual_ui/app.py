@@ -1321,25 +1321,7 @@ class DotsyApp(App):  # noqa: PLR0904
             # Only process if selector is visible
             if not chat._model_selector or chat._model_selector.styles.display == "none":
                 return
-            if chat._model_selector:
-                model = chat._model_selector.select()
-                if model:
-                    chat.hide_model_selector()
-                    # Set the model in config
-                    from dotsy.core.config import DotsyConfig
-
-                    DotsyConfig.save_updates({"active_model": model})
-
-                    # Reload the agent loop with new config
-                    if self.agent_loop:
-                        import asyncio
-
-                        asyncio.create_task(self._reload_config())
-                    else:
-                        self.notify(f"Model changed to {model}")
-
-                    chat.value = ""
-                    chat.focus_input()
+            chat._model_selector.action_select()
         except Exception:
             pass
 
