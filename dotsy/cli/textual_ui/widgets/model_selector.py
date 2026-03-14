@@ -84,7 +84,7 @@ class ModelSelectorWidget(Static):
         """Navigate through models list."""
         if not self._selected_provider:
             return
-        models = self._providers.get(self._selected_provider, [])
+        models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
         if not models:
             return
         self._selected_model_index = (self._selected_model_index + direction) % len(models)
@@ -103,7 +103,7 @@ class ModelSelectorWidget(Static):
                 self._update_display()
         else:
             if self._selected_provider:
-                models = self._providers.get(self._selected_provider, [])
+                models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
                 if models and 0 <= self._selected_model_index < len(models):
                     return models[self._selected_model_index].get("alias")
         return None
@@ -118,7 +118,7 @@ class ModelSelectorWidget(Static):
     def selected_model(self) -> str | None:
         """Get the currently selected model alias."""
         if self._selected_provider and self._mode == "models":
-            models = self._providers.get(self._selected_provider, [])
+            models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             if models and 0 <= self._selected_model_index < len(models):
                 return models[self._selected_model_index].get("alias")
         return None
@@ -185,7 +185,7 @@ class ModelSelectorWidget(Static):
                     text.append(f" {model_count} models  │\n", style="dim")
         else:
             # Show models for selected provider
-            models = self._providers.get(self._selected_provider, [])
+            models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             for idx, model in enumerate(models):
                 alias = model.get("alias", "unknown")
                 name = model.get("name", "")
@@ -278,7 +278,7 @@ class ModelSelectorWidget(Static):
                 self.focus()
                 self._update_display()
         else:
-            models = self._providers.get(self._selected_provider, [])
+            models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             idx = y - 14
             if 0 <= idx < len(models):
                 self._selected_model_index = idx
