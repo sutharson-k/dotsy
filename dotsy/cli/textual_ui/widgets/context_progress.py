@@ -32,9 +32,22 @@ class ContextProgress(NoMarkupStatic):
         super().__init__(**kwargs)
         self._last_max_tokens = 0
 
+    def watch_current_model(self, new_model: str) -> None:
+        """Update display when model changes."""
+        self._update_display()
+
     def watch_tokens(self, new_state: TokenState) -> None:
-        if new_state.max_tokens == 0:
+        self._update_display()
+
+    def _update_display(self) -> None:
+        if not self.current_model:
             self.update("")
+            return
+
+        new_state = self.tokens
+        if new_state.max_tokens == 0:
+            # Show model name even without token info
+            self.update(f"{self.current_model} | Waiting for tokens...")
             self._last_max_tokens = 0
             return
 
