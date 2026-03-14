@@ -274,17 +274,24 @@ class ModelSelectorWidget(Static):
                 self.focus()
                 self._update_display()
         else:
-            alias = self.selected_model
-            if alias:
-                self.hide()
-                from dotsy.core.config import DotsyConfig
-                DotsyConfig.save_updates({"active_model": alias})
-                import asyncio
-                asyncio.create_task(self.app._reload_config())
-                try:
-                    self.app.query_one("ChatInputContainer").focus_input()
-                except Exception:
-                    pass
+            y = event.offset.y
+            models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
+            idx = y - 12
+            if 0 <= idx < len(models):
+                self._selected_model_index = idx
+                alias = models[idx].get("alias")
+                if alias:
+                    self.hide()
+                    from dotsy.core.config import DotsyConfig
+                    DotsyConfig.save_updates({"active_model": alias})
+                    import asyncio
+                    asyncio.create_task(self.app._reload_config())
+                    try:
+                        self.app.query_one("ChatInputContainer").focus_input()
+                    except Exception:
+                        pass
+            else:
+                self.back()
 
     def on_mouse_move(self, event: MouseMove) -> None:
         """Handle mouse hover to highlight providers/models."""
