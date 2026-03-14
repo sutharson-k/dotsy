@@ -120,7 +120,6 @@ class DotsyApp(App):  # noqa: PLR0904
         Binding("up", "model_up", "Model Up", show=False),
         Binding("down", "model_down", "Model Down", show=False),
         Binding("enter", "model_select", "Select Model", show=False),
-        Binding("escape", "model_cancel", "Cancel", show=False),
         Binding("backspace", "model_back", "Back", show=False),
         Binding("escape", "close_model_selector", "Close Model Selector", show=False),
     ]
@@ -1301,7 +1300,8 @@ class DotsyApp(App):  # noqa: PLR0904
         """Navigate up in model selector."""
         try:
             chat = self.query_one(ChatInputContainer)
-            chat.navigate_model_selector(-1)
+            if chat._model_selector and chat._model_selector.styles.display != "none":
+                chat.navigate_model_selector(-1)
         except Exception:
             pass
 
@@ -1309,7 +1309,8 @@ class DotsyApp(App):  # noqa: PLR0904
         """Navigate down in model selector."""
         try:
             chat = self.query_one(ChatInputContainer)
-            chat.navigate_model_selector(1)
+            if chat._model_selector and chat._model_selector.styles.display != "none":
+                chat.navigate_model_selector(1)
         except Exception:
             pass
 
@@ -1317,6 +1318,9 @@ class DotsyApp(App):  # noqa: PLR0904
         """Select the current model from the selector."""
         try:
             chat = self.query_one(ChatInputContainer)
+            # Only process if selector is visible
+            if not chat._model_selector or chat._model_selector.styles.display == "none":
+                return
             if chat._model_selector:
                 model = chat._model_selector.select()
                 if model:
@@ -1344,6 +1348,7 @@ class DotsyApp(App):  # noqa: PLR0904
         try:
             chat = self.query_one(ChatInputContainer)
             chat.hide_model_selector()
+            chat.focus_input()
         except Exception:
             pass
 
@@ -1351,8 +1356,9 @@ class DotsyApp(App):  # noqa: PLR0904
         """Go back to providers list in model selector."""
         try:
             chat = self.query_one(ChatInputContainer)
-            if hasattr(chat._model_selector, 'back'):
-                chat._model_selector.back()
+            if chat._model_selector and chat._model_selector.styles.display != "none":
+                if hasattr(chat._model_selector, 'back'):
+                    chat._model_selector.back()
         except Exception:
             pass
 

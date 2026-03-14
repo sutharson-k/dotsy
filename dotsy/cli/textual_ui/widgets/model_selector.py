@@ -233,10 +233,20 @@ class ModelSelectorWidget(Static):
             DotsyConfig.save_updates({"active_model": alias})
             import asyncio
             asyncio.create_task(self.app._reload_config())
-        
+            # Refocus chat input
+            try:
+                self.app.query_one("ChatInputContainer").focus_input()
+            except Exception:
+                pass
+
     def action_cancel(self) -> None:
         """Handle Escape key."""
         self.hide()
+        # Refocus chat input
+        try:
+            self.app.query_one("ChatInputContainer").focus_input()
+        except Exception:
+            pass
         
     def action_back(self) -> None:
         """Handle Backspace key."""
@@ -256,7 +266,7 @@ class ModelSelectorWidget(Static):
         """Handle click events for selecting providers/models."""
         event.stop()
         event.prevent_default()
-        
+
         if self._mode == "providers":
             provider_list = list(self._providers.keys())
             # Header=3, blank=1, current model box=4, blank=1, providers header=3 = offset 12
@@ -281,4 +291,9 @@ class ModelSelectorWidget(Static):
                     DotsyConfig.save_updates({"active_model": alias})
                     import asyncio
                     asyncio.create_task(self.app._reload_config())
+                    # Refocus chat input
+                    try:
+                        self.app.query_one("ChatInputContainer").focus_input()
+                    except Exception:
+                        pass
 
