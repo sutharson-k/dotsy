@@ -1,10 +1,10 @@
 # Contributing to Dotsy
 
-Thank you for your interest in Dotsy! We appreciate your enthusiasm and support.
+Thank you for your interest in Dotsy! We appreciate your support.
 
 ## Current Status
 
-**Dotsy is in active development** — our team is iterating quickly and making lots of changes under the hood. Because of this pace, we may be slower than usual when reviewing PRs and issues.
+**Dotsy is in active development** — our team is iterating quickly and making lots of changes under the hood.
 
 **We especially encourage**:
 
@@ -38,8 +38,6 @@ We'd love to hear your ideas! When submitting feedback or feature requests:
 3. **Alternatives**: If applicable, mention any alternatives you've considered
 
 ## Development Setup
-
-This section is for developers who want to set up the repository for local development, even though we're not currently accepting contributions.
 
 ### Prerequisites
 
@@ -153,13 +151,35 @@ The pre-commit hooks include:
 
 See `pyproject.toml` for detailed configuration of Ruff and Pyright.
 
-## Code Contributions
+## Adding Skills
 
-While we're not accepting code contributions at the moment, we may open up contributions in the future. When that happens, we'll update this document with:
+Dotsy supports 145+ specialized skills. To add a custom skill:
 
-- Pull request process
-- Contribution guidelines
-- Review process
+1. Create a folder in `~/.dotsy/skills/your-skill-name/`
+2. Add a `skill.md` file with YAML frontmatter:
+
+```markdown
+---
+name: your-skill-name
+description: A brief description of what this skill does
+---
+
+# Your Skill Name
+
+Detailed instructions for the skill...
+```
+
+3. The skill will be available via `/your-skill-name` command
+
+## Adding AI Providers and Models
+
+To add a new AI provider or model:
+
+1. Add the provider to `dotsy/core/config.py` in the `DEFAULT_PROVIDERS` list
+2. Add models to the `DEFAULT_MODELS` list
+3. Update documentation in `README.md`
+
+See the provider configuration section in `core/config.py` for examples.
 
 ## Questions?
 
@@ -168,13 +188,3 @@ If you have questions about using Dotsy, please check the [README](README.md) fi
 Thank you for helping make Dotsy better! 🙏
 
 — Sutharson
-
-## Adding AI Providers and Models
-
-To add a new AI provider or model:
-
-1. Add the provider to `dotsy/core/config.py` in the `DEFAULT_PROVIDERS` list
-2. Add models to the `DEFAULT_MODELS` list
-3. Update documentation in `docs/models/README.md` and `docs/models/providers/README.md`
-
-See [docs/models/adding-providers.md](docs/models/adding-providers.md) for detailed instructions.

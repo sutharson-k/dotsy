@@ -5,15 +5,17 @@
 OVERVIEW
 ================================================================================
 
-Dotsy is a multi-provider AI CLI coding assistant built from scratch by
-Sutharson. It provides an interactive terminal interface for conversing with
-AI models while working on codebases. The tool supports multiple AI providers
-(Mistral, OpenAI, Anthropic, Google) and includes powerful features like file
-manipulation, code search, bash execution, and session management.
+Dotsy is a multi-provider AI CLI coding assistant with 145+ specialized skills.
+Built from scratch by Sutharson, it provides an interactive terminal interface
+for conversing with AI models while working on codebases. The tool supports
+multiple AI providers (Mistral, OpenAI, Anthropic, Google, Groq, OpenRouter,
+MuleRouter, Bytez, Hugging Face) and includes powerful features like file
+manipulation, code search, bash execution, session management, and more.
 
 Current Version: 17.20.119
 Author: Sutharson
 Repository: https://github.com/sutharson-k/dotsy
+Skills: 145+ specialized capabilities
 
 
 PROJECT STRUCTURE
@@ -26,19 +28,21 @@ dotsy/
 │   ├── cli.py               # CLI bootstrap logic
 │   ├── textual_ui/          # Terminal user interface
 │   │   ├── app.py           # Main TUI application
-│   │   └── widgets/         # UI components
+│   │   └── widgets/         # UI components (model_selector, context_progress, etc.)
 │   ├── update_notifier/     # Version update checking
 │   └── autocompletion/      # Tab completion
 ├── core/                    # Core engine
 │   ├── agent_loop.py        # Main AI reasoning loop
-│   ├── config.py            # Configuration management
+│   ├── config.py            # Configuration management (providers, models, skills)
 │   ├── llm/                 # LLM backend abstraction
 │   ├── tools/               # Tool system
 │   ├── agents/              # Agent profiles
 │   ├── session/             # Session save/load
-│   └── skills/              # Custom skill definitions
+│   ├── skills/              # Skill loading and management
+│   └── middleware.py        # Agent loop middleware
 ├── setup/                   # Onboarding & setup
-└── acp/                     # Agent Communication Protocol (server mode)
+├── acp/                     # Agent Communication Protocol (server mode)
+└── skills/                  # Built-in skills library (145+ skills)
 
 
 HOW IT WORKS - COMPLETE FLOW

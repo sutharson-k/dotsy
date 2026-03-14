@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-03-14
+
+### Added
+- **145+ Specialized Skills**: Complete library of skills covering software development, game dev, marketing, business, data/AI, infrastructure, and more
+- **Model Selector UI**: Interactive popup with hover-to-highlight + click-to-confirm pattern for browsing models by provider
+- **Token Counter Display**: Shows current model name alongside token usage (e.g., "mistral-large | 67% of 100k tokens")
+- **API Key Fallback**: Automatic fallback to available models when configured provider's API key is missing
+- **Sorted Provider/Model Lists**: Alphabetically sorted providers and models for consistent navigation
+- **Mouse Hover Support**: Model selector updates highlight on mouse hover for easier selection
+- **Click Outside to Go Back**: Clicking outside model rows in models view returns to providers
+
+### Changed
+- **Default Model**: Changed from `hunter-alpha` (mulerouter) to `mistral-large` (mistral) for better out-of-box experience
+- **Provider Consolidation**: Removed redundant `qwen_openrouter` provider, models now use `openrouter` directly
+- **Model Selector Click Handling**: Simplified to confirm currently highlighted selection instead of offset-based calculation
+- **Documentation**: Completely updated README.md with all 145+ skills listed and categorized
+
+### Fixed
+- Model selector click offset issues on scrollable content
+- Provider reset when navigating back from models view
+- Focus loss in model selector on click events
+- Skills not loading from global skills directory
+
+---
+
 ## [Unreleased] - 2026-03-09
 
 ### Added
