@@ -522,6 +522,52 @@ Skills are stored in `~/.dotsy/skills/` directory. Each skill is a folder contai
 - YAML frontmatter (name, description, settings)
 - Markdown content (skill instructions and capabilities)
 
+## CLI-Anything Integration
+
+Dotsy integrates with [CLI-Anything](https://github.com/HKUDS/CLI-Anything) to make desktop software agent-native. Tell dotsy to control Blender, GIMP, OBS, LibreOffice, and more using natural language.
+
+### Supported Apps
+
+| App | Tool Directory | Skill |
+|-----|---------------|-------|
+| Blender | `tools/cli-anything-blender` | `/blender-cli` |
+| GIMP | `tools/cli-anything-gimp` | `/gimp-cli` |
+| OBS Studio | `tools/cli-anything-obs` | `/obs-cli` |
+| LibreOffice | `tools/cli-anything-libreoffice` | `/libreoffice-cli` |
+| Audacity | `tools/cli-anything-audacity` | — |
+
+### Setup
+
+Install the tool harness for the app you want to use:
+
+```bash
+# Blender
+pip install -e tools/cli-anything-blender/agent-harness
+
+# GIMP
+pip install -e tools/cli-anything-gimp/agent-harness
+
+# OBS Studio
+pip install -e tools/cli-anything-obs/agent-harness
+
+# LibreOffice
+pip install -e tools/cli-anything-libreoffice/agent-harness
+```
+
+### Usage
+
+```bash
+dotsy
+
+# Activate the skill
+/blender-cli
+
+# Now tell dotsy what to do
+Create a 3D scene with a red cube at position 0,0,0 and render it to output.png
+```
+
+Dotsy will execute the CLI-Anything commands via its bash tool to control the app.
+
 ## Crush CLI Integration
 
 Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) for enhanced autonomous agent capabilities.
