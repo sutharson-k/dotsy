@@ -1,8 +1,8 @@
 # Dotsy
 
 [![PyPI Version](https://img.shields.io/pypi/v/dotsy)](https://pypi.org/project/dotsy)
-[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/release/python-3120/)
-[![License](https://img.shields.io/github/license/yourusername/dotsy)](https://github.com/sutharson-k/dotsy/blob/main/LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.12+-blue)](https://www.python.org/downloads/release/python-3120/)
+[![License](https://img.shields.io/github/license/sutharson-k/dotsy)](https://github.com/sutharson-k/dotsy/blob/main/LICENSE)
 
 ```
 ██████╗ ██████╗ ████████╗███████╗██╗   ██╗
@@ -13,7 +13,7 @@
 ╚═════╝  ╚═════╝    ╚═╝   ╚══════╝   ╚═╝
 ```
 
-**Your multi-provider AI coding assistant.**
+**Your multi-provider AI coding assistant with 145+ specialized skills.**
 
 Dotsy is a powerful command-line coding assistant that supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, and any OpenAI-compatible API. It provides a conversational interface to your codebase, allowing you to explore, modify, and interact with your projects through natural language.
 
@@ -23,6 +23,7 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 ## Features
 
 - **Multi-Provider Support**: Mistral, OpenAI, Anthropic, Google, Qwen, Bytez, Groq, Hugging Face, OpenRouter, or any OpenAI-compatible API
+- **145+ Specialized Skills**: From software development to marketing, gaming, content creation, and more
 - **Interactive Chat**: Conversational AI agent that understands your requests
 - **Bayesian Reasoning**: AI maintains uncertainty, updates beliefs gradually, and shows confidence levels (based on Google Research)
 - **Show Thinking**: Toggle AI step-by-step reasoning display with `/thinking` command
@@ -34,6 +35,8 @@ Dotsy is a powerful command-line coding assistant that supports multiple AI prov
 - **Multiple Agents**: Different agent profiles for different workflows (Default, Plan, Accept Edits)
 - **Crush CLI Integration**: Seamlessly work with Crush CLI as a coordinated autonomous agent
 - **Highly Configurable**: Customize models, providers, and tool permissions
+- **Model Selector UI**: Interactive popup to browse and select models by provider with hover-to-select navigation
+
 ## Quick Start
 
 ### Installation
@@ -62,19 +65,21 @@ dotsy --setup
 
 2. Configure your preferred provider and API key
 
-3. Start using Dotsy (default model: hunter-alpha):
+3. Start using Dotsy (default model: mistral-large):
 ```bash
 dotsy
 ```
 
 ### Default Model
 
-DOTSY uses **hunter-alpha** (OpenRouter) by default - a specialized reasoning model optimized for complex tasks.
+DOTSY uses **mistral-large** (Mistral AI) by default.
 
 To change the default, edit `~/.dotsy/config.toml`:
 ```toml
 active_model = "gpt-4o"  # or any configured model
 ```
+
+Or use the model selector in the UI: press the model selection key and browse providers/models with your mouse or arrow keys.
 
 ## Supported Providers
 
@@ -238,7 +243,7 @@ dotsy --prompt "Analyze the codebase" --output json
 ```
 
 ### Specify Model
-Edit your config to change the `active_model` alias.
+Edit your config to change the `active_model` alias, or use the interactive model selector in the UI.
 
 ### Send Images
 Use `@` syntax to attach images for vision analysis:
@@ -318,23 +323,178 @@ Type `/` in the chat to see all available commands with autocomplete:
 # Change model (type to search)
 /model
 # Then type "hunter" or "claude" to filter models
-# Use ↑↓ to navigate, Enter to select
+# Use ↑↓ to navigate, Enter to select, or hover and click
 
 # Clear history
 /clear
 ```
 
-## Claude Skills
+## Skills (145+ Specialized Capabilities)
 
-Dotsy includes **Claude-inspired skills** that provide specialized capabilities:
+Dotsy includes **145+ specialized skills** covering software development, marketing, content creation, gaming, and more:
 
-### Available Skills
+### Software Development Skills
 
-- **`/claude-code-review`** - Comprehensive code reviewer for quality, best practices, and improvements
-- **`/claude-architect`** - System design and architecture expert for scalable software systems
-- **`/claude-debugger`** - Expert debugging assistant for systematic bug diagnosis and fixes
-- **`/claude-teacher`** - Patient coding mentor for learning programming concepts effectively
-- **`/claude-security`** - Security expert for vulnerability assessment and secure code review
+- **`/accessibility-auditor`** - WCAG compliance and accessibility testing
+- **`/ai-engineer`** - AI/ML system design and implementation
+- **`/backend-architect`** - Backend system architecture and design
+- **`/code-reviewer`** - Code quality and best practices review
+- **`/data-engineer`** - Data pipeline and infrastructure design
+- **`/database-optimizer`** - Database performance tuning
+- **`/devops-automator`** - CI/CD and infrastructure automation
+- **`/frontend-developer`** - Frontend web development
+- **`/git-workflow-master`** - Git branching and workflow management
+- **`/mcp-builder`** - Model Context Protocol server development
+- **`/mobile-app-builder`** - iOS/Android app development
+- **`/model-qa-specialist`** - AI model testing and validation
+- **`/security-engineer`** - Security assessment and hardening
+- **`/senior-developer`** - General software development expertise
+- **`/seo-specialist`** - Search engine optimization
+- **`/software-architect`** - Software architecture design
+- **`/technical-writer`** - Technical documentation
+- **`/ui-designer`** - User interface design
+- **`/ux-architect`** - User experience architecture
+- **`/ux-researcher`** - User research and testing
+
+### Game Development Skills
+
+- **`/blender-add-on-engineer`** - Blender plugin development
+- **`/game-audio-engineer`** - Game audio implementation
+- **`/game-designer`** - Game mechanics and systems design
+- **`/godot-gameplay-scripter`** - Godot engine scripting
+- **`/godot-multiplayer-engineer`** - Godot network programming
+- **`/godot-shader-developer`** - Godot shader programming
+- **`/level-designer`** - Game level design
+- **`/narrative-designer`** - Game narrative and storytelling
+- **`/roblox-avatar-creator`** - Roblox avatar design
+- **`/roblox-experience-designer`** - Roblox game design
+- **`/roblox-systems-scripter`** - Roblox Lua scripting
+- **`/technical-artist`** - Game art pipeline and tools
+- **`/unity-architect`** - Unity system architecture
+- **`/unity-editor-tool-developer`** - Unity editor extensions
+- **`/unity-multiplayer-engineer`** - Unity networking
+- **`/unity-shader-graph-artist`** - Unity shader development
+- **`/unreal-multiplayer-architect`** - Unreal Engine networking
+- **`/unreal-systems-engineer`** - Unreal Engine systems
+- **`/unreal-technical-artist`** - Unreal art pipeline
+- **`/unreal-world-builder`** - Unreal level design
+
+### Marketing & Content Skills
+
+- **`/baidu-seo-specialist`** - Baidu search optimization
+- **`/bilibili-content-strategist`** - Bilibili video content strategy
+- **`/brand-guardian`** - Brand consistency management
+- **`/carousel-growth-engine`** - Social carousel content
+- **`/content-creator`** - General content creation
+- **`/developer-advocate`** - Developer relations content
+- **`/douyin-strategist`** - Douyin (TikTok China) strategy
+- **`/growth-hacker`** - Growth marketing strategies
+- **`/instagram-curator`** - Instagram content strategy
+- **`/kuaishou-strategist`** - Kuaishou video strategy
+- **`/linkedin-content-creator`** - LinkedIn professional content
+- **`/paid-media-auditor`** - Paid advertising audit
+- **`/paid-social-strategist`** - Paid social media strategy
+- **`/podcast-strategist`** - Podcast production strategy
+- **`/ppc-campaign-strategist`** - PPC campaign management
+- **`/reddit-community-builder`** - Reddit community engagement
+- **`/short-video-editing-coach`** - Short-form video editing
+- **`/social-media-strategist`** - Social media strategy
+- **`/tiktok-strategist`** - TikTok content strategy
+- **`/trend-researcher`** - Trend analysis and research
+- **`/twitter-engager`** - Twitter/X engagement strategy
+- **`/visual-storyteller`** - Visual narrative design
+- **`/wechat-official-account-manager`** - WeChat official account
+- **`/weibo-strategist`** - Weibo social strategy
+- **`/xiaohongshu-specialist`** - Xiaohongshu (RED) strategy
+- **`/zhihu-strategist`** - Zhihu content strategy
+
+### Business & Enterprise Skills
+
+- **`/account-strategist`** - Account management strategy
+- **`/accounts-payable-agent`** - AP process automation
+- **`/analytics-reporter`** - Business analytics reporting
+- **`/compliance-auditor`** - Regulatory compliance audit
+- **`/corporate-training-designer`** - Corporate training programs
+- **`/deal-strategist`** - Deal negotiation strategy
+- **`/document-generator`** - Business document generation
+- **`/executive-summary-generator`** - Executive summary creation
+- **`/finance-tracker`** - Financial tracking and reporting
+- **`/government-digital-presales-consultant`** - GovTech presales
+- **`/healthcare-marketing-compliance-specialist`** - Healthcare marketing compliance
+- **`/jira-workflow-steward`** - Jira workflow optimization
+- **`/legal-compliance-checker`** - Legal compliance verification
+- **`/outbound-strategist`** - Outbound sales strategy
+- **`/project-shepherd`** - Project coordination
+- **`/proposal-strategist`** - Proposal and RFP strategy
+- **`/recruitment-specialist`** - Recruitment process optimization
+- **`/sales-coach`** - Sales technique coaching
+- **`/sales-engineer`** - Sales engineering support
+- **`/senior-project-manager`** - Project management expertise
+- **`/supply-chain-strategist`** - Supply chain optimization
+- **`/support-responder`** - Customer support responses
+- **`/workflow-optimizer`** - Business process optimization
+
+### Data & AI Skills
+
+- **`/ai-data-remediation-engineer`** - AI-powered data cleanup
+- **`/data-consolidation-agent`** - Data consolidation
+- **`/experiment-tracker`** - A/B test tracking
+- **`/feedback-synthesizer`** - User feedback synthesis
+- **`/identity-graph-operator`** - Customer identity graphs
+- **`/image-prompt-engineer`** - Image generation prompts
+- **`/lsp-index-engineer`** - Language server indexing
+- **`/pipeline-analyst`** - Data pipeline analysis
+- **`/sales-data-extraction-agent`** - Sales data extraction
+- **`/search-query-analyst`** - Search query analysis
+- **`/test-results-analyzer`** - Test result analysis
+
+### Infrastructure & DevOps Skills
+
+- **`/automation-governance-architect`** - Automation governance
+- **`/embedded-firmware-engineer`** - Embedded systems development
+- **`/evidence-collector`** - Evidence collection automation
+- **`/incident-response-commander`** - Incident response coordination
+- **`/infrastructure-maintainer`** - Infrastructure maintenance
+- **`/sre-site-reliability-engineer`** - Site reliability engineering
+- **`/terminal-integration-specialist`** - Terminal integrations
+- **`/threat-detection-engineer`** - Threat detection systems
+
+### Specialized Skills
+
+- **`/accessibility-auditor`** - Accessibility compliance
+- **`/agentic-identity-trust-architect`** - Digital identity architecture
+- **`/agents-orchestrator`** - Multi-agent system orchestration
+- **`/app-store-optimizer`** - App store optimization (ASO)
+- **`/autonomous-optimization-architect`** - Autonomous system optimization
+- **`/behavioral-nudge-engine`** - Behavioral design
+- **`/blockchain-security-auditor`** - Blockchain security audit
+- **`/book-co-author`** - Book writing collaboration
+- **`/china-e-commerce-operator`** - China e-commerce operations
+- **`/cross-border-e-commerce-specialist`** - Cross-border e-commerce
+- **`/cultural-intelligence-strategist`** - Cultural adaptation strategy
+- **`/discovery-coach`** - Discovery process coaching
+- **`/feishu-integration-developer`** - Feishu/Lark integrations
+- **`/git-workflow-master`** - Git workflow management
+- **`/inclusive-visuals-specialist`** - Inclusive visual design
+- **`/livestream-commerce-coach`** - Livestream shopping coaching
+- **`/macos-spatial-metal-engineer`** - macOS Spatial Computing
+- **`/performance-benchmarker`** - Performance benchmarking
+- **`/private-domain-operator`** - Private domain traffic
+- **`/programmatic-display-buyer`** - Programmatic advertising
+- **`/rapid-prototyper`** - Rapid prototyping
+- **`/reality-checker`** - Feasibility analysis
+- **`/report-distribution-agent`** - Report distribution
+- **`/solidity-smart-contract-engineer`** - Solidity smart contracts
+- **`/sprint-prioritizer`** - Sprint planning
+- **`/studio-operations`** - Studio operations management
+- **`/studio-producer`** - Studio production
+- **`/study-abroad-advisor`** - Study abroad consulting
+- **`/tracking-measurement-specialist`** - Analytics tracking
+- **`/visionos-spatial-engineer`** - visionOS development
+- **`/whimsy-injector`** - Creative enhancement
+- **`/xr-cockpit-interaction-specialist`** - XR cockpit design
+- **`/xr-immersive-developer`** - XR immersive experiences
+- **`/xr-interface-architect`** - XR interface architecture
 
 ### Using Skills
 
@@ -343,21 +503,23 @@ Invoke any skill with its slash command:
 ```bash
 dotsy
 
-/claude-code-review
+# List all available skills
+/skills
+
+# Use a specific skill
+/code-reviewer
 Please review this function for potential improvements...
 
-/claude-debugger
-I'm getting a null pointer exception in this code...
+/security-engineer
+Check this code for security vulnerabilities...
 
-/claude-architect
-Help me design a microservices architecture for...
+/ux-architect
+Help me design a better user flow for...
 ```
-
-Skills provide focused expertise in their domain while leveraging your configured AI model.
 
 ### Adding Custom Skills
 
-Skills are stored in the `skills/` directory. Each skill is a folder containing a `SKILL.md` file with:
+Skills are stored in `~/.dotsy/skills/` directory. Each skill is a folder containing a `skill.md` file with:
 - YAML frontmatter (name, description, settings)
 - Markdown content (skill instructions and capabilities)
 
@@ -366,8 +528,6 @@ Skills are stored in the `skills/` directory. Each skill is a folder containing 
 Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) for enhanced autonomous agent capabilities.
 
 ### Installation
-
-First, install Crush CLI:
 
 ```bash
 # Homebrew (macOS/Linux)
@@ -397,39 +557,12 @@ disabled_tools = []  # List of tools to disable
 
 ### Available Crush Tools
 
-Once enabled, Dotsy provides these Crush CLI tools:
-
 | Tool | Description |
 |------|-------------|
 | `crush_run` | Execute tasks using Crush CLI |
 | `crush_read_context` | Read project context from AGENTS.md |
 | `crush_logs` | Retrieve Crush CLI session logs |
 | `crush_update_providers` | Update Crush CLI provider list |
-
-### How It Works
-
-1. **Dotsy as Orchestrator**: Dotsy coordinates complex tasks and can delegate to Crush CLI
-2. **Crush as Worker**: Crush CLI executes specific coding tasks with its LLM integration
-3. **Shared Context**: Both agents share project context via AGENTS.md
-4. **Collaborative Workflow**: Dotsy can analyze Crush's output and provide enhanced responses
-
-### Example Usage
-
-```bash
-# Start Dotsy with Crush integration enabled
-dotsy
-
-# Ask Dotsy to use Crush for a task
-"Use Crush to refactor the authentication module"
-
-# Dotsy will coordinate with Crush CLI to complete the task
-```
-
-### Agent Coordination
-
-- **Dotsy**: High-level planning, tool orchestration, user communication
-- **Crush**: Code execution, file modifications, terminal commands
-- **Together**: Collaborative problem-solving with shared context
 
 ## Browser Automation
 
@@ -452,15 +585,6 @@ dotsy
 # "Click the login button"
 ```
 
-### Features
-
-- Navigate to URLs
-- Click, fill, type interactions
-- Take screenshots
-- Extract page content
-- CSS selector and XPath support
-- Domain allowlist for security
-
 ### Configuration
 
 ```toml
@@ -471,86 +595,6 @@ headless = true
 timeout_seconds = 60
 domain_allowlist = ["localhost", "127.0.0.1", "*.yourdomain.com"]
 ```
-
-### Why browser-use?
-
-| Feature | browser-use | Puppeteer MCP |
-|---------|-------------|---------------|
-| Language | Python | Node.js |
-| LLM Integration | ✅ Built-in | ⚠️ Manual |
-| Auto-wait | ✅ Yes | ✅ Yes |
-| Multi-provider | ✅ Yes | ❌ Local only |
-| Ease of use | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-
-Dotsy can integrate with [Crush CLI](https://github.com/charmbracelet/crush) to provide enhanced autonomous agent capabilities. Crush CLI acts as a basic CLI assistant while Dotsy coordinates as the autonomous agent.
-
-### Installation
-
-First, install Crush CLI:
-
-```bash
-# Homebrew (macOS/Linux)
-brew install charmbracelet/tap/crush
-
-# npm
-npm install -g @charmland/crush
-
-# Go
-go install github.com/charmbracelet/crush@latest
-
-# Windows (Winget)
-winget install charmbracelet.crush
-```
-
-### Configuration
-
-Enable Crush CLI integration in your `~/.dotsy/config.toml`:
-
-```toml
-[crush_cli]
-enabled = true
-yolo_mode = false  # Set to true to auto-approve all Crush operations
-auto_approve_tools = []  # List of tools that don't require approval
-disabled_tools = []  # List of tools to disable
-config_path = ""  # Optional: path to Crush config file
-```
-
-### Available Crush Tools
-
-Once integrated, Dotsy provides these Crush CLI tools:
-
-- **crush_run** - Execute tasks using Crush CLI
-- **crush_read_context** - Read project context from AGENTS.md
-- **crush_logs** - Retrieve Crush CLI session logs
-- **crush_update_providers** - Update Crush CLI provider list
-
-### How It Works
-
-1. **Dotsy as Orchestrator**: Dotsy coordinates complex tasks and can delegate to Crush CLI
-2. **Crush as Worker**: Crush CLI executes specific coding tasks with its LLM integration
-3. **Shared Context**: Both agents share project context via AGENTS.md
-4. **Collaborative Workflow**: Dotsy can analyze Crush's output and provide enhanced responses
-
-### Example Usage
-
-```bash
-# Start Dotsy with Crush integration enabled
-dotsy
-
-# Ask Dotsy to use Crush for a task
-"Use Crush to refactor the authentication module"
-
-# Dotsywill coordinate with Crush CLI to complete the task
-```
-
-### Agent Coordination
-
-Dotsy and Crush can work together in different modes:
-
-- **Worker Mode**: Crush executes tasks delegated by Dotsy
-- **Orchestrator Mode**: Dotsy coordinates multiple subtasks, some handled by Crush
-- **Collaborator Mode**: Both agents contribute to complex tasks
-
 
 ## Environment Variables
 
@@ -569,10 +613,7 @@ export ANTHROPIC_API_KEY="your-anthropic-key"
 # Google
 export GOOGLE_API_KEY="your-google-key"
 
-# Qwen (Alibaba Cloud DashScope)
-export DASHSCOPE_API_KEY="your-dashscope-key"
-
-# OpenRouter (for Qwen international access)
+# OpenRouter (for Qwen international)
 export OPENROUTER_API_KEY="your-openrouter-key"
 
 # Groq (for ultra-fast inference)
@@ -591,7 +632,6 @@ MISTRAL_API_KEY=your-mistral-key
 OPENAI_API_KEY=your-openai-key
 ANTHROPIC_API_KEY=your-anthropic-key
 GOOGLE_API_KEY=your-google-key
-DASHSCOPE_API_KEY=your-dashscope-key
 OPENROUTER_API_KEY=your-openrouter-key
 GROQ_API_KEY=your-groq-key
 MULEROUTER_API_KEY=your-mulerouter-key
