@@ -82,6 +82,11 @@ class CommandRegistry:
                 description="Toggle AI thinking/reasoning display",
                 handler="_toggle_thinking",
             ),
+            "new": Command(
+                aliases=frozenset(["/new"]),
+                description="Start a new session",
+                handler="_new_session",
+            ),
         }
 
         for command in excluded_commands:

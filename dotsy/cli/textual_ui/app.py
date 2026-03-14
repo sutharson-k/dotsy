@@ -976,6 +976,44 @@ class DotsyApp(App):  # noqa: PLR0904
                 )
             )
 
+    async def _new_session(self) -> None:
+        """Start a new session by clearing history and creating a new session logger."""
+        try:
+            # Clear the agent loop history
+            await self.agent_loop.clear_history()
+            await self._finalize_current_streaming_message()
+            
+            # Clear UI messages and todos
+            messages_area = self.query_one("#messages")
+            await messages_area.remove_children()
+            todo_area = self.query_one("#todo-area")
+            await todo_area.remove_children()
+
+            # Create new session logger
+            from dotsy.core.session.session_logger import SessionLogger
+            
+            self.agent_loop.session_logger = SessionLogger(
+                save_dir=self.agent_loop.session_logger._save_dir,
+                enabled=self.agent_loop.session_logger.enabled,
+            )
+            
+            # Mount confirmation message
+            await messages_area.mount(UserMessage("/new"))
+            await self._mount_and_scroll(
+                UserCommandMessage("✅ Started a new session! Previous history cleared.")
+            )
+            
+            # Scroll to top
+            chat = self.query_one("#chat", VerticalScroll)
+            chat.scroll_home(animate=False)
+
+        except Exception as e:
+            await self._mount_and_scroll(
+                ErrorMessage(
+                    f"Failed to start new session: {e}", collapsed=self._tools_collapsed
+                )
+            )
+
     async def _show_log_path(self) -> None:
         if not self.agent_loop.session_logger.enabled:
             await self._mount_and_scroll(
