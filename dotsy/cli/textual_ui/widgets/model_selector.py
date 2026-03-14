@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from rich.text import Text
-from textual.events import Click
+from textual.events import Click, MouseMove
 from textual.widgets import Static
 
 
@@ -265,36 +265,38 @@ class ModelSelectorWidget(Static):
         
     def on_click(self, event: Click) -> None:
         """Handle click events for selecting providers/models."""
-        # Removed event.stop() and event.prevent_default() - they may block click processing
-
-        y = event.offset.y
-        provider_list = sorted(self._providers.keys())
-        self.notify(f"y={y} providers={provider_list}")
-        idx = y - 14
-
         if self._mode == "providers":
-            if 0 <= idx < len(provider_list):
-                self._selected_provider = provider_list[idx]
+            if self._selected_provider:
                 self._mode = "models"
                 self._selected_model_index = 0
                 self.focus()
+                self._update_display()
+        else:
+            alias = self.selected_model
+            if alias:
+                self.hide()
+                from dotsy.core.config import DotsyConfig
+                DotsyConfig.save_updates({"active_model": alias})
+                import asyncio
+                asyncio.create_task(self.app._reload_config())
+                try:
+                    self.app.query_one("ChatInputContainer").focus_input()
+                except Exception:
+                    pass
+
+    def on_mouse_move(self, event: MouseMove) -> None:
+        """Handle mouse hover to highlight providers/models."""
+        y = event.offset.y
+        if self._mode == "providers":
+            provider_list = sorted(self._providers.keys())
+            idx = y - 14
+            if 0 <= idx < len(provider_list):
+                self._selected_provider = provider_list[idx]
                 self._update_display()
         else:
             models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             idx = y - 14
             if 0 <= idx < len(models):
                 self._selected_model_index = idx
-                alias = models[idx].get("alias")
-                if alias:
-                    # Hide selector and reload config
-                    self.hide()
-                    from dotsy.core.config import DotsyConfig
-                    DotsyConfig.save_updates({"active_model": alias})
-                    import asyncio
-                    asyncio.create_task(self.app._reload_config())
-                    # Refocus chat input
-                    try:
-                        self.app.query_one("ChatInputContainer").focus_input()
-                    except Exception:
-                        pass
+                self._update_display()
 
