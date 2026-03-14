@@ -257,11 +257,13 @@ class ModelSelectorWidget(Static):
         """Hide the model selector."""
         self.styles.display = "none"
         self.can_focus = False
-        
+        self.release_mouse()
+
     def show(self) -> None:
         """Show the model selector."""
         self.styles.display = "block"
         self.can_focus = True
+        self.capture_mouse()
         
     def on_click(self, event: Click) -> None:
         """Handle click events for selecting providers/models."""
