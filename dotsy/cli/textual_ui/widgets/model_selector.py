@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from rich.text import Text
+from textual.events import Click
 from textual.widgets import Static
 
 
@@ -244,4 +245,34 @@ class ModelSelectorWidget(Static):
         """Show the model selector."""
         self.styles.display = "block"
         self.can_focus = True
+        
+    def on_click(self, event: Click) -> None:
+        """Handle click events for selecting providers/models."""
+        event.stop()
+        event.prevent_default()
+        
+        if self._mode == "providers":
+            provider_list = list(self._providers.keys())
+            # Header=3 lines, current model section=4 lines, providers header=2 lines = offset 9
+            provider_start = 9
+            idx = event.y - provider_start
+            if 0 <= idx < len(provider_list):
+                self._selected_provider = provider_list[idx]
+                self._mode = "models"
+                self._selected_model_index = 0
+                self._update_display()
+        else:
+            models = self._providers.get(self._selected_provider, [])
+            model_start = 9
+            idx = event.y - model_start
+            if 0 <= idx < len(models):
+                self._selected_model_index = idx
+                alias = models[idx].get("alias")
+                if alias:
+                    # Hide selector and reload config
+                    self.hide()
+                    from dotsy.core.config import DotsyConfig
+                    DotsyConfig.save_updates({"active_model": alias})
+                    import asyncio
+                    asyncio.create_task(self.app._reload_config())
 
