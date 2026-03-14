@@ -615,7 +615,7 @@ DEFAULT_MODELS = [
 
 
 class DotsyConfig(BaseSettings):
-    active_model: str = "hunter-alpha"
+    active_model: str = "mistral-large"
     textual_theme: str = "terminal"
     vim_keybindings: bool = False
     disable_welcome_banner_animation: bool = False
