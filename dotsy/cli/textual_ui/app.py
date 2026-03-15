@@ -223,11 +223,10 @@ class DotsyApp(App):  # noqa: PLR0904
             context_progress.current_model = self.config.active_model
 
         AgentStats.add_listener("context_tokens", update_context_progress)
+        self.agent_loop.stats.trigger_listeners()
         
         # Set model name immediately on startup
-        context_progress.current_model = self.config.active_model
-        
-        self.agent_loop.stats.trigger_listeners()
+        context_progress.set_model(self.config.active_model)
 
         self.agent_loop.set_approval_callback(self._approval_callback)
         self.agent_loop.set_user_input_callback(self._user_input_callback)

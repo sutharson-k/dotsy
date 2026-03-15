@@ -39,6 +39,11 @@ class ContextProgress(NoMarkupStatic):
     def watch_tokens(self, new_state: TokenState) -> None:
         self._update_display()
 
+    def set_model(self, model: str) -> None:
+        """Set the current model and update display."""
+        self.current_model = model
+        self._update_display()
+
     def _update_display(self) -> None:
         if not self.current_model:
             self.update("")
