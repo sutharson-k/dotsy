@@ -81,7 +81,11 @@ class ContextProgress(NoMarkupStatic):
                 last_tokens=new_state.current_tokens,
             )
 
-        text = (
-            f"{self.current_model} | {ratio:.0%} of {new_state.max_tokens // 1000}k tokens{tokens_per_second}"
-        )
+        max_k = new_state.max_tokens // 1000
+        if max_k >= 1000:
+            max_label = f"{max_k / 1000:.1f}M"
+        else:
+            max_label = f"{max_k}k"
+        
+        text = f"{self.current_model} | {ratio:.0%} of {max_label} tokens{tokens_per_second}"
         self.update(text)
