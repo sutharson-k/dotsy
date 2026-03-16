@@ -261,7 +261,7 @@ DOTSY uses Bayesian reasoning by default - the AI:
 
 To disable: add `use_bayesian_reasoning = false` to `~/.dotsy/config.toml`
 
-### Show Thinking (Optional)
+### Show Thinking (Optional,Some models only have the ability to work with thinking i am trying to add to all the models.bare with me :))
 Enable to see AI's step-by-step reasoning before answers:
 
 **Toggle in chat:**
