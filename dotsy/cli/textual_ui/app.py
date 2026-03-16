@@ -556,26 +556,33 @@ class DotsyApp(App):  # noqa: PLR0904
             return
 
         try:
-            result = subprocess.run(
-                command, shell=True, capture_output=True, text=False, timeout=30
+            proc = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                stdin=asyncio.subprocess.DEVNULL,
             )
-            stdout = (
-                result.stdout.decode("utf-8", errors="replace") if result.stdout else ""
-            )
-            stderr = (
-                result.stderr.decode("utf-8", errors="replace") if result.stderr else ""
-            )
-            output = stdout or stderr or "(no output)"
-            exit_code = result.returncode
+            try:
+                stdout, stderr = await asyncio.wait_for(
+                    proc.communicate(), timeout=30
+                )
+                output = (
+                    (stdout or stderr or b"(no output)").decode(
+                        "utf-8", errors="replace"
+                    )
+                )
+                exit_code = proc.returncode
+            except asyncio.TimeoutError:
+                proc.kill()
+                await self._mount_and_scroll(
+                    ErrorMessage(
+                        "Command timed out after 30 seconds",
+                        collapsed=self._tools_collapsed,
+                    )
+                )
+                return
             await self._mount_and_scroll(
                 BashOutputMessage(command, str(Path.cwd()), output, exit_code)
-            )
-        except subprocess.TimeoutExpired:
-            await self._mount_and_scroll(
-                ErrorMessage(
-                    "Command timed out after 30 seconds",
-                    collapsed=self._tools_collapsed,
-                )
             )
         except Exception as e:
             await self._mount_and_scroll(

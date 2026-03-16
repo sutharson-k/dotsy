@@ -9,6 +9,7 @@ This module provides integration between Dotsy and Crush CLI, allowing Dotsy to:
 from __future__ import annotations
 
 from collections.abc import AsyncGenerator
+import asyncio
 import json
 from pathlib import Path
 import shutil
@@ -141,6 +142,27 @@ class CrushCLI:
         except FileNotFoundError as e:
             raise ToolError(f"Failed to execute Crush CLI: {e}")
 
+    async def run_command_async(
+        self, args: list[str], cwd: Path | None = None, timeout: int = 300
+    ) -> tuple[int, str, str]:
+        """Run a Crush CLI command asynchronously.
+
+        Args:
+            args: Command line arguments
+            cwd: Working directory
+            timeout: Timeout in seconds
+
+        Returns:
+            Tuple of (return_code, stdout, stderr)
+        """
+        loop = asyncio.get_event_loop()
+        return await asyncio.wait_for(
+            loop.run_in_executor(
+                None, lambda: self.run_command(args, cwd, timeout)
+            ),
+            timeout=timeout + 10,
+        )
+
     def get_logs(self, tail: int = 100, follow: bool = False) -> str:
         """Get Crush CLI logs."""
         args = ["logs", "--tail", str(tail)]
@@ -202,8 +224,8 @@ class CrushTool(
             tool_call_id=tool_call_id,
         )
 
-        # Run Crush with the task
-        returncode, stdout, stderr = self.crush_cli.run_command(
+        # Run Crush with the task (async to avoid blocking UI)
+        returncode, stdout, stderr = await self.crush_cli.run_command_async(
             ["--yolo", args.task], timeout=600
         )
 

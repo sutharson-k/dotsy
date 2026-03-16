@@ -44,6 +44,9 @@ class SessionLogger:
 
         self.save_dir.mkdir(parents=True, exist_ok=True)
         self.session_dir = self.save_folder
+        self._git_commit: str | None = None
+        self._git_branch: str | None = None
+        self._git_fetched = False
         self.session_metadata = self._initialize_session_metadata()
 
     @property
@@ -75,6 +78,20 @@ class SessionLogger:
 
     @property
     def git_commit(self) -> str | None:
+        if not self._git_fetched:
+            self._fetch_git_info()
+        return self._git_commit
+
+    @property
+    def git_branch(self) -> str | None:
+        if not self._git_fetched:
+            self._fetch_git_info()
+        return self._git_branch
+
+    def _fetch_git_info(self) -> None:
+        """Fetch and cache git commit and branch info."""
+        if self._git_fetched:
+            return
         try:
             result = subprocess.run(
                 ["git", "rev-parse", "HEAD"],
@@ -84,13 +101,9 @@ class SessionLogger:
                 timeout=5.0,
             )
             if result.returncode == 0 and result.stdout:
-                return result.stdout.strip()
+                self._git_commit = result.stdout.strip()
         except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
             pass
-        return None
-
-    @property
-    def git_branch(self) -> str | None:
         try:
             result = subprocess.run(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
@@ -100,10 +113,10 @@ class SessionLogger:
                 timeout=5.0,
             )
             if result.returncode == 0 and result.stdout:
-                return result.stdout.strip()
+                self._git_branch = result.stdout.strip()
         except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
             pass
-        return None
+        self._git_fetched = True
 
     @property
     def username(self) -> str:
