@@ -16,19 +16,29 @@ if TYPE_CHECKING:
 
 logger = getLogger("dotsy")
 
+_SKILL_CACHE: dict[str, SkillInfo] | None = None
+_SEARCH_PATHS_CACHE: list[Path] | None = None
+
 
 class SkillManager:
     def __init__(self, config_getter: Callable[[], DotsyConfig]) -> None:
+        global _SKILL_CACHE, _SEARCH_PATHS_CACHE
         self._config_getter = config_getter
-        self._search_paths = self._compute_search_paths(self._config)
-        self._available: dict[str, SkillInfo] = self._discover_skills()
 
-        if self._available:
-            logger.info(
-                "Discovered %d skill(s) from %d search path(s)",
-                len(self._available),
-                len(self._search_paths),
-            )
+        if _SKILL_CACHE is None or _SEARCH_PATHS_CACHE is None:
+            self._search_paths = self._compute_search_paths(self._config)
+            self._available: dict[str, SkillInfo] = self._discover_skills()
+            _SKILL_CACHE = self._available
+            _SEARCH_PATHS_CACHE = self._search_paths
+            if self._available:
+                logger.info(
+                    "Discovered %d skill(s) from %d search path(s)",
+                    len(self._available),
+                    len(self._search_paths),
+                )
+        else:
+            self._search_paths = _SEARCH_PATHS_CACHE
+            self._available = _SKILL_CACHE
 
     @property
     def _config(self) -> DotsyConfig:
@@ -131,3 +141,12 @@ class SkillManager:
 
     def get_skill(self, name: str) -> SkillInfo | None:
         return self.available_skills.get(name)
+
+    def invalidate_cache(self) -> None:
+        """Clear skill instances cache without re-scanning files.
+
+        Called on reload when config hasn't changed to avoid expensive re-discovery.
+        """
+        global _SKILL_CACHE
+        _SKILL_CACHE = None
+        _SEARCH_PATHS_CACHE = None

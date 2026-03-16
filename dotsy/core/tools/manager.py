@@ -218,7 +218,10 @@ class ToolManager:
     def _integrate_mcp(self) -> None:
         if not self._config.mcp_servers:
             return
-        run_sync(self._integrate_mcp_async())
+        import threading
+
+        t = threading.Thread(target=lambda: run_sync(self._integrate_mcp_async()), daemon=True)
+        t.start()
 
     async def _integrate_mcp_async(self) -> None:
         try:
