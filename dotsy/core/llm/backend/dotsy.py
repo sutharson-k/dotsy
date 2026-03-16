@@ -8,7 +8,6 @@ import types
 from typing import TYPE_CHECKING, NamedTuple, cast
 
 import httpx
-import mistralai
 
 from dotsy.core.llm.exceptions import BackendErrorBuilder
 from dotsy.core.types import (
@@ -24,6 +23,7 @@ from dotsy.core.types import (
 )
 
 if TYPE_CHECKING:
+    import mistralai
     from dotsy.core.config import ModelConfig, ProviderConfig
 
 
@@ -34,6 +34,8 @@ class ParsedContent(NamedTuple):
 
 class DotsyMapper:
     def prepare_message(self, msg: LLMMessage) -> mistralai.Messages:
+        import mistralai
+
         match msg.role:
             case Role.system:
                 return mistralai.SystemMessage(role="system", content=msg.content or "")
@@ -81,6 +83,8 @@ class DotsyMapper:
                 )
 
     def prepare_tool(self, tool: AvailableTool) -> mistralai.Tool:
+        import mistralai
+
         return mistralai.Tool(
             type="function",
             function=mistralai.Function(
@@ -93,6 +97,8 @@ class DotsyMapper:
     def prepare_tool_choice(
         self, tool_choice: StrToolChoice | AvailableTool
     ) -> mistralai.ChatCompletionStreamRequestToolChoice:
+        import mistralai
+
         if isinstance(tool_choice, str):
             return cast(mistralai.ToolChoiceEnum, tool_choice)
 
@@ -116,6 +122,8 @@ class DotsyMapper:
     def parse_content(
         self, content: mistralai.AssistantMessageContent
     ) -> ParsedContent:
+        import mistralai
+
         if isinstance(content, str):
             return ParsedContent(content=content, reasoning_content=None)
 
@@ -151,7 +159,6 @@ class DotsyMapper:
 
 class DotsyBackend:
     def __init__(self, provider: ProviderConfig, timeout: float = 720.0) -> None:
-        self._client: mistralai.Mistral | None = None
         self._provider = provider
         self._mapper = DotsyMapper()
         self._api_key = (
@@ -159,6 +166,7 @@ class DotsyBackend:
             if self._provider.api_key_env_var
             else None
         )
+        self._client: mistralai.Mistral | None = None
 
         reasoning_field = getattr(provider, "reasoning_field_name", "reasoning_content")
         if reasoning_field != "reasoning_content":
@@ -179,6 +187,8 @@ class DotsyBackend:
         self._timeout = timeout
 
     async def __aenter__(self) -> DotsyBackend:
+        import mistralai
+
         self._client = mistralai.Mistral(
             api_key=self._api_key,
             server_url=self._server_url,
@@ -199,6 +209,8 @@ class DotsyBackend:
             )
 
     def _get_client(self) -> mistralai.Mistral:
+        import mistralai
+
         if self._client is None:
             self._client = mistralai.Mistral(
                 api_key=self._api_key, server_url=self._server_url
@@ -216,6 +228,8 @@ class DotsyBackend:
         tool_choice: StrToolChoice | AvailableTool | None,
         extra_headers: dict[str, str] | None,
     ) -> LLMChunk:
+        import mistralai
+
         try:
             response = await self._get_client().chat.complete_async(
                 model=model.name,
@@ -289,6 +303,8 @@ class DotsyBackend:
         tool_choice: StrToolChoice | AvailableTool | None,
         extra_headers: dict[str, str] | None,
     ) -> AsyncGenerator[LLMChunk, None]:
+        import mistralai
+
         try:
             async for chunk in await self._get_client().chat.stream_async(
                 model=model.name,

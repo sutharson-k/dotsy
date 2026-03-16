@@ -6,9 +6,6 @@ import hashlib
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from mcp import ClientSession
-from mcp.client.stdio import StdioServerParameters, stdio_client
-from mcp.client.streamable_http import streamablehttp_client
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from dotsy.core.tools.base import (
@@ -22,6 +19,8 @@ from dotsy.core.tools.ui import ToolCallDisplay, ToolResultDisplay
 from dotsy.core.types import ToolStreamEvent
 
 if TYPE_CHECKING:
+    from mcp import ClientSession
+    from mcp.client.stdio import StdioServerParameters
     from dotsy.core.types import ToolCallEvent, ToolResultEvent
 
 
@@ -118,6 +117,9 @@ async def list_tools_http(
     headers: dict[str, str] | None = None,
     startup_timeout_sec: float | None = None,
 ) -> list[RemoteTool]:
+    from mcp import ClientSession
+    from mcp.client.streamable_http import streamablehttp_client
+
     timeout = timedelta(seconds=startup_timeout_sec) if startup_timeout_sec else None
     async with streamablehttp_client(url, headers=headers) as (read, write, _):
         async with ClientSession(read, write, read_timeout_seconds=timeout) as session:
@@ -135,6 +137,9 @@ async def call_tool_http(
     startup_timeout_sec: float | None = None,
     tool_timeout_sec: float | None = None,
 ) -> MCPToolResult:
+    from mcp import ClientSession
+    from mcp.client.streamable_http import streamablehttp_client
+
     init_timeout = (
         timedelta(seconds=startup_timeout_sec) if startup_timeout_sec else None
     )
@@ -238,6 +243,9 @@ async def list_tools_stdio(
     env: dict[str, str] | None = None,
     startup_timeout_sec: float | None = None,
 ) -> list[RemoteTool]:
+    from mcp import ClientSession
+    from mcp.client.stdio import StdioServerParameters, stdio_client
+
     params = StdioServerParameters(command=command[0], args=command[1:], env=env)
     timeout = timedelta(seconds=startup_timeout_sec) if startup_timeout_sec else None
     async with stdio_client(params) as (read, write):
@@ -256,6 +264,9 @@ async def call_tool_stdio(
     startup_timeout_sec: float | None = None,
     tool_timeout_sec: float | None = None,
 ) -> MCPToolResult:
+    from mcp import ClientSession
+    from mcp.client.stdio import StdioServerParameters, stdio_client
+
     params = StdioServerParameters(command=command[0], args=command[1:], env=env)
     init_timeout = (
         timedelta(seconds=startup_timeout_sec) if startup_timeout_sec else None
