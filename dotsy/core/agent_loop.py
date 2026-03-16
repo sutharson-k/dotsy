@@ -378,7 +378,7 @@ class AgentLoop:
         chunks_with_content = 0
         chunks_with_reasoning = 0
         message_id: str | None = None
-        BATCH_SIZE = 5
+        BATCH_SIZE = 15
 
         async for chunk in self._chat_streaming():
             if message_id is None:

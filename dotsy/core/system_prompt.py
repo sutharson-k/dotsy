@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Generator
 import fnmatch
+import hashlib
 import html
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -19,6 +21,8 @@ if TYPE_CHECKING:
     from dotsy.core.config import DotsyConfig, ProjectContextConfig
     from dotsy.core.skills.manager import SkillManager
     from dotsy.core.tools.manager import ToolManager
+
+_PROMPT_CACHE: tuple[str, str] | None = None
 
 
 def _load_project_doc(workdir: Path, max_bytes: int) -> str:
@@ -418,6 +422,27 @@ def get_universal_system_prompt(
     skill_manager: SkillManager,
     agent_manager: AgentManager,
 ) -> str:
+    global _PROMPT_CACHE
+
+    # Build cache key from config values that affect the prompt
+    key_data = {
+        "system_prompt": config.system_prompt,
+        "active_model": config.active_model,
+        "agent": agent_manager.active_profile.name if agent_manager else None,
+        "use_bayesian_reasoning": getattr(config, "use_bayesian_reasoning", False),
+        "show_thinking": getattr(config, "show_thinking", False),
+        "include_commit_signature": config.include_commit_signature,
+        "include_model_info": config.include_model_info,
+        "include_prompt_detail": config.include_prompt_detail,
+        "include_project_context": config.include_project_context,
+        "tool_count": len(tool_manager.available_tools),
+        "skill_count": len(skill_manager.available_skills),
+    }
+    key = hashlib.md5(json.dumps(key_data, sort_keys=True).encode()).hexdigest()
+
+    if _PROMPT_CACHE and _PROMPT_CACHE[0] == key:
+        return _PROMPT_CACHE[1]
+
     sections = [config.system_prompt]
 
     # Add Bayesian reasoning prompt if enabled
@@ -488,4 +513,6 @@ Then provide your final answer after the thinking block.
         if project_doc.strip():
             sections.append(project_doc)
 
-    return "\n\n".join(sections)
+    prompt = "\n\n".join(sections)
+    _PROMPT_CACHE = (key, prompt)
+    return prompt

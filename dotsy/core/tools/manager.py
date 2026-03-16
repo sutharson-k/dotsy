@@ -27,6 +27,8 @@ logger = getLogger("dotsy")
 if TYPE_CHECKING:
     from dotsy.core.config import DotsyConfig, MCPHttp, MCPStdio, MCPStreamableHttp
 
+_TOOL_CLASS_CACHE: dict[str, type[BaseTool]] | None = None
+
 
 def _try_integrate_crush_tools(manager: ToolManager) -> None:
     """Integrate Crush CLI tools if available and enabled."""
@@ -90,13 +92,16 @@ class ToolManager:
     """
 
     def __init__(self, config_getter: Callable[[], DotsyConfig]) -> None:
+        global _TOOL_CLASS_CACHE
         self._config_getter = config_getter
         self._instances: dict[str, BaseTool] = {}
         self._search_paths: list[Path] = self._compute_search_paths(self._config)
 
-        self._available: dict[str, type[BaseTool]] = {
-            cls.get_name(): cls for cls in self._iter_tool_classes(self._search_paths)
-        }
+        if _TOOL_CLASS_CACHE is None:
+            _TOOL_CLASS_CACHE = {
+                cls.get_name(): cls for cls in self._iter_tool_classes(self._search_paths)
+            }
+        self._available: dict[str, type[BaseTool]] = dict(_TOOL_CLASS_CACHE)
 
         # Integrate Crush CLI tools if enabled
         if self._config.crush_cli.enabled:

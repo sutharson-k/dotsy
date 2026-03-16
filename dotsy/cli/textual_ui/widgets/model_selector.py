@@ -27,10 +27,11 @@ class ModelSelectorWidget(Static):
         self._selected_provider: str | None = None
         self._selected_model_index = 0
         self._mode = "providers"  # "providers" or "models"
+        self._display_dirty = True
         
     def set_models(self, models: list[dict], current_model: str | None = None) -> None:
         """Set the list of available models and group by provider.
-        
+
         Args:
             models: List of dicts with 'alias', 'name', 'provider' keys
             current_model: The currently active model alias
@@ -43,6 +44,7 @@ class ModelSelectorWidget(Static):
         provider_list = sorted(self._providers.keys())
         self._selected_provider = provider_list[0] if provider_list else None
         self._mode = "providers"
+        self._display_dirty = True
         self._update_display()
         
     def _group_by_provider(self) -> None:
@@ -77,6 +79,7 @@ class ModelSelectorWidget(Static):
             idx = provider_list.index(self._selected_provider)
             idx = (idx + direction) % len(provider_list)
             self._selected_provider = provider_list[idx]
+        self._display_dirty = True
         self._update_display()
         
     def _navigate_models(self, direction: int) -> None:
@@ -87,6 +90,7 @@ class ModelSelectorWidget(Static):
         if not models:
             return
         self._selected_model_index = (self._selected_model_index + direction) % len(models)
+        self._display_dirty = True
         self._update_display()
         
     def select(self) -> str | None:
@@ -112,6 +116,7 @@ class ModelSelectorWidget(Static):
         self._mode = "providers"
         self._selected_model_index = 0
         self._selected_provider = sorted(self._providers.keys())[0] if self._providers else None
+        self._display_dirty = True
         self._update_display()
         
     @property
@@ -125,6 +130,9 @@ class ModelSelectorWidget(Static):
         
     def _update_display(self) -> None:
         """Update the display with current selection."""
+        if not self._display_dirty:
+            return
+        self._display_dirty = False
         text = Text()
         
         # Header
@@ -302,6 +310,7 @@ class ModelSelectorWidget(Static):
                 hovered = provider_list[idx]
                 if hovered != self._selected_provider:
                     self._selected_provider = hovered
+                    self._display_dirty = True
                     self._update_display()
         else:
             models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
@@ -309,5 +318,6 @@ class ModelSelectorWidget(Static):
             if 0 <= idx < len(models):
                 if idx != self._selected_model_index:
                     self._selected_model_index = idx
+                    self._display_dirty = True
                     self._update_display()
 
