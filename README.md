@@ -55,6 +55,7 @@ pip install "dotsy[openai]"       # OpenAI / GPT
 pip install "dotsy[anthropic]"    # Anthropic / Claude
 pip install "dotsy[google]"       # Google Gemini (large install)
 pip install "dotsy[browser]"      # Browser automation
+pip install "dotsy[computer]"     # Full desktop/system control
 pip install "dotsy[all]"          # Everything
 ```
 

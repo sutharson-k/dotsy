@@ -55,6 +55,7 @@ anthropic = ["anthropic>=0.18.0"]
 google = ["google-generativeai>=0.4.0"]
 bytez = ["bytez>=0.1.0"]
 browser = ["browser-use>=0.1.0"]
+computer = ["pyautogui>=0.9.54", "pillow>=10.0.0", "pygetwindow>=0.0.9"]
 all = [
     "mistralai==1.9.11",
     "openai>=1.0.0",
@@ -62,6 +63,9 @@ all = [
     "google-generativeai>=0.4.0",
     "bytez>=0.1.0",
     "browser-use>=0.1.0",
+    "pyautogui>=0.9.54",
+    "pillow>=10.0.0",
+    "pygetwindow>=0.0.9",
 ]
 
 [project.urls]
