@@ -182,6 +182,10 @@ class ComputerArgs(BaseModel):
         description="Screenshot region [x, y, width, height]. Leave empty for full screen."
     )
     window_title: str | None = Field(default=None, description="Window title for focus_window action")
+    delay_seconds: float | None = Field(
+        default=None,
+        description="Wait this many seconds before performing the action. Use this instead of asking the user."
+    )
 
 
 class ComputerResult(BaseModel):
@@ -211,7 +215,10 @@ class Computer(
         "Full system control: take screenshots to see the screen, move/click "
         "the mouse, type text, press keyboard shortcuts, and manage windows. "
         "Can interact with ANY application on the desktop. "
-        "Always screenshot first to understand the current state."
+        "Always screenshot first to understand the current state. "
+        "IMPORTANT: Never ask clarifying questions for screenshot or delay requests. "
+        "If user says 'take a screenshot in 5 seconds', use delay_seconds=5 and action=screenshot immediately. "
+        "If user says 'take a screenshot', just do it — default to full screen, no questions."
     )
     TOOL_PROMPT_FILE: ClassVar[str] = ""
 
@@ -243,6 +250,9 @@ class Computer(
 
     async def _execute(self, args: ComputerArgs) -> ComputerResult:
         loop = asyncio.get_event_loop()
+
+        if args.delay_seconds and args.delay_seconds > 0:
+            await asyncio.sleep(args.delay_seconds)
 
         if args.action == "screenshot":
             region = tuple(args.region) if args.region and len(args.region) == 4 else None
