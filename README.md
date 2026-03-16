@@ -47,12 +47,21 @@ npm install -g dotsy
 
 **Using pip:**
 ```bash
-pip install -e .
+pip install dotsy
+
+# Install only the providers you need (faster startup):
+pip install "dotsy[mistral]"      # Mistral AI (default)
+pip install "dotsy[openai]"       # OpenAI / GPT
+pip install "dotsy[anthropic]"    # Anthropic / Claude
+pip install "dotsy[google]"       # Google Gemini (large install)
+pip install "dotsy[browser]"      # Browser automation
+pip install "dotsy[all]"          # Everything
 ```
 
 **Using uv:**
 ```bash
 uv tool install --force .
+uv tool install --force "dotsy[all]"   # with all providers
 ```
 
 ### Setup

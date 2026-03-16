@@ -30,14 +30,8 @@ dependencies = [
     "agent-client-protocol==0.7.1",
     "anyio>=4.12.0",
     "beautifulsoup4>=4.12.0",
-    "browser-use>=0.1.0",
-    "bytez>=0.1.0",
     "httpx>=0.28.1",
     "mcp>=1.14.0",
-    "mistralai==1.9.11",
-    "openai>=1.0.0",
-    "anthropic>=0.18.0",
-    "google-generativeai>=0.4.0",
     "pexpect>=4.9.0",
     "packaging>=24.1",
     "pydantic>=2.12.4",
@@ -52,6 +46,22 @@ dependencies = [
     "textual-speedups>=0.2.1",
     "tree-sitter>=0.25.2",
     "tree-sitter-bash>=0.25.1",
+]
+
+[project.optional-dependencies]
+mistral = ["mistralai==1.9.11"]
+openai = ["openai>=1.0.0"]
+anthropic = ["anthropic>=0.18.0"]
+google = ["google-generativeai>=0.4.0"]
+bytez = ["bytez>=0.1.0"]
+browser = ["browser-use>=0.1.0"]
+all = [
+    "mistralai==1.9.11",
+    "openai>=1.0.0",
+    "anthropic>=0.18.0",
+    "google-generativeai>=0.4.0",
+    "bytez>=0.1.0",
+    "browser-use>=0.1.0",
 ]
 
 [project.urls]
