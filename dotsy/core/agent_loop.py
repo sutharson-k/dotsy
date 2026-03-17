@@ -1011,8 +1011,10 @@ class AgentLoop:
             *[msg for msg in self.messages if msg.role != Role.system],
         ]
 
-        if len(self.messages) == 1:
-            self.stats.reset_context_state()
+        # Always reset context token count on model switch so the progress
+        # bar reflects the new model's context window, not the old one.
+        # The actual token count will be updated on the next LLM call.
+        self.stats.reset_context_state()
 
         try:
             active_model = self.config.get_active_model()
