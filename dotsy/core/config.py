@@ -565,6 +565,7 @@ DEFAULT_MODELS = [
         input_price=0.0,
         output_price=0.0,
         max_tokens=4096,
+        context_window=10_000,
     ),
     # Vision-capable models via OpenRouter
     ModelConfig(

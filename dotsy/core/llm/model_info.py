@@ -36,7 +36,9 @@ KNOWN_CONTEXT_WINDOWS: dict[str, int] = {
     "gemini-1.5-pro": 2_000_000,
     "gemini-2.0-flash": 1_000_000,
     # Nvidia Nemotron
-    "nemotron": 131_072,
+    "nemotron": 10_000,
+    "nemotron-3-super": 10_000,
+    "nvidia/nemotron-3-super-120b-a12b": 10_000,
     "nvidia/llama-3.1-nemotron-ultra-253b-v1": 131_072,
     "nvidia/llama-3.3-nemotron-super-49b-v1": 131_072,
     # Qwen
