@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from dotsy.core.config import DotsyConfig, MCPHttp, MCPStdio, MCPStreamableHttp
 
 _TOOL_CLASS_CACHE: dict[str, type[BaseTool]] | None = None
+_TOOL_SEARCH_PATHS_CACHE: list[Path] | None = None
 
 
 def _try_integrate_crush_tools(manager: ToolManager) -> None:
@@ -92,15 +93,20 @@ class ToolManager:
     """
 
     def __init__(self, config_getter: Callable[[], DotsyConfig]) -> None:
-        global _TOOL_CLASS_CACHE
+        global _TOOL_CLASS_CACHE, _TOOL_SEARCH_PATHS_CACHE
         self._config_getter = config_getter
         self._instances: dict[str, BaseTool] = {}
         self._search_paths: list[Path] = self._compute_search_paths(self._config)
 
-        if _TOOL_CLASS_CACHE is None:
+        if (
+            _TOOL_CLASS_CACHE is None
+            or _TOOL_SEARCH_PATHS_CACHE is None
+            or _TOOL_SEARCH_PATHS_CACHE != self._search_paths
+        ):
             _TOOL_CLASS_CACHE = {
                 cls.get_name(): cls for cls in self._iter_tool_classes(self._search_paths)
             }
+            _TOOL_SEARCH_PATHS_CACHE = self._search_paths
         self._available: dict[str, type[BaseTool]] = dict(_TOOL_CLASS_CACHE)
 
         # Integrate Crush CLI tools if enabled
@@ -368,3 +374,13 @@ class ToolManager:
 
     def invalidate_tool(self, tool_name: str) -> None:
         self._instances.pop(tool_name, None)
+
+    @classmethod
+    def invalidate_cache(cls) -> None:
+        """Clear the module-level tool class cache.
+
+        Called by tests or when search paths need to be re-scanned.
+        """
+        global _TOOL_CLASS_CACHE, _TOOL_SEARCH_PATHS_CACHE
+        _TOOL_CLASS_CACHE = None
+        _TOOL_SEARCH_PATHS_CACHE = None

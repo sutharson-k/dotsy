@@ -182,6 +182,9 @@ class TestToolManagerFiltering:
         """Should handle a mix of file and directory paths in tool_paths."""
         import sys
 
+        # Clear tool cache to ensure fresh discovery
+        ToolManager.invalidate_cache()
+
         # Create a directory with a tool
         tool_dir = tmp_path / "tools"
         tool_dir.mkdir()

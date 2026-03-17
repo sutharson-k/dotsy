@@ -627,16 +627,10 @@ version = "17.20.119"
 source = { editable = "." }
 dependencies = [
     { name = "agent-client-protocol" },
-    { name = "anthropic" },
     { name = "anyio" },
     { name = "beautifulsoup4" },
-    { name = "browser-use" },
-    { name = "bytez" },
-    { name = "google-generativeai" },
     { name = "httpx" },
     { name = "mcp" },
-    { name = "mistralai" },
-    { name = "openai" },
     { name = "packaging" },
     { name = "pexpect" },
     { name = "pydantic" },
@@ -651,6 +645,34 @@ dependencies = [
     { name = "tree-sitter" },
     { name = "tree-sitter-bash" },
     { name = "watchfiles" },
+]
+
+[package.optional-dependencies]
+all = [
+    { name = "anthropic" },
+    { name = "browser-use" },
+    { name = "bytez" },
+    { name = "google-generativeai" },
+    { name = "mistralai" },
+    { name = "openai" },
+]
+anthropic = [
+    { name = "anthropic" },
+]
+browser = [
+    { name = "browser-use" },
+]
+bytez = [
+    { name = "bytez" },
+]
+google = [
+    { name = "google-generativeai" },
+]
+mistral = [
+    { name = "mistralai" },
+]
+openai = [
+    { name = "openai" },
 ]
 
 [package.dev-dependencies]
@@ -676,16 +698,22 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "agent-client-protocol", specifier = "==0.7.1" },
-    { name = "anthropic", specifier = ">=0.18.0" },
+    { name = "anthropic", marker = "extra == 'all'", specifier = ">=0.18.0" },
+    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.18.0" },
     { name = "anyio", specifier = ">=4.12.0" },
     { name = "beautifulsoup4", specifier = ">=4.12.0" },
-    { name = "browser-use", specifier = ">=0.1.0" },
-    { name = "bytez", specifier = ">=0.1.0" },
-    { name = "google-generativeai", specifier = ">=0.4.0" },
+    { name = "browser-use", marker = "extra == 'all'", specifier = ">=0.1.0" },
+    { name = "browser-use", marker = "extra == 'browser'", specifier = ">=0.1.0" },
+    { name = "bytez", marker = "extra == 'all'", specifier = ">=0.1.0" },
+    { name = "bytez", marker = "extra == 'bytez'", specifier = ">=0.1.0" },
+    { name = "google-generativeai", marker = "extra == 'all'", specifier = ">=0.4.0" },
+    { name = "google-generativeai", marker = "extra == 'google'", specifier = ">=0.4.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "mcp", specifier = ">=1.14.0" },
-    { name = "mistralai", specifier = "==1.9.11" },
-    { name = "openai", specifier = ">=1.0.0" },
+    { name = "mistralai", marker = "extra == 'all'", specifier = "==1.9.11" },
+    { name = "mistralai", marker = "extra == 'mistral'", specifier = "==1.9.11" },
+    { name = "openai", marker = "extra == 'all'", specifier = ">=1.0.0" },
+    { name = "openai", marker = "extra == 'openai'", specifier = ">=1.0.0" },
     { name = "packaging", specifier = ">=24.1" },
     { name = "pexpect", specifier = ">=4.9.0" },
     { name = "pydantic", specifier = ">=2.12.4" },
@@ -701,6 +729,7 @@ requires-dist = [
     { name = "tree-sitter-bash", specifier = ">=0.25.1" },
     { name = "watchfiles", specifier = ">=1.1.1" },
 ]
+provides-extras = ["mistral", "openai", "anthropic", "google", "bytez", "browser", "all"]
 
 [package.metadata.requires-dev]
 build = [{ name = "pyinstaller", specifier = ">=6.17.0" }]
