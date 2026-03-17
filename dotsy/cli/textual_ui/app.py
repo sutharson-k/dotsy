@@ -214,10 +214,17 @@ class DotsyApp(App):  # noqa: PLR0904
         self._chat_input_container = self.query_one(ChatInputContainer)
         self._agent_indicator = self.query_one(AgentIndicator)
         context_progress = self.query_one(ContextProgress)
+        context_progress.set_model(self.config.active_model)
 
         def update_context_progress(stats: AgentStats) -> None:
+            # Use the agent loop's actual compact threshold (based on real model context window)
+            max_tokens = (
+                self.agent_loop._get_compact_threshold()
+                if self.agent_loop
+                else self.config.auto_compact_threshold
+            )
             context_progress.tokens = TokenState(
-                max_tokens=self.config.auto_compact_threshold,
+                max_tokens=max_tokens,
                 current_tokens=stats.context_tokens,
             )
             context_progress.current_model = self.config.active_model
@@ -953,6 +960,19 @@ class DotsyApp(App):  # noqa: PLR0904
 
             # Get the new active model name for notification
             new_model = base_config.get_active_model().alias
+
+            # Reset context progress bar for new model
+            try:
+                context_progress = self.query_one(ContextProgress)
+                new_threshold = self.agent_loop._get_compact_threshold()
+                context_progress.tokens = TokenState(
+                    max_tokens=new_threshold,
+                    current_tokens=self.agent_loop.stats.context_tokens,
+                )
+                context_progress.set_model(new_model)
+            except Exception:
+                pass
+
             await self._mount_and_scroll(
                 UserCommandMessage(f"✓ Model changed to {new_model}")
             )
