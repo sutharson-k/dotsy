@@ -557,12 +557,13 @@ DEFAULT_MODELS = [
         input_price=0.0,
         output_price=0.0,
     ),
-        ModelConfig(
+    ModelConfig(
         name="nvidia/nemotron-3-super-120b-a12b:free",
         provider="openrouter",
         alias="nemotron-3-super",
         input_price=0.0,
         output_price=0.0,
+        max_tokens=4096,
     ),
     # Vision-capable models via OpenRouter
     ModelConfig(
@@ -593,7 +594,7 @@ DEFAULT_MODELS = [
         name="openrouter/hunter-alpha",
         input_price=0.0,
         output_price=0.0,
-        max_tokens=999_999_999,  # Effectively unlimited for free model
+        max_tokens=4096,
     ),
     ModelConfig(
         alias="healer-alpha",
@@ -601,7 +602,7 @@ DEFAULT_MODELS = [
         name="openrouter/healer-alpha",
         input_price=0.0,
         output_price=0.0,
-        max_tokens=999_999_999,  # Effectively unlimited for free model
+        max_tokens=4096,
     ),
 ]
 
@@ -612,7 +613,7 @@ class DotsyConfig(BaseSettings):
     vim_keybindings: bool = False
     disable_welcome_banner_animation: bool = False
     displayed_workdir: str = ""
-    auto_compact_threshold: int = 200_000
+    auto_compact_threshold: int = 100_000
     context_warnings: bool = False
     auto_approve: bool = False
     system_prompt_id: str = "cli"
