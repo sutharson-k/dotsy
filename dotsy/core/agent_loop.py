@@ -121,6 +121,9 @@ class AgentLoop:
         self._max_turns = max_turns
         self._max_price = max_price
 
+        # Auto-slim system prompt for small context window models
+        self._base_config = self._apply_context_aware_config(config)
+
         self.agent_manager = AgentManager(
             lambda: self._base_config, initial_agent=agent_name
         )
@@ -194,6 +197,40 @@ class AgentLoop:
 
         self.config.tools[tool_name].permission = permission
         self.tool_manager.invalidate_tool(tool_name)
+
+    def _apply_context_aware_config(self, config: DotsyConfig) -> DotsyConfig:
+        """Slim the system prompt for small context window models.
+
+        Models with ≤16k context get a reduced system prompt to avoid
+        immediately filling the context window on startup.
+        """
+        try:
+            from dotsy.core.llm.model_info import KNOWN_CONTEXT_WINDOWS
+            active_model = config.get_active_model()
+            ctx = getattr(active_model, "context_window", None)
+
+            if ctx is None:
+                # Try known windows
+                name = active_model.name.lower()
+                alias = active_model.alias.lower()
+                for key, val in KNOWN_CONTEXT_WINDOWS.items():
+                    if key.startswith("_"):
+                        continue
+                    if key in name or key in alias:
+                        ctx = val
+                        break
+
+            if ctx and ctx <= 16_000:
+                # Slim config: disable heavy prompt sections
+                slimmed = config.model_copy(update={
+                    "include_project_context": False,
+                    "include_commit_signature": False,
+                    "use_bayesian_reasoning": False,
+                })
+                return slimmed
+        except Exception:
+            pass
+        return config
 
     def _get_compact_threshold(self) -> int:
         """Get a safe compact threshold based on the model's real context window.
