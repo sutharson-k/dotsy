@@ -269,6 +269,7 @@ class ModelConfig(BaseModel):
     temperature: float = 0.2
     input_price: float = 0.0  # Price per million input tokens
     output_price: float = 0.0  # Price per million output tokens
+    context_window: int | None = None  # Real context window size in tokens (fetched from API if None)
 
     @model_validator(mode="before")
     @classmethod

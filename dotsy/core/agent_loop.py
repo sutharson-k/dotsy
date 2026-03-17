@@ -195,6 +195,46 @@ class AgentLoop:
         self.config.tools[tool_name].permission = permission
         self.tool_manager.invalidate_tool(tool_name)
 
+    def _get_compact_threshold(self) -> int:
+        """Get a safe compact threshold based on the model's real context window.
+
+        If user has set auto_compact_threshold explicitly, respect it.
+        Otherwise, auto-detect from model context window at 80% safety margin.
+        """
+        # If user explicitly set a custom threshold, use it
+        if self.config.auto_compact_threshold != 200_000:
+            return self.config.auto_compact_threshold
+
+        # Auto-detect from model context window
+        try:
+            from dotsy.core.llm.model_info import KNOWN_CONTEXT_WINDOWS, get_safe_compact_threshold
+            active_model = self.config.get_active_model()
+            provider = self.config.get_provider_for_model(active_model)
+
+            # Check if model has explicit context_window set
+            if hasattr(active_model, "context_window") and active_model.context_window:
+                return get_safe_compact_threshold(active_model.context_window)
+
+            # Look up in known windows by model name/alias
+            model_name = active_model.name.lower()
+            model_alias = active_model.alias.lower()
+            for key, val in KNOWN_CONTEXT_WINDOWS.items():
+                if key.startswith("_"):
+                    continue
+                if key in model_name or key in model_alias:
+                    threshold = get_safe_compact_threshold(val)
+                    return threshold
+
+            # Provider default
+            provider_key = f"_{provider.name}_default"
+            ctx = KNOWN_CONTEXT_WINDOWS.get(
+                provider_key, KNOWN_CONTEXT_WINDOWS["_default"]
+            )
+            return get_safe_compact_threshold(ctx)
+
+        except Exception:
+            return self.config.auto_compact_threshold
+
     def _select_backend(self) -> BackendLike:
         active_model = self.config.get_active_model()
         provider = self.config.get_provider_for_model(active_model)
@@ -241,13 +281,12 @@ class AgentLoop:
         if self._max_price is not None:
             self.middleware_pipeline.add(PriceLimitMiddleware(self._max_price))
 
-        if self.config.auto_compact_threshold > 0:
-            self.middleware_pipeline.add(
-                AutoCompactMiddleware(self.config.auto_compact_threshold)
-            )
+        threshold = self._get_compact_threshold()
+        if threshold > 0:
+            self.middleware_pipeline.add(AutoCompactMiddleware(threshold))
             if self.config.context_warnings:
                 self.middleware_pipeline.add(
-                    ContextWarningMiddleware(0.5, self.config.auto_compact_threshold)
+                    ContextWarningMiddleware(0.5, threshold)
                 )
 
         self.middleware_pipeline.add(PlanAgentMiddleware(lambda: self.agent_profile))
