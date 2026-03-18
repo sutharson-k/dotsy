@@ -235,14 +235,9 @@ class AgentLoop:
     def _get_compact_threshold(self) -> int:
         """Get a safe compact threshold based on the model's real context window.
 
-        If user has set auto_compact_threshold explicitly, respect it.
-        Otherwise, auto-detect from model context window at 80% safety margin.
+        Always auto-detects from model context window at 80% safety margin.
+        Falls back to config value only if detection fails.
         """
-        # If user explicitly set a custom threshold, use it
-        if self.config.auto_compact_threshold != 200_000:
-            return self.config.auto_compact_threshold
-
-        # Auto-detect from model context window
         try:
             from dotsy.core.llm.model_info import KNOWN_CONTEXT_WINDOWS, get_safe_compact_threshold
             active_model = self.config.get_active_model()
@@ -259,8 +254,7 @@ class AgentLoop:
                 if key.startswith("_"):
                     continue
                 if key in model_name or key in model_alias:
-                    threshold = get_safe_compact_threshold(val)
-                    return threshold
+                    return get_safe_compact_threshold(val)
 
             # Provider default
             provider_key = f"_{provider.name}_default"
