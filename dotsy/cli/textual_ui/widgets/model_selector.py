@@ -27,6 +27,7 @@ class ModelSelectorWidget(Static):
         self._selected_provider: str | None = None
         self._selected_model_index = 0
         self._mode = "providers"  # "providers" or "models"
+        self._ignore_next_click = False
         self._display_dirty = True
         
     def set_models(self, models: list[dict], current_model: str | None = None) -> None:
@@ -278,9 +279,13 @@ class ModelSelectorWidget(Static):
             if self._selected_provider:
                 self._mode = "models"
                 self._selected_model_index = 0
+                self._ignore_next_click = True  # ignore the click that follows mode switch
                 self.focus()
                 self._update_display()
         else:
+            if getattr(self, "_ignore_next_click", False):
+                self._ignore_next_click = False
+                return
             y = event.offset.y
             models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             idx = y - 12
