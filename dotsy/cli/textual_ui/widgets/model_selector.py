@@ -192,39 +192,48 @@ class ModelSelectorWidget(Static):
 
     def _update_display(self) -> None:
         text = Text()
+        W = 60  # total box width including │ chars
+        INNER = W - 2  # inner content width (between │ and │)
 
-        text.append("╔══════════════════════════════════════════════════════════╗\n", style="bold cyan")
+        def padded(content: str) -> str:
+            """Pad content to fill inner width exactly."""
+            return content + " " * max(0, INNER - len(content))
+
+        # Header
+        text.append("╔" + "═" * INNER + "╗\n", style="bold cyan")
         if self._mode == "providers":
-            text.append("║         MODEL SELECTOR - Select a Provider            ║\n", style="bold cyan")
+            title = "  MODEL SELECTOR — Select a Provider"
         else:
-            text.append("║         MODEL SELECTOR - Select a Model               ║\n", style="bold cyan")
-        text.append("╚══════════════════════════════════════════════════════════╝\n\n", style="bold cyan")
+            title = "  MODEL SELECTOR — Select a Model  "
+        text.append("║" + padded(title) + "║\n", style="bold cyan")
+        text.append("╚" + "═" * INNER + "╝\n\n", style="bold cyan")
 
-        text.append("┌──────────────────────────────────────────────────────────┐\n", style="bold green")
-        text.append("│ ", style="bold green")
-        text.append("CURRENT MODEL", style="bold reverse green")
-        text.append(" " * 46, style="bold green")
-        text.append("│\n", style="bold green")
+        # Current model box
+        text.append("┌" + "─" * INNER + "┐\n", style="bold green")
+        label = "  CURRENT MODEL"
+        text.append("│", style="bold green")
+        text.append(label, style="bold reverse green")
+        text.append(" " * (INNER - len(label)) + "│\n", style="bold green")
         text.append("│ ", style="green")
         if self._current_model:
-            text.append(f"● {self._current_model}", style="bold yellow")
-            text.append(" " * (53 - len(self._current_model)), style="green")
+            model_display = f"● {self._current_model}"
+            text.append(model_display, style="bold yellow")
+            text.append(" " * (INNER - 1 - len(model_display)) + "│\n", style="green")
         else:
             text.append("No model selected", style="dim yellow")
-            text.append(" " * 34, style="green")
-        text.append("│\n", style="green")
-        text.append("└──────────────────────────────────────────────────────────┘\n\n", style="bold green")
+            text.append(" " * (INNER - 1 - 17) + "│\n", style="green")
+        text.append("└" + "─" * INNER + "┘\n\n", style="bold green")
 
-        text.append("┌──────────────────────────────────────────────────────────┐\n", style="bold cyan")
-        text.append("│ ", style="bold cyan")
+        # Providers/Models section
+        text.append("┌" + "─" * INNER + "┐\n", style="bold cyan")
         if self._mode == "providers":
-            text.append("PROVIDERS (hover + click or arrow keys)", style="bold reverse cyan")
-            text.append(" " * 8, style="bold cyan")
+            section = "  PROVIDERS  (↑↓ navigate · click or Enter to open)"
         else:
-            text.append(f"PROVIDERS → {self._selected_provider}", style="bold reverse cyan")
-            text.append(" " * max(0, 14 - len(str(self._selected_provider))), style="bold cyan")
+            section = f"  PROVIDERS → {self._selected_provider}"
+        text.append("│", style="bold cyan")
+        text.append(padded(section), style="bold reverse cyan")
         text.append("│\n", style="bold cyan")
-        text.append("│                                                          │\n", style="cyan")
+        text.append("│" + " " * INNER + "│\n", style="cyan")
 
         if self._mode == "providers":
             provider_list = sorted(self._providers.keys())
@@ -234,17 +243,20 @@ class ModelSelectorWidget(Static):
                 is_current_provider = self._current_model and any(
                     m.get("alias") == self._current_model for m in self._providers[provider]
                 )
+                count_str = f"{model_count} models"
                 if is_selected:
-                    text.append("│  ", style="cyan")
-                    text.append(f"▶ {provider}", style="bold reverse")
-                    text.append(" " * (35 - len(provider)), style="reverse")
-                    text.append(f" {model_count} models", style="reverse dim")
-                    text.append("  │\n", style="reverse")
+                    row = f"  ▶ {provider}"
+                    pad = INNER - len(row) - len(count_str) - 1
+                    text.append("│", style="cyan")
+                    text.append(row + " " * max(0, pad) + " " + count_str, style="bold reverse")
+                    text.append("│\n", style="bold reverse")
                 else:
                     marker = "✓" if is_current_provider else " "
-                    text.append(f"│  {marker} {provider}", style="cyan")
-                    text.append(" " * (35 - len(provider)), style="dim")
-                    text.append(f" {model_count} models  │\n", style="dim")
+                    row = f"  {marker} {provider}"
+                    pad = INNER - len(row) - len(count_str) - 1
+                    text.append("│", style="cyan")
+                    text.append(row + " " * max(0, pad) + " " + count_str, style="dim")
+                    text.append("│\n", style="dim")
         else:
             models = sorted(
                 self._providers.get(self._selected_provider, []),
@@ -255,30 +267,32 @@ class ModelSelectorWidget(Static):
                 is_selected = idx == self._selected_model_index
                 is_current = alias == self._current_model
                 if is_selected:
-                    text.append("│  ", style="cyan")
                     if is_current:
-                        text.append(f"▶ {alias} ✓", style="bold reverse yellow")
-                        text.append(" " * (35 - len(alias)), style="reverse yellow")
+                        row = f"  ▶ {alias} ✓"
+                        text.append("│", style="cyan")
+                        text.append(padded(row), style="bold reverse yellow")
+                        text.append("│\n", style="bold reverse yellow")
                     else:
-                        text.append(f"▶ {alias}", style="bold reverse")
-                        text.append(" " * (37 - len(alias)), style="reverse")
-                    text.append("  │\n", style="reverse")
+                        row = f"  ▶ {alias}"
+                        text.append("│", style="cyan")
+                        text.append(padded(row), style="bold reverse")
+                        text.append("│\n", style="bold reverse")
                 else:
                     marker = "●" if is_current else " "
-                    text.append(f"│  {marker} {alias}", style="cyan")
-                    text.append(" " * (37 - len(alias)), style="dim")
-                    text.append("  │\n", style="dim")
+                    row = f"  {marker} {alias}"
+                    text.append("│", style="cyan")
+                    text.append(padded(row), style="dim")
+                    text.append("│\n", style="dim")
 
-            text.append("│                                                          │\n", style="cyan")
-            text.append("│  ", style="cyan")
-            text.append("← Back to Providers (Backspace)", style="italic yellow")
-            text.append(" " * 19, style="dim")
+            text.append("│" + " " * INNER + "│\n", style="cyan")
+            back_row = "  ← Backspace to go back"
+            text.append("│", style="cyan")
+            text.append(padded(back_row), style="italic yellow")
             text.append("│\n", style="cyan")
 
-        text.append("│                                                          │\n", style="cyan")
-        text.append("└──────────────────────────────────────────────────────────┘\n", style="bold cyan")
-        text.append("\n", style="dim")
-        text.append("  ↑↓: Navigate  Enter/Click: Select  Backspace: Back  Esc: Cancel", style="dim italic")
+        text.append("│" + " " * INNER + "│\n", style="cyan")
+        text.append("└" + "─" * INNER + "┘\n", style="bold cyan")
+        text.append("\n  ↑↓: Navigate  Enter/Click: Select  Backspace: Back  Esc: Cancel\n", style="dim italic")
 
         self.update(text)
         self.refresh()
