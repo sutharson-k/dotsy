@@ -1,6 +1,6 @@
 ---
 name: libreoffice-cli
-description: Control LibreOffice via CLI-Anything. Create, edit, and export documents, spreadsheets, and presentations using bash commands. Install first with: pip install -e tools/cli-anything-libreoffice/agent-harness
+description: "Control LibreOffice via CLI-Anything. Create, edit, and export documents, spreadsheets, and presentations using bash commands. Install first with: pip install -e tools/cli-anything-libreoffice/agent-harness"
 ---
 
 # LibreOffice CLI Tool

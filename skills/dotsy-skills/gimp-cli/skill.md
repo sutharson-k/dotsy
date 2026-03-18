@@ -1,6 +1,6 @@
 ---
 name: gimp-cli
-description: Control GIMP image editor via CLI-Anything. Open, edit, apply filters, and export images using bash commands. Install first with: pip install -e tools/cli-anything-gimp/agent-harness
+description: "Control GIMP image editor via CLI-Anything. Open, edit, apply filters, and export images using bash commands. Install first with: pip install -e tools/cli-anything-gimp/agent-harness"
 ---
 
 # GIMP CLI Tool

@@ -1,6 +1,6 @@
 ---
 name: blender-cli
-description: Control Blender 3D via CLI-Anything. Create scenes, add objects, apply materials, animate, and render using bash commands. Install first with: pip install -e tools/cli-anything-blender/agent-harness
+description: "Control Blender 3D via CLI-Anything. Create scenes, add objects, apply materials, animate, and render using bash commands. Install first with: pip install -e tools/cli-anything-blender/agent-harness"
 ---
 
 # Blender CLI Tool

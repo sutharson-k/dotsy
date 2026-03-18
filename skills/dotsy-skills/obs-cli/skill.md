@@ -1,6 +1,6 @@
 ---
 name: obs-cli
-description: Control OBS Studio via CLI-Anything. Start/stop recording, manage scenes, and stream using bash commands. Install first with: pip install -e tools/cli-anything-obs/agent-harness
+description: "Control OBS Studio via CLI-Anything. Start/stop recording, manage scenes, and stream using bash commands. Install first with: pip install -e tools/cli-anything-obs/agent-harness"
 ---
 
 # OBS Studio CLI Tool
