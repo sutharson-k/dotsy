@@ -306,7 +306,6 @@ class ModelSelectorWidget(Static):
         if self._mode == "providers":
             provider_list = sorted(self._providers.keys())
             idx = y - 12
-            self.notify(f"y={y} idx={idx} provider={provider_list[idx] if 0 <= idx < len(provider_list) else 'OOB'}")
             if 0 <= idx < len(provider_list):
                 hovered = provider_list[idx]
                 if hovered != self._selected_provider:
@@ -316,6 +315,7 @@ class ModelSelectorWidget(Static):
         else:
             models = sorted(self._providers.get(self._selected_provider, []), key=lambda m: m.get("alias", ""))
             idx = y - 12
+            self.notify(f"models mode y={y} idx={idx} model={models[idx].get('alias') if 0 <= idx < len(models) else 'OOB'}")
             if 0 <= idx < len(models):
                 if idx != self._selected_model_index:
                     self._selected_model_index = idx
