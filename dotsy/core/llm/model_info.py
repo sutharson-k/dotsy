@@ -44,17 +44,37 @@ KNOWN_CONTEXT_WINDOWS: dict[str, int] = {
     # Qwen
     "qwen-72b": 131_072,
     "qwen-coder": 131_072,
+    "qwen3": 131_072,
+    "qwen3.5": 131_072,
+    "qwen-plus": 131_072,
+    "qwen-max": 32_768,
+    "qwen-turbo": 131_072,
     # Groq
     "groq-llama": 131_072,
     "groq-llama-8b": 131_072,
     "groq-mixtral": 32_768,
     "groq-gemma": 8_192,
+    # OpenRouter free/specialized models
+    "hunter-alpha": 131_072,
+    "healer-alpha": 131_072,
+    "gemma-3n": 131_072,
+    # MuleRouter (Qwen-based)
+    "mule-qwen": 131_072,
+    # Bytez
+    "bytez-qwen": 131_072,
+    # HuggingFace
+    "qwen3.5-27b": 131_072,
     # Defaults by provider
-    "_openrouter_default": 32_768,
+    "_openrouter_default": 131_072,
     "_mistral_default": 131_072,
     "_openai_default": 128_000,
     "_anthropic_default": 200_000,
     "_google_default": 1_000_000,
+    "_groq_default": 131_072,
+    "_mulerouter_default": 131_072,
+    "_bytez_default": 131_072,
+    "_huggingface_default": 131_072,
+    "_sarvam_default": 32_768,
     "_default": 32_768,
 }
 
