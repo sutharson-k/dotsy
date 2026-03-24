@@ -72,7 +72,7 @@ uv tool install --force "dotsy[all]"   # with all providers
 dotsy --setup
 ```
 
-2. Configure your preferred provider and API key
+2. Configure your preferred provider and API key.
 
 3. Start using Dotsy (default model: mistral-large):
 ```bash
