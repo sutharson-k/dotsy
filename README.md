@@ -18,7 +18,7 @@
 Dotsy is a powerful command-line coding assistant that supports multiple AI providers including Mistral, OpenAI, Anthropic, Google, and any OpenAI-compatible API. It provides a conversational interface to your codebase, allowing you to explore, modify, and interact with your projects through natural language.
 
 > [!WARNING]
-> Dotsy works on Windows, but we officially support and target UNIX environments.
+> Dotsy works on Windows, but we officially support and target UNIX environments..
 
 ## Features
 
